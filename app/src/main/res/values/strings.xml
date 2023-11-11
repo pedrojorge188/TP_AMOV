@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">praticalWork</string>
+    <string name="SubjectName">AMOV</string>
+    <string name="Back">Back</string>
+    <string name="add">Add</string>
+    <string name="AppName">PRATICAL WORK</string>
+    <string name="Register">Register</string>
+    <string name="login">Login</string>
+</resources>
