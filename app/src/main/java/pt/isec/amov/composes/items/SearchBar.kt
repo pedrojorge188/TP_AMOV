@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
@@ -75,8 +76,11 @@ fun SearchBar() {
                     ),
                     shape = MaterialTheme.shapes.extraSmall
                 ) {
-
-                    Text(text = stringResource(R.string.order))
+                    if(orderBy == ""){
+                        Text(text = stringResource(R.string.order))
+                    }else{
+                        Text(text = orderBy)
+                    }
                     Icon(
                         imageVector = Icons.Default.ArrowDropDown,
                         contentDescription = "More"
@@ -89,14 +93,14 @@ fun SearchBar() {
                     DropdownMenuItem(
                         text = { Text(stringResource(R.string.order_name)) },
                         onClick = {
-                            orderBy = R.string.order_name.toString()
+                            orderBy = "Ord.Alfabética"
                             expandedOrderBy = false
                         }
                     )
                     DropdownMenuItem(
                         text = { Text(stringResource(R.string.order_distance)) },
                         onClick = {
-                            orderBy = R.string.order_name.toString()
+                            orderBy = "Distância"
                             expandedOrderBy = false
                         }
                     )
@@ -128,6 +132,28 @@ fun SearchBar() {
                 }
 
             }
+
+            //mais tarde adicionar categoria
+            if(orderBy != "" || search != ""){
+                Button(
+                    onClick = {
+                              orderBy = "";
+                              search  = "";
+                    },
+
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFF02458A),
+                        contentColor = Color.White
+                    ),
+                ) {
+
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = stringResource(R.string.search)
+                    )
+                }
+            }
+
         }
     }
 }
