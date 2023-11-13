@@ -6,12 +6,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -52,6 +55,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
     val currentScreen by navController.currentBackStackEntryAsState()
     var showDetailsBtn by remember { mutableStateOf(false) }
     var showAddBtn by remember { mutableStateOf(false) }
+    var expandedMenu by remember  { mutableStateOf(false) }
 
     // Snackbar initialization
     val snackbarHostState = remember { SnackbarHostState() }
@@ -91,10 +95,29 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                             }
                         }
                         if(showAddBtn){
-                            IconButton(onClick = { /* Ir para a página de detalhes de conta */ }) {
+                            IconButton(onClick = {
+                                expandedMenu = !expandedMenu
+                            }) {
                                 Icon(
                                     Icons.Filled.Add,
                                     contentDescription = stringResource(R.string.add)
+                                )
+                            }
+                            DropdownMenu(
+                                expanded = expandedMenu,
+                                onDismissRequest = { expandedMenu = false }
+                            ) {
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(R.string.add_category)) },
+                                    onClick = { expandedMenu = false }
+                                )
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(R.string.add_location)) },
+                                    onClick = {  expandedMenu = false}
+                                )
+                                DropdownMenuItem(
+                                    text = { Text(stringResource(R.string.add_interest_location)) },
+                                    onClick = { expandedMenu = false  }
                                 )
                             }
                         }

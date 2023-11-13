@@ -13,4 +13,7 @@
     <string name="search">Pesquisa</string>
     <string name="location_list">Lista Localizações</string>
     <string name="details">detalhes</string>
+    <string name="add_category">Adicionar categória</string>
+    <string name="add_location">Adicionar localização</string>
+    <string name="add_interest_location">Adicionar local de interesse</string>
 </resources>
