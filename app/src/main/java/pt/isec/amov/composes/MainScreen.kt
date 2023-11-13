@@ -3,6 +3,7 @@ package pt.isec.amov.composes
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,7 +37,8 @@ enum class Screens(display: String, val showAppBar: Boolean){
     LOGIN("Login",true), //Página de login
     REGISTER("Register", true), //Página de registo
     DETAILS("Details", true), //Página com detalhes de conta
-    LIST("List", true), //Página que lista todas as localizações
+    LOCATION("Location", true), //Página que lista todas as localizações
+    LOCAL("Local", true), //Página que lista todas as localizações
     MAP("Map", true), //Página com o mapa de uma localização
     CONTRIBUTION("Contribution", true); //Página com as contribuições (adicionar local de interesse / categoria)
     val route : String
@@ -50,23 +51,26 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
 
     val currentScreen by navController.currentBackStackEntryAsState()
     var showDetailsBtn by remember { mutableStateOf(false) }
+    var showAddBtn by remember { mutableStateOf(false) }
 
-    //snackbar initialization
-    val scope = rememberCoroutineScope()
-    val snackbarhoststate = remember { SnackbarHostState() }
+    // Snackbar initialization
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    navController.addOnDestinationChangedListener{controller, destination, arguments ->
+    navController.addOnDestinationChangedListener { controller, destination, arguments ->
         showDetailsBtn = destination.route in arrayOf(
-            Screens.DETAILS.route, Screens.LIST.route, Screens.MAP.route, Screens.CONTRIBUTION.route
+            Screens.DETAILS.route, Screens.LOCATION.route,  Screens.LOCAL.route, Screens.MAP.route, Screens.CONTRIBUTION.route
+        )
+        showAddBtn = destination.route in arrayOf(
+            Screens.DETAILS.route, Screens.LOCATION.route,  Screens.LOCAL.route, Screens.MAP.route, Screens.CONTRIBUTION.route
         )
     }
 
     Scaffold(
         snackbarHost = {
-            SnackbarHost(snackbarhoststate)
+            SnackbarHost(snackbarHostState)
         },
         topBar = {
-            if (currentScreen != null && Screens.valueOf(currentScreen!!.destination.route!!).showAppBar)
+            if (currentScreen != null && Screens.valueOf(currentScreen!!.destination.route!!).showAppBar) {
                 TopAppBar(
                     title = { },
                     navigationIcon = {
@@ -78,14 +82,22 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                         }
                     },
                     actions = {
-                        if(showDetailsBtn)
-                            IconButton(onClick = { /*Ir para página dos detalhes de conta*/ }
-                            ) {
+                        if (showDetailsBtn) {
+                            IconButton(onClick = { /* dropdown */ }) {
                                 Icon(
                                     Icons.Filled.Person,
+                                    contentDescription = stringResource(R.string.details)
+                                )
+                            }
+                        }
+                        if(showAddBtn){
+                            IconButton(onClick = { /* Ir para a página de detalhes de conta */ }) {
+                                Icon(
+                                    Icons.Filled.Add,
                                     contentDescription = stringResource(R.string.add)
                                 )
                             }
+                        }
                     },
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color(0xFF02458A),
@@ -94,6 +106,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                         actionIconContentColor = Color.White
                     )
                 )
+            }
         },
         modifier = Modifier.fillMaxSize()
     ) {
@@ -102,7 +115,6 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
             startDestination = Screens.MENU.route,
             modifier = Modifier
                 .padding(it)
-
         ) {
             composable(Screens.MENU.route) {
                 Menu(stringResource(R.string.AppName), navController)
@@ -113,11 +125,14 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
             composable(Screens.REGISTER.route) {
                 RegisterScreen(navHostController = navController)
             }
-            composable(Screens.LIST.route) {
-                Greeting(name = Screens.LIST.route)
+            composable(Screens.LOCAL.route) {
+                Greeting(Screens.LOCAL.route)
+            }
+            composable(Screens.LOCATION.route) {
+                LocationListScreen(NavHostController = navController);
             }
             composable(Screens.MAP.route) {
-                Greeting(name = Screens.MAP.route)
+                Greeting(Screens.MAP.route)
             }
             composable(Screens.CONTRIBUTION.route) {
                 Greeting(Screens.CONTRIBUTION.route)
@@ -127,5 +142,5 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
             }
         }
     }
-
 }
+

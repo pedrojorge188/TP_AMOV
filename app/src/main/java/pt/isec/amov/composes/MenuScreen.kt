@@ -14,10 +14,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import pt.isec.amov.R
 import pt.isec.amov.composes.items.NormalBtn
 
 @Composable
@@ -52,11 +54,11 @@ fun Menu(
 
             NormalBtn(
                 onClick = { navHostController?.navigate(Screens.LOGIN.route) },
-                text = "Login"
+                text = stringResource(R.string.login)
             )
             NormalBtn(
                 onClick = { navHostController?.navigate(Screens.REGISTER.route) },
-                text = "Register"
+                text = stringResource(R.string.Register)
             )
             NormalBtn(onClick = {}, text = "Créditos")
         }

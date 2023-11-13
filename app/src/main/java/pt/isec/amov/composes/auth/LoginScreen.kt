@@ -81,7 +81,7 @@ fun LoginScreen(navHostController: NavHostController?) {
 
             NormalBtn(
                 onClick = {
-                    navHostController?.navigate(Screens.LIST.route)
+                    navHostController?.navigate(Screens.LOCATION.route)
                 },
                 text = stringResource(R.string.login)
             )
