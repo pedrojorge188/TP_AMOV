@@ -16,4 +16,5 @@
     <string name="add_category">Adicionar categória</string>
     <string name="add_location">Adicionar localização</string>
     <string name="add_interest_location">Adicionar local de interesse</string>
+    <string name="interests_locations">Locais de Interesse</string>
 </resources>

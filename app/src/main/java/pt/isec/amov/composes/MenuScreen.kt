@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import pt.isec.amov.R
 import pt.isec.amov.composes.items.NormalBtn
+import pt.isec.amov.viewmodels.Screens
 
 @Composable
 fun Menu(

@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,15 +27,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import pt.isec.amov.R
-import pt.isec.amov.composes.Screens
 import pt.isec.amov.composes.items.NormalBtn
+import pt.isec.amov.viewmodels.Screens
 
 @Composable
-fun RegisterScreen(navHostController: NavHostController?) {
+fun RegisterScreen(navHostController: NavHostController?, title: MutableState<String>) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
-
+    title.value = stringResource(id = R.string.Register)
     Box(
         modifier = Modifier
             .fillMaxSize()

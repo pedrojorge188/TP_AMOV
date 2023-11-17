@@ -34,19 +34,7 @@ import pt.isec.amov.Greeting
 import pt.isec.amov.R
 import pt.isec.amov.composes.auth.LoginScreen
 import pt.isec.amov.composes.auth.RegisterScreen
-
-enum class Screens(display: String, val showAppBar: Boolean){
-    MENU("Menu", false), //Menu principal
-    LOGIN("Login",true), //Página de login
-    REGISTER("Register", true), //Página de registo
-    DETAILS("Details", true), //Página com detalhes de conta
-    LOCATION("Location", true), //Página que lista todas as localizações
-    LOCAL("Local", true), //Página que lista todas as localizações
-    MAP("Map", true), //Página com o mapa de uma localização
-    CONTRIBUTION("Contribution", true); //Página com as contribuições (adicionar local de interesse / categoria)
-    val route : String
-        get() = this.toString()
-}
+import pt.isec.amov.viewmodels.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -56,8 +44,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
     var showDetailsBtn by remember { mutableStateOf(false) }
     var showAddBtn by remember { mutableStateOf(false) }
     var expandedMenu by remember  { mutableStateOf(false) }
-
-    // Snackbar initialization
+    val title = remember { mutableStateOf("") }
     val snackbarHostState = remember { SnackbarHostState() }
 
     navController.addOnDestinationChangedListener { controller, destination, arguments ->
@@ -76,7 +63,9 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
         topBar = {
             if (currentScreen != null && Screens.valueOf(currentScreen!!.destination.route!!).showAppBar) {
                 TopAppBar(
-                    title = { },
+                    title = {
+                            Text(text = title.value)
+                    },
                     navigationIcon = {
                         IconButton(onClick = { navController.navigateUp() }) {
                             Icon(
@@ -143,16 +132,16 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                 Menu(stringResource(R.string.AppName), navController)
             }
             composable(Screens.LOGIN.route) {
-                LoginScreen(navHostController = navController)
+                LoginScreen(navHostController = navController, title)
             }
             composable(Screens.REGISTER.route) {
-                RegisterScreen(navHostController = navController)
+                RegisterScreen(navHostController = navController, title)
             }
             composable(Screens.LOCAL.route) {
-                Greeting(Screens.LOCAL.route)
+                LocalInterestListScreen(NavHostController = navController, title)
             }
             composable(Screens.LOCATION.route) {
-                LocationListScreen(NavHostController = navController);
+                LocationListScreen(NavHostController = navController, title);
             }
             composable(Screens.MAP.route) {
                 Greeting(Screens.MAP.route)
