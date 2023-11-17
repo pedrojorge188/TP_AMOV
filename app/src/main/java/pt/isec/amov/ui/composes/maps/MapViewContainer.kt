@@ -1,4 +1,4 @@
-package pt.isec.amov.composes.maps
+package pt.isec.amov.ui.composes.maps
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable

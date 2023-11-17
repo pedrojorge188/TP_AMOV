@@ -1,4 +1,4 @@
-package pt.isec.amov.composes.auth
+package pt.isec.amov.ui.composes.auth
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -27,8 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import pt.isec.amov.R
-import pt.isec.amov.composes.items.NormalBtn
-import pt.isec.amov.viewmodels.Screens
+import pt.isec.amov.ui.composes.items.NormalBtn
+import pt.isec.amov.utils.viewmodels.Screens
 
 @Composable
 fun LoginScreen(navHostController: NavHostController?, title: MutableState<String>) {

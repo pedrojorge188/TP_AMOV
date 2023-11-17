@@ -1,4 +1,4 @@
-package pt.isec.amov.composes
+package pt.isec.amov.ui.composes
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,8 +26,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import pt.isec.amov.R
-import pt.isec.amov.composes.items.SearchBar
-import pt.isec.amov.viewmodels.Screens
+import pt.isec.amov.ui.composes.items.SearchBar
+import pt.isec.amov.utils.viewmodels.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

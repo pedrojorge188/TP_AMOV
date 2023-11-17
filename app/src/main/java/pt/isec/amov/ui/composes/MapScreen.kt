@@ -1,4 +1,4 @@
-package pt.isec.amov.composes
+package pt.isec.amov.ui.composes
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable

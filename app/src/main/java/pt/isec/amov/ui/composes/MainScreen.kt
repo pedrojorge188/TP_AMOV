@@ -1,4 +1,4 @@
-package pt.isec.amov.composes
+package pt.isec.amov.ui.composes
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -32,9 +32,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import pt.isec.amov.Greeting
 import pt.isec.amov.R
-import pt.isec.amov.composes.auth.LoginScreen
-import pt.isec.amov.composes.auth.RegisterScreen
-import pt.isec.amov.viewmodels.Screens
+import pt.isec.amov.ui.composes.auth.LoginScreen
+import pt.isec.amov.ui.composes.auth.RegisterScreen
+import pt.isec.amov.utils.viewmodels.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

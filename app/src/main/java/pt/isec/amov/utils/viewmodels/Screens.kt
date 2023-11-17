@@ -1,4 +1,4 @@
-package pt.isec.amov.viewmodels
+package pt.isec.amov.utils.viewmodels
 
 enum class Screens(display: String, val showAppBar: Boolean){
     MENU("Menu", false), //Menu principal
