@@ -30,7 +30,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import pt.isec.amov.Greeting
+import pt.isec.amov.ui.Greeting
 import pt.isec.amov.R
 import pt.isec.amov.ui.composes.auth.LoginScreen
 import pt.isec.amov.ui.composes.auth.RegisterScreen

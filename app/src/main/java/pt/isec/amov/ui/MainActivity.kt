@@ -1,4 +1,4 @@
-package pt.isec.amov
+package pt.isec.amov.ui
 
 import android.content.pm.PackageManager
 import android.os.Build
