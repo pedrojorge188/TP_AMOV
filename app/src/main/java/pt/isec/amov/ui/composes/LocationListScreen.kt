@@ -1,5 +1,6 @@
 package pt.isec.amov.ui.composes
 
+import RedWarningIconButton
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -61,6 +62,12 @@ fun LocationListScreen(NavHostController: NavHostController, title: MutableState
                             .padding(horizontal = 20.dp, vertical = 20.dp)
                     )
                     Row{
+                        RedWarningIconButton(
+                            onClick = { },
+                            itemInfo = item,
+                            1F // este valor vai ser recevido dentro do item mais tarde e corresponde ao numero de votaçoes
+                        )
+
                         IconButton(
                             onClick = { NavHostController.navigate(Screens.MAP.route) }, //mudar mais tarde
                         ) {

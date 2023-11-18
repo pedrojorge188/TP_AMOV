@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,11 +39,23 @@ fun LocationDetailsScreen(
 ) {
     title.value = stringResource(id = R.string.locations_details)
 
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 20.dp, vertical = 20.dp)
     ) {
+            //esta row so vai aparecer caso o item nao seja confiavel
+            Row (modifier = Modifier
+                .padding(horizontal = 20.dp, vertical = 20.dp)){
+                Icon(
+                    Icons.Filled.Warning,
+                    contentDescription = "danger",
+                    tint = Color.Red
+                )
+                Text(text = stringResource(id = R.string.warning_info_title), color = Color.Red)
+            }
+
             Image(
                 painter = painterResource(id = R.drawable.museu),
                 contentDescription = "Museu",
@@ -62,7 +75,9 @@ fun LocationDetailsScreen(
             .fillMaxSize()
             .padding(horizontal = 20.dp, vertical = 20.dp))
         {
+
             item {
+
                 Text(
                     text = "Categoria:",
                     color = Color.Black,
