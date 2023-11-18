@@ -1,4 +1,4 @@
-package pt.isec.amov.composes.items
+package pt.isec.amov.ui.composes.items
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height

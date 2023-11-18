@@ -1,4 +1,4 @@
-package pt.isec.amov
+package pt.isec.amov.ui
 
 import android.content.pm.PackageManager
 import android.os.Build
@@ -14,7 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
-import pt.isec.amov.composes.MainScreen
+import pt.isec.amov.ui.composes.MainScreen
 import pt.isec.amov.ui.theme.PraticalWorkTheme
 
 class MainActivity : ComponentActivity() {

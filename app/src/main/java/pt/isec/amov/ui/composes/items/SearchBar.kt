@@ -1,4 +1,4 @@
-package pt.isec.amov.composes.items
+package pt.isec.amov.ui.composes.items
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -32,10 +32,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import pt.isec.amov.R
+import pt.isec.amov.utils.viewmodels.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar() {
+fun SearchBar(Screen: Screens) {
 
     var expandedOrderBy by remember { mutableStateOf(false) }
     var expandedCategory by remember { mutableStateOf(false) }
@@ -106,31 +107,32 @@ fun SearchBar() {
                     )
                 }
 
-                Spacer(modifier = Modifier.width(10.dp))
+                if(Screen == Screens.LOCAL) {
+                    Spacer(modifier = Modifier.width(10.dp))
 
-                Button(
-                    onClick = { expandedCategory = !expandedCategory },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF02458A),
-                        contentColor = Color.White
-                    ),
-                    shape = MaterialTheme.shapes.extraSmall
-                ) {
+                    Button(
+                        onClick = { expandedCategory = !expandedCategory },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF02458A),
+                            contentColor = Color.White
+                        ),
+                        shape = MaterialTheme.shapes.extraSmall
+                    ) {
 
-                    Text(text = stringResource(R.string.category))
-                    Icon(
-                        imageVector = Icons.Default.ArrowDropDown,
-                        contentDescription = "more category"
-                    )
+                        Text(text = stringResource(R.string.category))
+                        Icon(
+                            imageVector = Icons.Default.ArrowDropDown,
+                            contentDescription = "more category"
+                        )
+                    }
+
+                    DropdownMenu(
+                        expanded = expandedCategory,
+                        onDismissRequest = { expandedCategory = false }
+                    ) {
+                        /* Colocar categorias com um for*/
+                    }
                 }
-
-                DropdownMenu(
-                    expanded = expandedCategory,
-                    onDismissRequest = { expandedCategory = false }
-                ) {
-                    /* Colocar categorias com um for*/
-                }
-
             }
 
             //mais tarde adicionar categoria

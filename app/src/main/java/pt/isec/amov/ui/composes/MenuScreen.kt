@@ -1,4 +1,4 @@
-package pt.isec.amov.composes
+package pt.isec.amov.ui.composes
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import pt.isec.amov.R
-import pt.isec.amov.composes.items.NormalBtn
+import pt.isec.amov.ui.composes.items.NormalBtn
+import pt.isec.amov.utils.viewmodels.Screens
 
 @Composable
 fun Menu(
