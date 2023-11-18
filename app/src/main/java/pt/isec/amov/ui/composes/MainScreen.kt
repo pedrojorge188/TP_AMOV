@@ -140,6 +140,9 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
             composable(Screens.LOCAL.route) {
                 LocalInterestListScreen(NavHostController = navController, title)
             }
+            composable(Screens.LOCATION_DETAILS.route) {
+                LocationDetailsScreen(NavHostController = navController, title )
+            }
             composable(Screens.LOCATION.route) {
                 LocationListScreen(NavHostController = navController, title);
             }

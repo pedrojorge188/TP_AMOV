@@ -70,7 +70,7 @@ fun LocationListScreen(NavHostController: NavHostController, title: MutableState
                             )
                         }
                         IconButton(
-                            onClick = { /*...details...*/ }
+                            onClick = {NavHostController.navigate(Screens.LOCATION_DETAILS.route)}, //mudar mais tarde
                         ) {
                             Icon(
                                 Icons.Filled.MoreVert,
