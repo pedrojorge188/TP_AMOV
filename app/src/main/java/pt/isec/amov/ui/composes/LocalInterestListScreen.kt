@@ -1,5 +1,6 @@
 package pt.isec.amov.ui.composes
 
+import RedWarningIconButton
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -83,14 +84,22 @@ fun LocalInterestListScreen(NavHostController: NavHostController, title: Mutable
                         modifier = Modifier
                             .padding(horizontal = 20.dp, vertical = 20.dp)
                     )
-
-                    IconButton(
-                        onClick = { NavHostController.navigate(Screens.MAP.route) }, //mudar mais tarde
-                    ) {
-                        Icon(
-                            Icons.Filled.LocationOn,
-                            contentDescription = "Location"
+                    Row {
+                        //Isto só aparece se for uma informação sem as votacoes necessarias (mudar quando implementar firebase)
+                        RedWarningIconButton(
+                            onClick = { },
+                            itemInfo = item,
+                            0F // este valor vai ser recevido dentro do item mais tarde e corresponde ao numero de votaçoes
                         )
+
+                        IconButton(
+                            onClick = { NavHostController.navigate(Screens.MAP.route) }, //mudar mais tarde
+                        ) {
+                            Icon(
+                                Icons.Filled.LocationOn,
+                                contentDescription = "Location"
+                            )
+                        }
                     }
                 }
                 Divider(color = Color.Gray)

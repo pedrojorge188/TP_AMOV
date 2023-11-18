@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
@@ -53,6 +54,7 @@ fun LocationDetailsScreen(
                     contentDescription = "danger",
                     tint = Color.Red
                 )
+                Spacer(modifier = Modifier.width(16.dp))
                 Text(text = stringResource(id = R.string.warning_info_title), color = Color.Red)
             }
 
@@ -121,6 +123,12 @@ fun LocationDetailsScreen(
                     rating = 3F,
                     onRatingChanged = {}
                 )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                NormalBtn(
+                    onClick = { navHostController.navigate(Screens.MAP.route) }
+                    ,text = "Ver no Mapa")
             }
         }
     }

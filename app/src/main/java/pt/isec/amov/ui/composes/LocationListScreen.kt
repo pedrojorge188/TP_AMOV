@@ -62,6 +62,7 @@ fun LocationListScreen(NavHostController: NavHostController, title: MutableState
                             .padding(horizontal = 20.dp, vertical = 20.dp)
                     )
                     Row{
+                        //Isto só aparece se for uma informação sem as votacoes necessarias (mudar quando implementar firebase)
                         RedWarningIconButton(
                             onClick = { },
                             itemInfo = item,
