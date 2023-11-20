@@ -2,6 +2,7 @@ package pt.isec.amov.ui.composes
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,9 +14,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -30,7 +36,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import pt.isec.amov.R
-import pt.isec.amov.ui.composes.items.NormalBtn
 import pt.isec.amov.utils.viewmodels.Screens
 
 @Composable
@@ -67,11 +72,49 @@ fun LocationDetailsScreen(
                     .height(200.dp)
             )
 
-            NormalBtn(
-                onClick = { navHostController.navigate(Screens.LOCAL.route) }
-                ,text = "Locais de interesse")
-
-            Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 20.dp, vertical = 20.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceAround
+        ) {
+            Button(
+                onClick = { navHostController.navigate(Screens.LOCAL.route) },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF02458A),
+                    contentColor = Color.White
+                ),
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier
+                    .padding(10.dp)
+                    .height(52.dp)
+                    .weight(1f)
+            ) {
+                Icon(
+                    Icons.Filled.Info,
+                    contentDescription = "LocationOn",
+                    tint = Color.White
+                )
+            }
+            Button(
+                onClick = { navHostController.navigate(Screens.MAP.route) },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF02458A),
+                    contentColor = Color.White
+                ),
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier
+                    .padding(10.dp)
+                    .height(52.dp)
+                    .weight(1f)
+            ) {
+                Icon(
+                    Icons.Filled.LocationOn,
+                    contentDescription = "LocationOn",
+                    tint = Color.White
+                )
+            }
+        }
 
         LazyColumn( modifier = Modifier
             .fillMaxSize()
@@ -81,7 +124,7 @@ fun LocationDetailsScreen(
             item {
 
                 Text(
-                    text = "Categoria:",
+                    text = stringResource(R.string.category_txt),
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
                     fontSize = 25.sp
@@ -89,13 +132,13 @@ fun LocationDetailsScreen(
                 Text(
                     text = "    Museu",
                     color = Color.Black,
-                    fontSize = 25.sp
+                    fontSize = 20.sp
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Informação adicional:",
+                    text = stringResource(R.string.extra_information),
                     color = Color.Black,
                     fontWeight = FontWeight.Bold,
                     fontSize = 25.sp
@@ -104,7 +147,7 @@ fun LocationDetailsScreen(
                     text = " Explore a riqueza da arte e da história no conforto da sua casa. " +
                             "Descubra exposições fascinantes e mergulhe em culturas diversas.",
                     color = Color.Black,
-                    fontSize = 20.sp,
+                    fontSize = 18.sp,
                     modifier = Modifier.padding(start = 20.dp)
                 )
 
@@ -124,11 +167,6 @@ fun LocationDetailsScreen(
                     onRatingChanged = {}
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
-
-                NormalBtn(
-                    onClick = { navHostController.navigate(Screens.MAP.route) }
-                    ,text = "Ver no Mapa")
             }
         }
     }

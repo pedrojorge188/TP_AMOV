@@ -1,4 +1,4 @@
-package pt.isec.amov.ui.composes
+package pt.isec.amov.ui.composes.lists
 
 import RedWarningIconButton
 import androidx.compose.foundation.clickable
@@ -12,8 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -28,82 +29,59 @@ import pt.isec.amov.R
 import pt.isec.amov.ui.composes.items.SearchBar
 import pt.isec.amov.utils.viewmodels.Screens
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LocalInterestListScreen(NavHostController: NavHostController, title: MutableState<String>) {
+fun LocationListScreen(NavHostController: NavHostController, title: MutableState<String>) {
 
-    title.value = stringResource(id = R.string.interests_locations)
+    title.value = stringResource(id = R.string.location_list)
     Column {
 
         Spacer(modifier = Modifier.height(16.dp))
-        SearchBar(Screens.LOCAL)
+        SearchBar(Screens.LOCATION)
         Spacer(modifier = Modifier.height(16.dp))
 
-        LazyColumn(
+        LazyColumn (
             modifier = Modifier
                 .padding(horizontal = 20.dp, vertical = 20.dp)
         ) {
             //Array so para testes
-            items(
-                listOf(
-                    "Local 1",
-                    "Local 2",
-                    "Local 3",
-                    "Local 1",
-                    "Local 2",
-                    "Local 3",
-                    "Local 1",
-                    "Local 2",
-                    "Local 3",
-                    "Local 1",
-                    "Local 2",
-                    "Local 3",
-                    "Local 1",
-                    "Local 2",
-                    "Local 3",
-                    "Local 1",
-                    "Local 2",
-                    "Local 3",
-                    "Local 1",
-                    "Local 2",
-                    "Local 3"
-                )
-            ) { item ->
+            items(listOf("Location 1", "Location 2", "Location 3","Location 1", "Location 2")) { item ->
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp)
-                        .clickable {
-                            /*Determinar o click*/
-
-                        },
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .clickable {
+                        NavHostController.navigate(Screens.LOCAL.route) //mudar mais tarde (vai ter de redirecionar para os locais de intresse desejados)
+                    },
+                    horizontalArrangement = Arrangement.SpaceBetween){
                     Text(
                         text = item,
                         modifier = Modifier
                             .padding(horizontal = 20.dp, vertical = 20.dp)
                     )
-                    Row {
+                    Row{
                         //Isto só aparece se for uma informação sem as votacoes necessarias (mudar quando implementar firebase)
                         RedWarningIconButton(
                             onClick = { },
                             itemInfo = item,
-                            0F // este valor vai ser recevido dentro do item mais tarde e corresponde ao numero de votaçoes
+                            1F // este valor vai ser recevido dentro do item mais tarde e corresponde ao numero de votaçoes
                         )
 
                         IconButton(
-                            onClick = { NavHostController.navigate(Screens.MAP.route) }, //mudar mais tarde
+                            onClick = {NavHostController.navigate(Screens.LOCATION_DETAILS.route)}, //mudar mais tarde
                         ) {
                             Icon(
-                                Icons.Filled.LocationOn,
-                                contentDescription = "Location"
+                                Icons.Filled.MoreVert,
+                                contentDescription = "Info"
                             )
                         }
                     }
+
                 }
                 Divider(color = Color.Gray)
             }
         }
     }
 }
+
+

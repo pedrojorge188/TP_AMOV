@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,10 +31,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
 import pt.isec.amov.R
 import pt.isec.amov.ui.Greeting
+import pt.isec.amov.ui.composes.auth.AccountPage
 import pt.isec.amov.ui.composes.auth.LoginScreen
 import pt.isec.amov.ui.composes.auth.RegisterScreen
+import pt.isec.amov.ui.composes.lists.LocalInterestListScreen
+import pt.isec.amov.ui.composes.lists.LocationListScreen
 import pt.isec.amov.utils.viewmodels.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -41,18 +46,24 @@ import pt.isec.amov.utils.viewmodels.Screens
 fun MainScreen(navController: NavHostController = rememberNavController()) {
 
     val currentScreen by navController.currentBackStackEntryAsState()
+    var showBackArrow by remember { mutableStateOf(false) }
     var showDetailsBtn by remember { mutableStateOf(false) }
     var showAddBtn by remember { mutableStateOf(false) }
     var expandedMenu by remember  { mutableStateOf(false) }
+    var expandedDetails by remember  { mutableStateOf(false) }
     val title = remember { mutableStateOf("") }
     val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     navController.addOnDestinationChangedListener { controller, destination, arguments ->
         showDetailsBtn = destination.route in arrayOf(
-            Screens.DETAILS.route, Screens.LOCATION.route,  Screens.LOCAL.route, Screens.MAP.route, Screens.CONTRIBUTION.route
+            Screens.ACCOUNT_CHANGE_DATA.route,Screens.LOCAL_DETAILS.route, Screens.LOCATION.route, Screens.LOCATION_DETAILS.route ,Screens.LOCAL.route, Screens.MAP.route, Screens.CONTRIBUTION.route
         )
         showAddBtn = destination.route in arrayOf(
-            Screens.DETAILS.route, Screens.LOCATION.route,  Screens.LOCAL.route, Screens.MAP.route, Screens.CONTRIBUTION.route
+            Screens.ACCOUNT_CHANGE_DATA.route, Screens.LOCAL_DETAILS.route, Screens.LOCATION.route,  Screens.LOCATION_DETAILS.route ,  Screens.LOCAL.route, Screens.MAP.route, Screens.CONTRIBUTION.route
+        )
+        showBackArrow = destination.route in arrayOf(
+            Screens.ACCOUNT_CHANGE_DATA.route, Screens.LOGIN.route,Screens.REGISTER.route, Screens.LOCAL_DETAILS.route, Screens.LOCATION_DETAILS.route, Screens.LOCAL.route, Screens.MAP.route, Screens.CONTRIBUTION.route
         )
     }
 
@@ -67,20 +78,42 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                             Text(text = title.value)
                     },
                     navigationIcon = {
-                        IconButton(onClick = { navController.navigateUp() }) {
-                            Icon(
-                                Icons.Filled.ArrowBack,
-                                contentDescription = stringResource(R.string.Back)
-                            )
+                        if(showBackArrow){
+                            IconButton(onClick = { navController.navigateUp() }) {
+                                Icon(
+                                    Icons.Filled.ArrowBack,
+                                    contentDescription = stringResource(R.string.Back)
+                                )
+                            }
                         }
                     },
                     actions = {
                         if (showDetailsBtn) {
-                            IconButton(onClick = { /* dropdown */ }) {
+                            IconButton(onClick = { expandedDetails = !expandedDetails}) {
                                 Icon(
                                     Icons.Filled.Person,
                                     contentDescription = stringResource(R.string.details)
                                 )
+                                DropdownMenu(
+                                    expanded = expandedDetails,
+                                    onDismissRequest = { expandedDetails = false }
+                                ) {
+                                    DropdownMenuItem(
+                                        text = { Text(stringResource(R.string.account)) },
+                                        onClick = {
+                                            navController.navigate(Screens.ACCOUNT_CHANGE_DATA.route)
+                                            expandedDetails = false
+                                        }
+                                    )
+                                    DropdownMenuItem(
+                                        text = { Text(stringResource(R.string.logout)) },
+                                        onClick = {
+                                            navController.navigate(Screens.MENU.route);
+                                            scope.launch { snackbarHostState.showSnackbar("Terminou a sessão!") }
+                                            expandedDetails = false
+                                        }
+                                    )
+                                }
                             }
                         }
                         if(showAddBtn){
@@ -91,23 +124,23 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                                     Icons.Filled.Add,
                                     contentDescription = stringResource(R.string.add)
                                 )
-                            }
-                            DropdownMenu(
-                                expanded = expandedMenu,
-                                onDismissRequest = { expandedMenu = false }
-                            ) {
-                                DropdownMenuItem(
-                                    text = { Text(stringResource(R.string.add_category)) },
-                                    onClick = { expandedMenu = false }
-                                )
-                                DropdownMenuItem(
-                                    text = { Text(stringResource(R.string.add_location)) },
-                                    onClick = {  expandedMenu = false}
-                                )
-                                DropdownMenuItem(
-                                    text = { Text(stringResource(R.string.add_interest_location)) },
-                                    onClick = { expandedMenu = false  }
-                                )
+                                DropdownMenu(
+                                    expanded = expandedMenu,
+                                    onDismissRequest = { expandedMenu = false }
+                                ) {
+                                    DropdownMenuItem(
+                                        text = { Text(stringResource(R.string.add_category)) },
+                                        onClick = { expandedMenu = false }
+                                    )
+                                    DropdownMenuItem(
+                                        text = { Text(stringResource(R.string.add_location)) },
+                                        onClick = {  expandedMenu = false}
+                                    )
+                                    DropdownMenuItem(
+                                        text = { Text(stringResource(R.string.add_interest_location)) },
+                                        onClick = { expandedMenu = false  }
+                                    )
+                                }
                             }
                         }
                     },
@@ -143,8 +176,23 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
             composable(Screens.LOCATION_DETAILS.route) {
                 LocationDetailsScreen(navHostController = navController, title = title)
             }
+            composable(Screens.LOCAL_DETAILS.route) {
+                Greeting(Screens.LOCAL_DETAILS.route)
+            }
             composable(Screens.LOCATION.route) {
-                LocationListScreen(NavHostController = navController, title);
+                LocationListScreen(NavHostController = navController, title)
+            }
+            composable(Screens.ACCOUNT_CHANGE_DATA.route) {
+                AccountPage(
+                    navController,
+                    title,
+                    onChangeUsername = { newUsername ->
+
+                    },
+                    onChangePassword = { newPassword ->
+
+                    }
+                )
             }
             composable(Screens.MAP.route) {
                 Greeting(Screens.MAP.route)
@@ -152,10 +200,6 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
             composable(Screens.CONTRIBUTION.route) {
                 Greeting(Screens.CONTRIBUTION.route)
             }
-            composable(Screens.DETAILS.route) {
-                Greeting(Screens.DETAILS.route)
-            }
         }
     }
 }
-

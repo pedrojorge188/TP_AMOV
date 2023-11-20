@@ -18,7 +18,8 @@ import androidx.compose.ui.unit.sp
 fun NormalBtn(
     onClick: () -> Unit,
     text: String
-) {var btnColor = Color(0xFF02458A)
+) {
+    var btnColor = Color(0xFF02458A)
     Button(
         onClick = onClick,
         modifier = Modifier
