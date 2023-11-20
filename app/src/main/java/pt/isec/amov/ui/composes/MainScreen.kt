@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -75,7 +76,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
             if (currentScreen != null && Screens.valueOf(currentScreen!!.destination.route!!).showAppBar) {
                 TopAppBar(
                     title = {
-                            Text(text = title.value)
+                            Text(text = title.value,fontSize = 15.sp )
                     },
                     navigationIcon = {
                         if(showBackArrow){
