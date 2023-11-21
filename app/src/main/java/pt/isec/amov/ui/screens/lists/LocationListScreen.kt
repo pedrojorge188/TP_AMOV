@@ -45,7 +45,7 @@ fun LocationListScreen(NavHostController: NavHostController, title: MutableState
                 .padding(horizontal = 20.dp, vertical = 20.dp)
         ) {
             //Array so para testes
-            items(listOf("Location 1", "Location 2", "Location 3","Location 1", "Location 2")) { item ->
+            items(listOf("Location 1", "Location 2", "Location 3","Location 1", "Location 2")) {
 
                 Row(modifier = Modifier
                     .fillMaxWidth()
@@ -55,7 +55,7 @@ fun LocationListScreen(NavHostController: NavHostController, title: MutableState
                     },
                     horizontalArrangement = Arrangement.SpaceBetween){
                     Text(
-                        text = item,
+                        text = it,
                         modifier = Modifier
                             .padding(horizontal = 20.dp, vertical = 20.dp)
                     )
@@ -63,7 +63,7 @@ fun LocationListScreen(NavHostController: NavHostController, title: MutableState
                         //Isto só aparece se for uma informação sem as votacoes necessarias (mudar quando implementar firebase)
                         RedWarningIconButton(
                             onClick = { },
-                            itemInfo = item,
+                            itemInfo = it,
                             1F // este valor vai ser recevido dentro do item mais tarde e corresponde ao numero de votaçoes
                         )
 

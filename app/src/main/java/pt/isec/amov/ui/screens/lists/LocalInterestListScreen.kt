@@ -67,8 +67,7 @@ fun LocalInterestListScreen(NavHostController: NavHostController, title: Mutable
                     "Local 2",
                     "Local 3"
                 )
-            ) { item ->
-
+            ) {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -80,7 +79,7 @@ fun LocalInterestListScreen(NavHostController: NavHostController, title: Mutable
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = item,
+                        text = it,
                         modifier = Modifier
                             .padding(horizontal = 20.dp, vertical = 20.dp)
                     )
@@ -88,7 +87,7 @@ fun LocalInterestListScreen(NavHostController: NavHostController, title: Mutable
                         //Isto só aparece se for uma informação sem as votacoes necessarias (mudar quando implementar firebase)
                         RedWarningIconButton(
                             onClick = { },
-                            itemInfo = item,
+                            itemInfo = it,
                             0F // este valor vai ser recevido dentro do item mais tarde e corresponde ao numero de votaçoes
                         )
 
