@@ -1,5 +1,6 @@
 package pt.isec.amov.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -187,11 +188,6 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
                 RegisterScreen(navHostController = navController, viewModel!!)
             }
-            composable(Screens.LOCAL.route) {
-                title.value = stringResource(id = R.string.interests_locations)
-                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
-                LocalInterestListScreen(NavHostController = navController, viewModel!!)
-            }
             composable(Screens.LOCATION_DETAILS.route) {
                 title.value = stringResource(id = R.string.locations_details)
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
@@ -206,8 +202,20 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
 
                 title.value = stringResource(id = R.string.location_list)
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
-                LocationListScreen(NavHostController = navController, viewModel!!)
+
+                LocationListScreen(NavHostController = navController, app.appData.locations) {
+                    Log.i("onSelected", "Location Name:$it");
+                }
             }
+            composable(Screens.LOCAL.route) {
+                title.value = stringResource(id = R.string.interests_locations)
+                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
+
+                LocalInterestListScreen(NavHostController = navController, app.appData.local_interest) {
+                    Log.i("onSelected", "Local Interest Name:$it");
+                }
+            }
+
             composable(Screens.ACCOUNT_CHANGE_DATA.route) {
                 title.value = stringResource(id = R.string.change_data_acc)
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
