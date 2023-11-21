@@ -1,4 +1,4 @@
-package pt.isec.amov.ui.composes.lists
+package pt.isec.amov.ui.screens.lists
 
 import RedWarningIconButton
 import androidx.compose.foundation.clickable
@@ -25,8 +25,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import pt.isec.amov.R
-import pt.isec.amov.ui.composes.items.SearchBar
-import pt.isec.amov.utils.viewmodels.Screens
+import pt.isec.amov.ui.composables.SearchBar
+import pt.isec.amov.ui.viewmodels.Screens
 
 @Composable
 fun LocalInterestListScreen(NavHostController: NavHostController, title: MutableState<String>) {

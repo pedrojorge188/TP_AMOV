@@ -1,4 +1,4 @@
-package pt.isec.amov.ui.composes.auth
+package pt.isec.amov.ui.screens.auth
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -26,16 +26,15 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import pt.isec.amov.R
-import pt.isec.amov.ui.composes.items.NormalBtn
-import pt.isec.amov.utils.viewmodels.Screens
+import pt.isec.amov.ui.composables.NormalBtn
+import pt.isec.amov.ui.viewmodels.Screens
 
 @Composable
-fun LoginScreen(navHostController: NavHostController?, title: MutableState<String>) {
+fun RegisterScreen(navHostController: NavHostController?, title: MutableState<String>) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-
-    title.value = stringResource(id = R.string.login);
-
+    var confirmPassword by remember { mutableStateOf("") }
+    title.value = stringResource(id = R.string.Register)
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -78,15 +77,25 @@ fun LoginScreen(navHostController: NavHostController?, title: MutableState<Strin
                     .padding(8.dp)
             )
 
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text("Confirmar Password") },
+                visualTransformation = PasswordVisualTransformation(),
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp)
+            )
+
             Spacer(modifier = Modifier.height(16.dp))
 
             NormalBtn(
                 onClick = {
-                    navHostController?.navigate(Screens.LOCATION.route)
+                    navHostController?.navigate(Screens.LOGIN.route)
                 },
-                text = stringResource(R.string.login)
+                text = stringResource(R.string.Register)
             )
         }
     }
 }
-

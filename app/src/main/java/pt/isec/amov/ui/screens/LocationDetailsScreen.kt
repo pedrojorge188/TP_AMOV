@@ -1,4 +1,4 @@
-package pt.isec.amov.ui.composes
+package pt.isec.amov.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import pt.isec.amov.R
-import pt.isec.amov.utils.viewmodels.Screens
+import pt.isec.amov.ui.viewmodels.Screens
 
 @Composable
 fun LocationDetailsScreen(

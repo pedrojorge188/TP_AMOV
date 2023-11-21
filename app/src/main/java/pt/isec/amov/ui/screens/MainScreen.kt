@@ -1,4 +1,4 @@
-package pt.isec.amov.ui.composes
+package pt.isec.amov.ui.screens
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -35,12 +35,12 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import pt.isec.amov.R
 import pt.isec.amov.ui.Greeting
-import pt.isec.amov.ui.composes.auth.AccountPage
-import pt.isec.amov.ui.composes.auth.LoginScreen
-import pt.isec.amov.ui.composes.auth.RegisterScreen
-import pt.isec.amov.ui.composes.lists.LocalInterestListScreen
-import pt.isec.amov.ui.composes.lists.LocationListScreen
-import pt.isec.amov.utils.viewmodels.Screens
+import pt.isec.amov.ui.screens.auth.AccountPage
+import pt.isec.amov.ui.screens.auth.LoginScreen
+import pt.isec.amov.ui.screens.auth.RegisterScreen
+import pt.isec.amov.ui.screens.lists.LocalInterestListScreen
+import pt.isec.amov.ui.screens.lists.LocationListScreen
+import pt.isec.amov.ui.viewmodels.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,13 +58,16 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
 
     navController.addOnDestinationChangedListener { controller, destination, arguments ->
         showDetailsBtn = destination.route in arrayOf(
-            Screens.ACCOUNT_CHANGE_DATA.route,Screens.LOCAL_DETAILS.route, Screens.LOCATION.route, Screens.LOCATION_DETAILS.route ,Screens.LOCAL.route, Screens.MAP.route, Screens.CONTRIBUTION.route
+            Screens.ACCOUNT_CHANGE_DATA.route,
+            Screens.LOCAL_DETAILS.route, Screens.LOCATION.route, Screens.LOCATION_DETAILS.route ,
+            Screens.LOCAL.route, Screens.MAP.route, Screens.CONTRIBUTION.route
         )
         showAddBtn = destination.route in arrayOf(
             Screens.ACCOUNT_CHANGE_DATA.route, Screens.LOCAL_DETAILS.route, Screens.LOCATION.route,  Screens.LOCATION_DETAILS.route ,  Screens.LOCAL.route, Screens.MAP.route, Screens.CONTRIBUTION.route
         )
         showBackArrow = destination.route in arrayOf(
-            Screens.ACCOUNT_CHANGE_DATA.route, Screens.LOGIN.route,Screens.REGISTER.route, Screens.LOCAL_DETAILS.route, Screens.LOCATION_DETAILS.route, Screens.LOCAL.route, Screens.MAP.route, Screens.CONTRIBUTION.route
+            Screens.ACCOUNT_CHANGE_DATA.route, Screens.LOGIN.route,
+            Screens.REGISTER.route, Screens.LOCAL_DETAILS.route, Screens.LOCATION_DETAILS.route, Screens.LOCAL.route, Screens.MAP.route, Screens.CONTRIBUTION.route
         )
     }
 

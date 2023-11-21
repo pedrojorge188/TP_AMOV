@@ -1,4 +1,4 @@
-package pt.isec.amov.ui.composes.auth
+package pt.isec.amov.ui.screens.auth
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,7 +28,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import pt.isec.amov.R
-import pt.isec.amov.ui.composes.items.NormalBtn
+import pt.isec.amov.ui.composables.NormalBtn
 
 @Composable
 fun AccountPage(

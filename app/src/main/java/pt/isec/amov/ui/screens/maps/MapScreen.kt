@@ -1,4 +1,4 @@
-package pt.isec.amov.ui.composes.maps
+package pt.isec.amov.ui.screens.maps
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
