@@ -14,7 +14,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,15 +28,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import pt.isec.amov.R
 import pt.isec.amov.ui.composables.NormalBtn
+import pt.isec.amov.ui.viewmodels.ActionsViewModel
 
 @Composable
 fun AccountPage(
     navHostController: NavHostController?,
-    title: MutableState<String>,
+    viewModel: ActionsViewModel,
     onChangeUsername: (String) -> Unit,
     onChangePassword: (String) -> Unit
 ) {
-    title.value = stringResource(R.string.change_data_acc)
     var updatedUsername by remember { mutableStateOf("") }
     var updatedPassword by remember { mutableStateOf("") }
     var updatedConfirmPassword by remember { mutableStateOf("") }
@@ -54,6 +53,7 @@ fun AccountPage(
             .padding(16.dp),
         contentAlignment = Alignment.Center
     ) {
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()

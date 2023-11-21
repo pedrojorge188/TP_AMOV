@@ -18,22 +18,18 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import pt.isec.amov.R
 import pt.isec.amov.ui.composables.SearchBar
+import pt.isec.amov.ui.viewmodels.ActionsViewModel
 import pt.isec.amov.ui.viewmodels.Screens
 
 @Composable
-fun LocalInterestListScreen(NavHostController: NavHostController, title: MutableState<String>) {
+fun LocalInterestListScreen(NavHostController: NavHostController, viewModel: ActionsViewModel) {
 
-    title.value = stringResource(id = R.string.interests_locations)
     Column (){
-
         Spacer(modifier = Modifier.height(16.dp))
         SearchBar(Screens.LOCAL)
         Spacer(modifier = Modifier.height(16.dp))
