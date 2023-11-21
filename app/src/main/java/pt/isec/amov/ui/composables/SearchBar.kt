@@ -1,4 +1,4 @@
-package pt.isec.amov.ui.composes.items
+package pt.isec.amov.ui.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -32,7 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import pt.isec.amov.R
-import pt.isec.amov.utils.viewmodels.Screens
+import pt.isec.amov.ui.viewmodels.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

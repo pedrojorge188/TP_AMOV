@@ -22,4 +22,16 @@
     <string name="warning_info_title">Informação não confiável</string>
     <string name="Cancel_text">Cancelar</string>
     <string name="vote">Aprovar informação</string>
+    <string name="account">Conta</string>
+    <string name="logout">Logout</string>
+    <string name="new_username">Novo Username</string>
+    <string name="new_password">Nova Password</string>
+    <string name="confirm">Confirmar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="change_account_personal">Alterar dados da conta</string>
+    <string name="change_data_acc">Mudar dados de conta</string>
+    <string name="as_senhas_n_o_coincidem">As senhas não coincidem</string>
+    <string name="confirmar_new_password">Confirmar Nova Password</string>
+    <string name="category_txt">Categoria</string>
+    <string name="extra_information">Informação adicional</string>
 </resources>
