@@ -15,3 +15,6 @@ enum class Screens(display: String, val showAppBar: Boolean){
     val route : String
         get() = this.toString()
 }
+
+
+data class NavigationData(val itemId : String, val nextPage: Screens)

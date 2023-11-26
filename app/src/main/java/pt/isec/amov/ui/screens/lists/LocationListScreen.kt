@@ -22,18 +22,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import pt.isec.amov.models.Location
 import pt.isec.amov.ui.composables.SearchBar
+import pt.isec.amov.ui.viewmodels.ActionsViewModel
+import pt.isec.amov.ui.viewmodels.NavigationData
 import pt.isec.amov.ui.viewmodels.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LocationListScreen(NavHostController: NavHostController,
-                       location : List<String>, /*Vai ter de deixar de ser string*/
-                       onSelected : (String) -> Unit /*onSelected : (Int) -> Unit*/ )  //para mudar
+                       vm: ActionsViewModel,
+                       location : List<Location>,
+                       onSelected : (NavigationData) -> Unit )
 {
     Column {
         Spacer(modifier = Modifier.height(16.dp))
-        SearchBar(Screens.LOCATION)
+        SearchBar(Screens.LOCATION, vm)
         Spacer(modifier = Modifier.height(16.dp))
 
         LazyColumn (
@@ -41,7 +45,7 @@ fun LocationListScreen(NavHostController: NavHostController,
                 .padding(horizontal = 20.dp, vertical = 20.dp)
         ) {
 
-            items(location, key = { it } /*key = it.id*/) { //tem de mudar
+            items(location, key = { it.id } ) {
 
                 Card(
                     elevation = CardDefaults.cardElevation(4.dp),
@@ -49,8 +53,7 @@ fun LocationListScreen(NavHostController: NavHostController,
                         .fillMaxWidth()
                         .padding(8.dp),
                     onClick = {
-                        onSelected(it /*key = it.id*/)
-                        NavHostController.navigate(Screens.LOCAL.route)
+                        onSelected(NavigationData(it.id, Screens.LOCAL))
                     }
                 ) {
                     Row(
@@ -60,25 +63,25 @@ fun LocationListScreen(NavHostController: NavHostController,
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
-                            text = it,
+                            text = it.name,
                             modifier = Modifier
                                 .padding(horizontal = 20.dp, vertical = 20.dp)
                         )
                         Row {
 
-                            //Isto só aparece se for uma informação sem as votacoes necessarias (mudar quando implementar firebase)
-                            RedWarningIconButton(
-                                onClick = {
-                                    //ação para colocar mais uma nota
-                                },
-                                itemInfo = it,
-                                1F // este valor vai ser recevido dentro do item mais tarde e corresponde ao numero de votaçoes
-                            )
+                            if(it.votes < 2){
+                                RedWarningIconButton(
+                                    onClick = {
+
+                                    },
+                                    itemInfo = it.name,
+                                    it.votes.toFloat()
+                                )
+                            }
 
                             IconButton(
                                 onClick = {
-                                    onSelected(it /*key = it.id*/) //tem que mudar
-                                    NavHostController.navigate(Screens.LOCATION_DETAILS.route)
+                                    onSelected(NavigationData(it.id, Screens.LOCATION_DETAILS))
                                 },
                             ) {
                                 Icon(

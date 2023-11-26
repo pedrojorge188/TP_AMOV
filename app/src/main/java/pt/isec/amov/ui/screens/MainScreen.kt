@@ -1,6 +1,5 @@
 package pt.isec.amov.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -42,8 +41,8 @@ import pt.isec.amov.ui.Greeting
 import pt.isec.amov.ui.screens.auth.AccountPage
 import pt.isec.amov.ui.screens.auth.LoginScreen
 import pt.isec.amov.ui.screens.auth.RegisterScreen
-import pt.isec.amov.ui.screens.lists.LocalInterestListScreen
 import pt.isec.amov.ui.screens.lists.LocationListScreen
+import pt.isec.amov.ui.screens.lists.PointOfInterestListScreen
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
 import pt.isec.amov.ui.viewmodels.ActionsViewModelFactory
 import pt.isec.amov.ui.viewmodels.Screens
@@ -54,7 +53,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
 
     val context = LocalContext.current
     val app = context.applicationContext as App
-
+    var stageId: String = "";
     val currentScreen by navController.currentBackStackEntryAsState()
     var showBackArrow by remember { mutableStateOf(false) }
     var showDetailsBtn by remember { mutableStateOf(false) }
@@ -191,7 +190,8 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
             composable(Screens.LOCATION_DETAILS.route) {
                 title.value = stringResource(id = R.string.locations_details)
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
-                LocationDetailsScreen(navHostController = navController, viewModel!!)
+
+                LocationDetailsScreen(navHostController = navController, viewModel!!, viewModel!!.getLocationById(stageId))
             }
             composable(Screens.LOCAL_DETAILS.route) {
 
@@ -203,16 +203,18 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                 title.value = stringResource(id = R.string.location_list)
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
 
-                LocationListScreen(NavHostController = navController, app.appData.locations) {
-                    Log.i("onSelected", "Location Name:$it");
+                LocationListScreen(NavHostController = navController, viewModel!!, app.appData.allLocations) {
+                    stageId = it.itemId
+                    navController.navigate(it.nextPage.route)
                 }
             }
+
             composable(Screens.LOCAL.route) {
                 title.value = stringResource(id = R.string.interests_locations)
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
-
-                LocalInterestListScreen(NavHostController = navController, app.appData.local_interest) {
-                    Log.i("onSelected", "Local Interest Name:$it");
+                PointOfInterestListScreen(NavHostController = navController, viewModel!!, viewModel!!.getLocationById(stageId).pointsOfInterest) {
+                    stageId = it.itemId
+                    navController.navigate(it.nextPage.route)
                 }
             }
 

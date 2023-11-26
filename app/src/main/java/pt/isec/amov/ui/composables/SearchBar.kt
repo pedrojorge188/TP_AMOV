@@ -32,16 +32,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import pt.isec.amov.R
+import pt.isec.amov.ui.viewmodels.ActionsViewModel
 import pt.isec.amov.ui.viewmodels.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar(Screen: Screens) {
+fun SearchBar(Screen: Screens, vm: ActionsViewModel) {
 
     var expandedOrderBy by remember { mutableStateOf(false) }
     var expandedCategory by remember { mutableStateOf(false) }
     var search by remember { mutableStateOf("") }
     var orderBy by remember { mutableStateOf("") }
+    var selectedCategory by remember { mutableStateOf("") }
 
     Box(
         modifier = Modifier
@@ -130,17 +132,27 @@ fun SearchBar(Screen: Screens) {
                         expanded = expandedCategory,
                         onDismissRequest = { expandedCategory = false }
                     ) {
-                        /* Colocar categorias com um for*/
+
+                        vm.getCategorys().forEach() {
+                            DropdownMenuItem(
+                                text = { it.name },
+                                onClick = {
+                                    selectedCategory = it.name
+                                    expandedCategory = false
+                                }
+                            )
+                        }
                     }
                 }
             }
 
             //mais tarde adicionar categoria
-            if(orderBy != "" || search != ""){
+            if(orderBy != "" || search != "" || selectedCategory != ""){
                 Button(
                     onClick = {
                               orderBy = "";
                               search  = "";
+                              selectedCategory = "";
                     },
 
                     colors = ButtonDefaults.buttonColors(

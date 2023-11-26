@@ -35,13 +35,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import pt.isec.amov.R
+import pt.isec.amov.models.Location
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
 import pt.isec.amov.ui.viewmodels.Screens
 
 @Composable
 fun LocationDetailsScreen(
     navHostController: NavHostController,
-    viewModel: ActionsViewModel
+    viewModel: ActionsViewModel,
+    location : Location?
 ) {
 
     Column(
@@ -49,17 +51,20 @@ fun LocationDetailsScreen(
             .fillMaxSize()
             .padding(horizontal = 20.dp, vertical = 20.dp)
     ) {
-            //esta row so vai aparecer caso o item nao seja confiavel
-            Row (modifier = Modifier
-                .padding(horizontal = 20.dp, vertical = 20.dp)){
-                Icon(
-                    Icons.Filled.Warning,
-                    contentDescription = "danger",
-                    tint = Color.Red
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(text = stringResource(id = R.string.warning_info_title), color = Color.Red)
-            }
+
+          if(location!!.votes < 2){
+              Row (modifier = Modifier
+                  .padding(horizontal = 20.dp, vertical = 20.dp)){
+                  Icon(
+                      Icons.Filled.Warning,
+                      contentDescription = "danger",
+                      tint = Color.Red
+                  )
+                  Spacer(modifier = Modifier.width(16.dp))
+                  Text(text = stringResource(id = R.string.warning_info_title), color = Color.Red)
+              }
+
+          }
 
             Image(
                 painter = painterResource(id = R.drawable.museu),
@@ -128,7 +133,7 @@ fun LocationDetailsScreen(
                     fontSize = 25.sp
                 )
                 Text(
-                    text = "    Museu",
+                    text = "   "+location!!.category.name,
                     color = Color.Black,
                     fontSize = 20.sp
                 )
@@ -142,8 +147,7 @@ fun LocationDetailsScreen(
                     fontSize = 25.sp
                 )
                 Text(
-                    text = " Explore a riqueza da arte e da história no conforto da sua casa. " +
-                            "Descubra exposições fascinantes e mergulhe em culturas diversas.",
+                    text = location.description,
                     color = Color.Black,
                     fontSize = 18.sp,
                     modifier = Modifier.padding(start = 20.dp)
@@ -152,7 +156,7 @@ fun LocationDetailsScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Avaliação Atual: 3",
+                    text = "Avaliação Atual: "+location!!.grade,
                     color = Color.Gray,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
@@ -161,7 +165,7 @@ fun LocationDetailsScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 CustomRatingBar(
-                    rating = 3F,
+                    rating = location!!.grade.toFloat(),
                     onRatingChanged = {}
                 )
 
