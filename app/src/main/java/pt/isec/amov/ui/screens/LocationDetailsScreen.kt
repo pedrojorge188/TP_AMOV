@@ -101,7 +101,7 @@ fun LocationDetailsScreen(
                 )
             }
             Button(
-                onClick = { navHostController.navigate(Screens.MAP.route) },
+                onClick = { navHostController.navigate(Screens.LOCATION_MAP.route) },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF02458A),
                     contentColor = Color.White
