@@ -1,4 +1,7 @@
 package pt.isec.amov.models
 
-class Category {
-}
+data class Category(
+    val name: String,
+    val iconUrl: String?,
+    val description: String
+)

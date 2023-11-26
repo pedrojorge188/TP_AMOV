@@ -22,7 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import pt.isec.amov.models.Location
+import pt.isec.amov.models.PointOfInterest
 import pt.isec.amov.ui.composables.SearchBar
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
 import pt.isec.amov.ui.viewmodels.NavigationData
@@ -30,14 +30,14 @@ import pt.isec.amov.ui.viewmodels.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LocationListScreen(NavHostController: NavHostController,
-                       vm: ActionsViewModel,
-                       location : List<Location>,
-                       onSelected : (NavigationData) -> Unit )
+fun PointOfInterestListScreen(NavHostController: NavHostController,
+                              vm: ActionsViewModel,
+                              locals : List<PointOfInterest>,
+                              onSelected : (NavigationData) -> Unit)
 {
     Column {
         Spacer(modifier = Modifier.height(16.dp))
-        SearchBar(Screens.LOCATION, vm)
+        SearchBar(Screens.LOCAL, vm)
         Spacer(modifier = Modifier.height(16.dp))
 
         LazyColumn (
@@ -45,7 +45,7 @@ fun LocationListScreen(NavHostController: NavHostController,
                 .padding(horizontal = 20.dp, vertical = 20.dp)
         ) {
 
-            items(location, key = { it.id } ) {
+            items(locals, key = { it.id }) {
 
                 Card(
                     elevation = CardDefaults.cardElevation(4.dp),
@@ -53,7 +53,7 @@ fun LocationListScreen(NavHostController: NavHostController,
                         .fillMaxWidth()
                         .padding(8.dp),
                     onClick = {
-                        onSelected(NavigationData(it.id, Screens.LOCAL))
+                        //onSelected(NavigationData(it.id, Screens.LOCAL))
                     }
                 ) {
                     Row(
@@ -72,7 +72,7 @@ fun LocationListScreen(NavHostController: NavHostController,
                             if(it.votes < 2){
                                 RedWarningIconButton(
                                     onClick = {
-
+                                        //ação para colocar mais uma nota
                                     },
                                     itemInfo = it.name,
                                     it.votes.toFloat()
@@ -81,7 +81,7 @@ fun LocationListScreen(NavHostController: NavHostController,
 
                             IconButton(
                                 onClick = {
-                                    onSelected(NavigationData(it.id, Screens.LOCATION_DETAILS))
+                                   // onSelected(it.id)
                                 },
                             ) {
                                 Icon(
@@ -97,5 +97,4 @@ fun LocationListScreen(NavHostController: NavHostController,
         }
     }
 }
-
 

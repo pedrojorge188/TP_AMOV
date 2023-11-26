@@ -25,36 +25,45 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
+import pt.isec.amov.App
 import pt.isec.amov.R
 import pt.isec.amov.ui.Greeting
 import pt.isec.amov.ui.screens.auth.AccountPage
 import pt.isec.amov.ui.screens.auth.LoginScreen
 import pt.isec.amov.ui.screens.auth.RegisterScreen
-import pt.isec.amov.ui.screens.lists.LocalInterestListScreen
 import pt.isec.amov.ui.screens.lists.LocationListScreen
+import pt.isec.amov.ui.screens.lists.PointOfInterestListScreen
+import pt.isec.amov.ui.viewmodels.ActionsViewModel
+import pt.isec.amov.ui.viewmodels.ActionsViewModelFactory
 import pt.isec.amov.ui.viewmodels.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(navController: NavHostController = rememberNavController()) {
 
+    val context = LocalContext.current
+    val app = context.applicationContext as App
+    var stageId: String = "";
     val currentScreen by navController.currentBackStackEntryAsState()
     var showBackArrow by remember { mutableStateOf(false) }
     var showDetailsBtn by remember { mutableStateOf(false) }
     var showAddBtn by remember { mutableStateOf(false) }
     var expandedMenu by remember  { mutableStateOf(false) }
     var expandedDetails by remember  { mutableStateOf(false) }
-    val title = remember { mutableStateOf("") }
+    var title = remember { mutableStateOf("") }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    var viewModel : ActionsViewModel? = null
 
     navController.addOnDestinationChangedListener { controller, destination, arguments ->
         showDetailsBtn = destination.route in arrayOf(
@@ -79,7 +88,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
             if (currentScreen != null && Screens.valueOf(currentScreen!!.destination.route!!).showAppBar) {
                 TopAppBar(
                     title = {
-                            Text(text = title.value,fontSize = 15.sp )
+                            Text(text = title.value ,fontSize = 15.sp )
                     },
                     navigationIcon = {
                         if(showBackArrow){
@@ -169,35 +178,62 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                 Menu(stringResource(R.string.AppName), navController)
             }
             composable(Screens.LOGIN.route) {
-                LoginScreen(navHostController = navController, title)
+                title.value = stringResource(id = R.string.login)
+                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
+                LoginScreen(navHostController = navController, viewModel!!)
             }
             composable(Screens.REGISTER.route) {
-                RegisterScreen(navHostController = navController, title)
-            }
-            composable(Screens.LOCAL.route) {
-                LocalInterestListScreen(NavHostController = navController, title)
+                title.value = stringResource(id = R.string.Register)
+                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
+                RegisterScreen(navHostController = navController, viewModel!!)
             }
             composable(Screens.LOCATION_DETAILS.route) {
-                LocationDetailsScreen(navHostController = navController, title = title)
+                title.value = stringResource(id = R.string.locations_details)
+                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
+
+                LocationDetailsScreen(navHostController = navController, viewModel!!, viewModel!!.getLocationById(stageId))
             }
             composable(Screens.LOCAL_DETAILS.route) {
+
+                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
                 Greeting(Screens.LOCAL_DETAILS.route)
             }
             composable(Screens.LOCATION.route) {
-                LocationListScreen(NavHostController = navController, title)
+
+                title.value = stringResource(id = R.string.location_list)
+                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
+
+                LocationListScreen(NavHostController = navController, viewModel!!, app.appData.allLocations) {
+                    stageId = it.itemId
+                    navController.navigate(it.nextPage.route)
+                }
             }
+
+            composable(Screens.LOCAL.route) {
+                title.value = stringResource(id = R.string.interests_locations)
+                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
+                PointOfInterestListScreen(NavHostController = navController, viewModel!!, viewModel!!.getLocationById(stageId).pointsOfInterest) {
+                    stageId = it.itemId
+                    navController.navigate(it.nextPage.route)
+                }
+            }
+
             composable(Screens.ACCOUNT_CHANGE_DATA.route) {
+                title.value = stringResource(id = R.string.change_data_acc)
+                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
                 AccountPage(
                     navController,
-                    title,
-                    onChangeUsername = { newUsername ->
+                    viewModel!!,
+                    onChangeUsername = {
+                            newUsername ->
 
                     },
-                    onChangePassword = { newPassword ->
-
+                    onChangePassword = {
+                            newPassword ->
                     }
                 )
             }
+
             composable(Screens.MAP.route) {
                 Greeting(Screens.MAP.route)
             }
