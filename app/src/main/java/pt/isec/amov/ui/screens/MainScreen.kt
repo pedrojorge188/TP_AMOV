@@ -76,7 +76,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
         )
         showBackArrow = destination.route in arrayOf(
             Screens.ACCOUNT_CHANGE_DATA.route, Screens.LOGIN.route,
-            Screens.REGISTER.route, Screens.LOCAL_DETAILS.route, Screens.LOCATION_DETAILS.route, Screens.LOCAL.route, Screens.MAP.route, Screens.CONTRIBUTION.route
+            Screens.REGISTER.route, Screens.CREDITS.route, Screens.LOCAL_DETAILS.route, Screens.LOCATION_DETAILS.route, Screens.LOCAL.route, Screens.MAP.route, Screens.CONTRIBUTION.route
         )
     }
 
@@ -187,6 +187,11 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
                 RegisterScreen(navHostController = navController, viewModel!!)
             }
+            composable(Screens.CREDITS.route) {
+                title.value = stringResource(id = R.string.Credits)
+                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
+                CreditsScreen(navHostController = navController, viewModel!!)
+            }
             composable(Screens.LOCATION_DETAILS.route) {
                 title.value = stringResource(id = R.string.locations_details)
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
@@ -243,3 +248,4 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
         }
     }
 }
+

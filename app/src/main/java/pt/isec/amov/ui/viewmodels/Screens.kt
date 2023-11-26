@@ -10,7 +10,8 @@ enum class Screens(display: String, val showAppBar: Boolean){
     LOCAL("Local", true), //Página que lista todas as localizações
     MAP("Map", true), //Página com o mapa de uma localização
     CONTRIBUTION("Contribution", true), //Página com as contribuições (adicionar local de interesse / categoria)
-    ACCOUNT_CHANGE_DATA("Contribution", true);//Página com detalhes de conta
+    ACCOUNT_CHANGE_DATA("Contribution", true),//Página com detalhes de conta
+    CREDITS("Credits", true);//Página com os creditos do trabalho
 
     val route : String
         get() = this.toString()
