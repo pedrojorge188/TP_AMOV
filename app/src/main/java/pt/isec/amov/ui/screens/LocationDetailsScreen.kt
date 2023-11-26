@@ -66,6 +66,7 @@ fun LocationDetailsScreen(
 
           }
 
+            //imagem tem de ser alterada mais tarde
             Image(
                 painter = painterResource(id = R.drawable.museu),
                 contentDescription = "Museu",
@@ -82,7 +83,7 @@ fun LocationDetailsScreen(
             horizontalArrangement = Arrangement.SpaceAround
         ) {
             Button(
-                onClick = { navHostController.navigate(Screens.LOCAL.route) },
+                onClick = { navHostController.navigate(Screens.POINT_OF_INTEREST.route) },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF02458A),
                     contentColor = Color.White

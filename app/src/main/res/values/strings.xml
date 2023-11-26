@@ -36,4 +36,5 @@
     <string name="extra_information">Informação adicional</string>
     <string name="Credits">Credits</string>
     <string name="detalhes_do_local_de_interesse">Detalhes do local de interesse</string>
+    <string name="this_application_needs_your_permission_to_use_location_while_in_the_background">This application needs your permission to use location while in the background.\n</string>
 </resources>

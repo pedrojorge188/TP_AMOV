@@ -53,7 +53,7 @@ fun LocationListScreen(NavHostController: NavHostController,
                         .fillMaxWidth()
                         .padding(8.dp),
                     onClick = {
-                        onSelected(NavigationData(it.id, Screens.LOCAL))
+                        onSelected(NavigationData(it.id, Screens.POINT_OF_INTEREST))
                     }
                 ) {
                     Row(

@@ -61,6 +61,7 @@ fun PointOfInteresetDetailsScreen(
 
         }
 
+        //imagem tem de ser alterada mais tarde
         Image(
             painter = painterResource(id = R.drawable.museu),
             contentDescription = "Museu",

@@ -53,7 +53,6 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
 
     val context = LocalContext.current
     val app = context.applicationContext as App
-    var locationId: String = ""; var pointOfInterestId: String = "";
     val currentScreen by navController.currentBackStackEntryAsState()
     var showBackArrow by remember { mutableStateOf(false) }
     var showDetailsBtn by remember { mutableStateOf(false) }
@@ -63,20 +62,23 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
     var title = remember { mutableStateOf("") }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+
     var viewModel : ActionsViewModel? = null
+    var locationId = remember { mutableStateOf("") };
+    var pointOfInterestId = remember { mutableStateOf("") };
 
     navController.addOnDestinationChangedListener { controller, destination, arguments ->
         showDetailsBtn = destination.route in arrayOf(
             Screens.ACCOUNT_CHANGE_DATA.route,
-            Screens.LOCAL_DETAILS.route, Screens.LOCATION.route, Screens.LOCATION_DETAILS.route ,
-            Screens.LOCAL.route, Screens.MAP.route, Screens.CONTRIBUTION.route
+            Screens.POINT_OF_INTEREST_DETAILS.route, Screens.LOCATION.route, Screens.LOCATION_DETAILS.route ,
+            Screens.POINT_OF_INTEREST.route, Screens.MAP.route, Screens.CONTRIBUTION.route
         )
         showAddBtn = destination.route in arrayOf(
-            Screens.ACCOUNT_CHANGE_DATA.route, Screens.LOCAL_DETAILS.route, Screens.LOCATION.route,  Screens.LOCATION_DETAILS.route ,  Screens.LOCAL.route, Screens.MAP.route, Screens.CONTRIBUTION.route
+            Screens.ACCOUNT_CHANGE_DATA.route, Screens.POINT_OF_INTEREST_DETAILS.route, Screens.LOCATION.route,  Screens.LOCATION_DETAILS.route ,  Screens.POINT_OF_INTEREST.route, Screens.MAP.route, Screens.CONTRIBUTION.route
         )
         showBackArrow = destination.route in arrayOf(
             Screens.ACCOUNT_CHANGE_DATA.route, Screens.LOGIN.route,
-            Screens.REGISTER.route, Screens.CREDITS.route, Screens.LOCAL_DETAILS.route, Screens.LOCATION_DETAILS.route, Screens.LOCAL.route, Screens.MAP.route, Screens.CONTRIBUTION.route
+            Screens.REGISTER.route, Screens.CREDITS.route, Screens.POINT_OF_INTEREST_DETAILS.route, Screens.LOCATION_DETAILS.route, Screens.POINT_OF_INTEREST.route, Screens.MAP.route, Screens.CONTRIBUTION.route
         )
     }
 
@@ -149,7 +151,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                                         text = { Text(stringResource(R.string.add_location)) },
                                         onClick = {  expandedMenu = false}
                                     )
-                                    if(currentScreen!!.destination.route == Screens.LOCAL.route){
+                                    if(currentScreen!!.destination.route == Screens.POINT_OF_INTEREST.route){
                                         DropdownMenuItem(
                                             text = { Text(stringResource(R.string.add_interest_location)) },
                                             onClick = { expandedMenu = false  }
@@ -195,17 +197,17 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                 CreditsScreen(navHostController = navController, viewModel!!)
             }
             composable(Screens.LOCATION_DETAILS.route) {
-                title.value = stringResource(id = R.string.locations_details)
+                title.value = viewModel!!.getLocationById(locationId.value).name
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
 
-                LocationDetailsScreen(navHostController = navController, viewModel!!, viewModel!!.getLocationById(locationId))
+                LocationDetailsScreen(navHostController = navController, viewModel!!, viewModel!!.getLocationById(locationId.value))
             }
 
-            composable(Screens.LOCAL_DETAILS.route) {
-                title.value = stringResource(R.string.detalhes_do_local_de_interesse)
+            composable(Screens.POINT_OF_INTEREST_DETAILS.route) {
+                title.value = viewModel!!.getPointOfInterestById(pointOfInterestId.value)!!.name
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
 
-                PointOfInteresetDetailsScreen(navHostController = navController, viewModel!!, viewModel!!.getPointOfInterestById(pointOfInterestId))
+                PointOfInteresetDetailsScreen(navHostController = navController, viewModel!!, viewModel!!.getPointOfInterestById(pointOfInterestId.value))
             }
 
             composable(Screens.LOCATION.route) {
@@ -214,17 +216,17 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
 
                 LocationListScreen(NavHostController = navController, viewModel!!, app.appData.allLocations) {
-                    locationId = it.itemId
+                    locationId.value = it.itemId
                     navController.navigate(it.nextPage.route)
                 }
             }
 
-            composable(Screens.LOCAL.route) {
-                title.value = stringResource(id = R.string.interests_locations) + viewModel!!.getLocationById(locationId).name + ")"
+            composable(Screens.POINT_OF_INTEREST.route) {
+                title.value = stringResource(id = R.string.interests_locations) + viewModel!!.getLocationById(locationId.value).name + ")"
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
 
-                PointOfInterestListScreen(NavHostController = navController, viewModel!!, viewModel!!.getLocationById(locationId).pointsOfInterest) {
-                    pointOfInterestId = it.itemId
+                PointOfInterestListScreen(NavHostController = navController, viewModel!!, viewModel!!.getLocationById(locationId.value).pointsOfInterest) {
+                    pointOfInterestId.value = it.itemId
                     navController.navigate(it.nextPage.route)
                 }
 
