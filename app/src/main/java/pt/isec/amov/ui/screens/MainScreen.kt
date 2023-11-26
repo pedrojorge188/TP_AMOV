@@ -149,10 +149,12 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                                         text = { Text(stringResource(R.string.add_location)) },
                                         onClick = {  expandedMenu = false}
                                     )
-                                    DropdownMenuItem(
-                                        text = { Text(stringResource(R.string.add_interest_location)) },
-                                        onClick = { expandedMenu = false  }
-                                    )
+                                    if(currentScreen!!.destination.route == Screens.LOCAL.route){
+                                        DropdownMenuItem(
+                                            text = { Text(stringResource(R.string.add_interest_location)) },
+                                            onClick = { expandedMenu = false  }
+                                        )
+                                    }
                                 }
                             }
                         }
