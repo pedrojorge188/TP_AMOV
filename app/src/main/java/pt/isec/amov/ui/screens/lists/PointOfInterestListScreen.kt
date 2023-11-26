@@ -53,7 +53,7 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
                         .fillMaxWidth()
                         .padding(8.dp),
                     onClick = {
-                        //onSelected(NavigationData(it.id, Screens.LOCAL))
+                        onSelected(NavigationData(it.id, Screens.LOCAL_DETAILS))
                     }
                 ) {
                     Row(
@@ -81,7 +81,7 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
 
                             IconButton(
                                 onClick = {
-                                   // onSelected(it.id)
+                                    onSelected(NavigationData(it.id, Screens.LOCAL_DETAILS))
                                 },
                             ) {
                                 Icon(

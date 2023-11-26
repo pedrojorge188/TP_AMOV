@@ -16,7 +16,7 @@
     <string name="add_category">Adicionar categória</string>
     <string name="add_location">Adicionar localização</string>
     <string name="add_interest_location">Adicionar local de interesse</string>
-    <string name="interests_locations">Locais de Interesse</string>
+    <string name="interests_locations">Locais de Interesse (</string>
     <string name="locations_details">Detalhes da Localização</string>
     <string name="info_modal_text">Esta informação para o item \'%1$s\' não é confiavel visto que ainda não foi votada pelo número mínimo de utilizadores, Deseja avaliar a informação como confiável?</string>
     <string name="warning_info_title">Informação não confiável</string>
@@ -35,4 +35,5 @@
     <string name="category_txt">Categoria</string>
     <string name="extra_information">Informação adicional</string>
     <string name="Credits">Credits</string>
+    <string name="detalhes_do_local_de_interesse">Detalhes do local de interesse</string>
 </resources>

@@ -53,7 +53,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
 
     val context = LocalContext.current
     val app = context.applicationContext as App
-    var stageId: String = "";
+    var locationId: String = ""; var pointOfInterestId: String = "";
     val currentScreen by navController.currentBackStackEntryAsState()
     var showBackArrow by remember { mutableStateOf(false) }
     var showDetailsBtn by remember { mutableStateOf(false) }
@@ -149,10 +149,12 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                                         text = { Text(stringResource(R.string.add_location)) },
                                         onClick = {  expandedMenu = false}
                                     )
-                                    DropdownMenuItem(
-                                        text = { Text(stringResource(R.string.add_interest_location)) },
-                                        onClick = { expandedMenu = false  }
-                                    )
+                                    if(currentScreen!!.destination.route == Screens.LOCAL.route){
+                                        DropdownMenuItem(
+                                            text = { Text(stringResource(R.string.add_interest_location)) },
+                                            onClick = { expandedMenu = false  }
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -196,36 +198,42 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                 title.value = stringResource(id = R.string.locations_details)
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
 
-                LocationDetailsScreen(navHostController = navController, viewModel!!, viewModel!!.getLocationById(stageId))
+                LocationDetailsScreen(navHostController = navController, viewModel!!, viewModel!!.getLocationById(locationId))
             }
-            composable(Screens.LOCAL_DETAILS.route) {
 
+            composable(Screens.LOCAL_DETAILS.route) {
+                title.value = stringResource(R.string.detalhes_do_local_de_interesse)
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
-                Greeting(Screens.LOCAL_DETAILS.route)
+
+                PointOfInteresetDetailsScreen(navHostController = navController, viewModel!!, viewModel!!.getPointOfInterestById(pointOfInterestId))
             }
+
             composable(Screens.LOCATION.route) {
 
                 title.value = stringResource(id = R.string.location_list)
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
 
                 LocationListScreen(NavHostController = navController, viewModel!!, app.appData.allLocations) {
-                    stageId = it.itemId
+                    locationId = it.itemId
                     navController.navigate(it.nextPage.route)
                 }
             }
 
             composable(Screens.LOCAL.route) {
-                title.value = stringResource(id = R.string.interests_locations)
+                title.value = stringResource(id = R.string.interests_locations) + viewModel!!.getLocationById(locationId).name + ")"
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
-                PointOfInterestListScreen(NavHostController = navController, viewModel!!, viewModel!!.getLocationById(stageId).pointsOfInterest) {
-                    stageId = it.itemId
+
+                PointOfInterestListScreen(NavHostController = navController, viewModel!!, viewModel!!.getLocationById(locationId).pointsOfInterest) {
+                    pointOfInterestId = it.itemId
                     navController.navigate(it.nextPage.route)
                 }
+
             }
 
             composable(Screens.ACCOUNT_CHANGE_DATA.route) {
                 title.value = stringResource(id = R.string.change_data_acc)
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
+
                 AccountPage(
                     navController,
                     viewModel!!,
