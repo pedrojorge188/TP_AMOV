@@ -50,4 +50,5 @@
     <string name="coordenadas_da_localiza_o">Coordenadas da localização</string>
     <string name="authors_name_qa">Insira o seu nome</string>
     <string name="insert_description">Escreva uma descrição</string>
+    <string name="my_location_market">Localização do seu dispositivo</string>
 </resources>

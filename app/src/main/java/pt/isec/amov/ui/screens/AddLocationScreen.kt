@@ -1,3 +1,4 @@
+
 package pt.isec.amov.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -38,6 +40,7 @@ import pt.isec.amov.ui.composables.NormalBtn
 import pt.isec.amov.ui.composables.SelectGalleryImg
 import pt.isec.amov.ui.composables.TakePhoto
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
+import pt.isec.amov.utils.location.CurrentLocation
 
 @Composable
 fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
@@ -50,6 +53,8 @@ fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
         var showLatLonDialog by remember { mutableStateOf(false) }
         var latitude by remember { mutableStateOf("") }
         var longitude by remember { mutableStateOf("") }
+        var locationOrigin by remember { mutableStateOf("")}
+        val applicationContext = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -126,17 +131,32 @@ fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
                     .align(Alignment.CenterHorizontally)
                     .padding(15.dp), text = stringResource(R.string.coordenadas_da_localiza_o)
             )
-            Text(
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .padding(3.dp), text = "lat:"+latitude+"    long:"+longitude
-            )
+
+            if(latitude.isNotBlank() && longitude.isNotBlank()) {
+                Text(
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(3.dp),
+                    text = "$locationOrigin\nlat:$latitude    long:$longitude",
+                    color = if (locationOrigin.isNotBlank()) {
+                        Color.Red
+                    } else {
+                        Color.Black
+                    }
+                )
+            }
+
             LocationSelectionButtons(
                 onInputButtonClick = {
                     showLatLonDialog = true
+                    locationOrigin = ""
                 },
                 onMapButtonClick = {
-                    //necessario concluir (buscar localizacao atual)
+                        CurrentLocation.getCurrentLocation(applicationContext) { lat, lon ->
+                            latitude = lat
+                            longitude = lon
+                        }
+                        locationOrigin = "Localização do seu dispositivo"
                 }
             )
             if (showLatLonDialog) {
