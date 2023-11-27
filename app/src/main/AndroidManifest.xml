@@ -40,6 +40,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="pt.isec.amov.android.fileprovider"
+            android:exported="false" android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path" />
+        </provider>
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyB74gxevtNrgY6IAQO2m_fOFuCfKkRx5bc" />
     </application>

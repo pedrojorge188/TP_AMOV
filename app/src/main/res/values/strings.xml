@@ -39,4 +39,15 @@
     <string name="this_application_needs_your_permission_to_use_location_while_in_the_background">This application needs your permission to use location while in the background.\n</string>
     <string name="localization_with_fan">"Localização - "</string>
     <string name="local_de_interesse">Local de Interesse -</string>
+    <string name="add_locations">Adiconar uma Localização</string>
+    <string name="location_name">Nome da Localização</string>
+    <string name="foto_da_localiza_o">Foto da localização</string>
+    <string name="choose_from_gallery">Escolher da galeria</string>
+    <string name="location_photo">Foto da localização</string>
+    <string name="choose_category">Escolha uma categoria</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
+    <string name="coordenadas_da_localiza_o">Coordenadas da localização</string>
+    <string name="authors_name_qa">Insira o seu nome</string>
+    <string name="insert_description">Escreva uma descrição</string>
 </resources>

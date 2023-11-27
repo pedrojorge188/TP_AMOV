@@ -1,3 +1,5 @@
+@file:Suppress("UNUSED_EXPRESSION")
+
 package pt.isec.amov.ui.screens
 
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,7 +39,6 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import pt.isec.amov.App
 import pt.isec.amov.R
-import pt.isec.amov.ui.Greeting
 import pt.isec.amov.ui.screens.auth.AccountPage
 import pt.isec.amov.ui.screens.auth.LoginScreen
 import pt.isec.amov.ui.screens.auth.RegisterScreen
@@ -73,14 +74,14 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
         showDetailsBtn = destination.route in arrayOf(
             Screens.ACCOUNT_CHANGE_DATA.route,
             Screens.POINT_OF_INTEREST_DETAILS.route, Screens.LOCATION.route, Screens.LOCATION_DETAILS.route ,
-            Screens.POINT_OF_INTEREST.route, Screens.LOCATION_MAP.route, Screens.CONTRIBUTION.route, Screens.POINT_OF_INTEREST_MAP.route
+            Screens.POINT_OF_INTEREST.route, Screens.LOCATION_MAP.route, Screens.ADD_LOCATION.route, Screens.POINT_OF_INTEREST_MAP.route
         )
         showAddBtn = destination.route in arrayOf(
-            Screens.ACCOUNT_CHANGE_DATA.route, Screens.POINT_OF_INTEREST_DETAILS.route, Screens.LOCATION.route,  Screens.LOCATION_DETAILS.route ,  Screens.POINT_OF_INTEREST.route, Screens.LOCATION_MAP.route, Screens.POINT_OF_INTEREST_MAP.route, Screens.CONTRIBUTION.route
+            Screens.ACCOUNT_CHANGE_DATA.route, Screens.POINT_OF_INTEREST_DETAILS.route, Screens.LOCATION.route,  Screens.LOCATION_DETAILS.route ,  Screens.POINT_OF_INTEREST.route, Screens.LOCATION_MAP.route, Screens.POINT_OF_INTEREST_MAP.route, Screens.ADD_LOCATION.route
         )
         showBackArrow = destination.route in arrayOf(
             Screens.ACCOUNT_CHANGE_DATA.route, Screens.LOGIN.route,
-            Screens.REGISTER.route, Screens.CREDITS.route, Screens.POINT_OF_INTEREST_DETAILS.route, Screens.LOCATION_DETAILS.route, Screens.POINT_OF_INTEREST.route, Screens.LOCATION_MAP.route, Screens.CONTRIBUTION.route , Screens.POINT_OF_INTEREST_MAP.route
+            Screens.REGISTER.route, Screens.CREDITS.route, Screens.POINT_OF_INTEREST_DETAILS.route, Screens.LOCATION_DETAILS.route, Screens.POINT_OF_INTEREST.route, Screens.LOCATION_MAP.route, Screens.ADD_LOCATION.route , Screens.POINT_OF_INTEREST_MAP.route
         )
     }
 
@@ -151,7 +152,10 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                                     )
                                     DropdownMenuItem(
                                         text = { Text(stringResource(R.string.add_location)) },
-                                        onClick = {  expandedMenu = false}
+                                        onClick = {
+                                            navController.navigate(Screens.ADD_LOCATION.route);
+                                            expandedMenu = false
+                                        }
                                     )
                                     if(currentScreen!!.destination.route == Screens.POINT_OF_INTEREST.route){
                                         DropdownMenuItem(
@@ -262,11 +266,12 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                 PointOfInterestMapScreen(navHostController = navController, viewModel = viewModel!!, item = viewModel!!.getPointOfInterestById(pointOfInterestId.value)!!)
             }
 
-            composable(Screens.CONTRIBUTION.route) {
-                Greeting(Screens.CONTRIBUTION.route)
+            composable(Screens.ADD_LOCATION.route) {
+                title.value = stringResource(R.string.add_locations)
+                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
+                AddLocationScreen(navController, viewModel!!);
             }
         }
     }
 }
-
 

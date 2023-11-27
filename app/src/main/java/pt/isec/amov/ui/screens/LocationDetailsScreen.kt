@@ -1,5 +1,6 @@
 package pt.isec.amov.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import pt.isec.amov.R
 import pt.isec.amov.models.Location
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
@@ -65,16 +67,21 @@ fun LocationDetailsScreen(
               }
 
           }
-
-            //imagem tem de ser alterada mais tarde
-            Image(
-                painter = painterResource(id = R.drawable.museu),
-                contentDescription = "Museu",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
+            Log.i("img", location!!.photoUrl.toString())
+            if (location.photoUrl != "") {
+                AsyncImage(model = location.photoUrl, contentDescription = "",contentScale = ContentScale.Fit,modifier = Modifier
                     .fillMaxWidth()
-                    .height(200.dp)
-            )
+                    .height(200.dp))
+            }else{
+                Image(
+                    painter = painterResource(id = R.drawable.logo),
+                    contentDescription = "",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                )
+            }
 
         Row(
             modifier = Modifier
