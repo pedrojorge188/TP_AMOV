@@ -16,8 +16,8 @@ class AppData {
             addCategory(name = "Museu", iconUrl = "", description = "Local de interesse")
             addCategory(name = "Discoteca", iconUrl = "", description = "Local de interesse")
 
-            addLocation("New York", 123.456, 789.012, "Descrição da Localização 1", "url_localizacao1", "user123", categories[0])
-            addLocation("Lisboa", 234.567, 890.123, "Descrição da Localização 2", "url_localizacao2", "user456", categories[0])
+            addLocation("New York", 123.456, 789.012, "Descrição da Localização 1", "", "user123", categories[0])
+            addLocation("Lisboa", 234.567, 890.123, "Descrição da Localização 2", "", "user456", categories[0])
 
             addPointOfInterestToLocation(locations[0].id, "Museu do americano", "Descrição do Ponto de Interesse 1", "url_ponto1", 123.456, 789.012, "user789", categories[1])
             addPointOfInterestToLocation(locations[1].id, "Urban", "Descrição do Ponto de Interesse 2", "url_ponto2", 234.567, 890.123, "user012", categories[2])

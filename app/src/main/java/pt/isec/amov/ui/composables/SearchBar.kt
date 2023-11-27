@@ -109,7 +109,7 @@ fun SearchBar(Screen: Screens, vm: ActionsViewModel) {
                     )
                 }
 
-                if(Screen == Screens.LOCAL) {
+                if(Screen == Screens.POINT_OF_INTEREST) {
                     Spacer(modifier = Modifier.width(10.dp))
 
                     Button(

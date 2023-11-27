@@ -60,7 +60,10 @@ fun Menu(
                 text = stringResource(R.string.Register)
             )
             Spacer(modifier = Modifier.height(16.dp))
-            NormalBtn(onClick = {}, text = "Créditos")
+            NormalBtn(
+                onClick = { navHostController?.navigate(Screens.CREDITS.route) },
+                text = stringResource(R.string.Credits)
+            )
         }
     }
 

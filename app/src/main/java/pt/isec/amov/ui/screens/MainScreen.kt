@@ -1,3 +1,5 @@
+@file:Suppress("UNUSED_EXPRESSION")
+
 package pt.isec.amov.ui.screens
 
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,12 +39,13 @@ import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.launch
 import pt.isec.amov.App
 import pt.isec.amov.R
-import pt.isec.amov.ui.Greeting
 import pt.isec.amov.ui.screens.auth.AccountPage
 import pt.isec.amov.ui.screens.auth.LoginScreen
 import pt.isec.amov.ui.screens.auth.RegisterScreen
 import pt.isec.amov.ui.screens.lists.LocationListScreen
 import pt.isec.amov.ui.screens.lists.PointOfInterestListScreen
+import pt.isec.amov.ui.screens.maps.LocationMapScreen
+import pt.isec.amov.ui.screens.maps.PointOfInterestMapScreen
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
 import pt.isec.amov.ui.viewmodels.ActionsViewModelFactory
 import pt.isec.amov.ui.viewmodels.Screens
@@ -53,7 +56,6 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
 
     val context = LocalContext.current
     val app = context.applicationContext as App
-    var stageId: String = "";
     val currentScreen by navController.currentBackStackEntryAsState()
     var showBackArrow by remember { mutableStateOf(false) }
     var showDetailsBtn by remember { mutableStateOf(false) }
@@ -63,20 +65,23 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
     var title = remember { mutableStateOf("") }
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+
     var viewModel : ActionsViewModel? = null
+    var locationId = remember { mutableStateOf("") };
+    var pointOfInterestId = remember { mutableStateOf("") };
 
     navController.addOnDestinationChangedListener { controller, destination, arguments ->
         showDetailsBtn = destination.route in arrayOf(
             Screens.ACCOUNT_CHANGE_DATA.route,
-            Screens.LOCAL_DETAILS.route, Screens.LOCATION.route, Screens.LOCATION_DETAILS.route ,
-            Screens.LOCAL.route, Screens.MAP.route, Screens.CONTRIBUTION.route
+            Screens.POINT_OF_INTEREST_DETAILS.route, Screens.LOCATION.route, Screens.LOCATION_DETAILS.route ,
+            Screens.POINT_OF_INTEREST.route, Screens.LOCATION_MAP.route, Screens.ADD_LOCATION.route, Screens.POINT_OF_INTEREST_MAP.route
         )
         showAddBtn = destination.route in arrayOf(
-            Screens.ACCOUNT_CHANGE_DATA.route, Screens.LOCAL_DETAILS.route, Screens.LOCATION.route,  Screens.LOCATION_DETAILS.route ,  Screens.LOCAL.route, Screens.MAP.route, Screens.CONTRIBUTION.route
+            Screens.ACCOUNT_CHANGE_DATA.route, Screens.POINT_OF_INTEREST_DETAILS.route, Screens.LOCATION.route,  Screens.LOCATION_DETAILS.route ,  Screens.POINT_OF_INTEREST.route, Screens.LOCATION_MAP.route, Screens.POINT_OF_INTEREST_MAP.route, Screens.ADD_LOCATION.route
         )
         showBackArrow = destination.route in arrayOf(
             Screens.ACCOUNT_CHANGE_DATA.route, Screens.LOGIN.route,
-            Screens.REGISTER.route, Screens.LOCAL_DETAILS.route, Screens.LOCATION_DETAILS.route, Screens.LOCAL.route, Screens.MAP.route, Screens.CONTRIBUTION.route
+            Screens.REGISTER.route, Screens.CREDITS.route, Screens.POINT_OF_INTEREST_DETAILS.route, Screens.LOCATION_DETAILS.route, Screens.POINT_OF_INTEREST.route, Screens.LOCATION_MAP.route, Screens.ADD_LOCATION.route , Screens.POINT_OF_INTEREST_MAP.route
         )
     }
 
@@ -147,12 +152,17 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                                     )
                                     DropdownMenuItem(
                                         text = { Text(stringResource(R.string.add_location)) },
-                                        onClick = {  expandedMenu = false}
+                                        onClick = {
+                                            navController.navigate(Screens.ADD_LOCATION.route);
+                                            expandedMenu = false
+                                        }
                                     )
-                                    DropdownMenuItem(
-                                        text = { Text(stringResource(R.string.add_interest_location)) },
-                                        onClick = { expandedMenu = false  }
-                                    )
+                                    if(currentScreen!!.destination.route == Screens.POINT_OF_INTEREST.route){
+                                        DropdownMenuItem(
+                                            text = { Text(stringResource(R.string.add_interest_location)) },
+                                            onClick = { expandedMenu = false  }
+                                        )
+                                    }
                                 }
                             }
                         }
@@ -187,40 +197,51 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
                 RegisterScreen(navHostController = navController, viewModel!!)
             }
+            composable(Screens.CREDITS.route) {
+                title.value = stringResource(id = R.string.Credits)
+                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
+                CreditsScreen(navHostController = navController, viewModel!!)
+            }
             composable(Screens.LOCATION_DETAILS.route) {
-                title.value = stringResource(id = R.string.locations_details)
+                title.value = viewModel!!.getLocationById(locationId.value).name
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
 
-                LocationDetailsScreen(navHostController = navController, viewModel!!, viewModel!!.getLocationById(stageId))
+                LocationDetailsScreen(navHostController = navController, viewModel!!, viewModel!!.getLocationById(locationId.value))
             }
-            composable(Screens.LOCAL_DETAILS.route) {
 
+            composable(Screens.POINT_OF_INTEREST_DETAILS.route) {
+                title.value = viewModel!!.getPointOfInterestById(pointOfInterestId.value)!!.name
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
-                Greeting(Screens.LOCAL_DETAILS.route)
+
+                PointOfInteresetDetailsScreen(navHostController = navController, viewModel!!, viewModel!!.getPointOfInterestById(pointOfInterestId.value))
             }
+
             composable(Screens.LOCATION.route) {
 
                 title.value = stringResource(id = R.string.location_list)
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
 
                 LocationListScreen(NavHostController = navController, viewModel!!, app.appData.allLocations) {
-                    stageId = it.itemId
+                    locationId.value = it.itemId
                     navController.navigate(it.nextPage.route)
                 }
             }
 
-            composable(Screens.LOCAL.route) {
-                title.value = stringResource(id = R.string.interests_locations)
+            composable(Screens.POINT_OF_INTEREST.route) {
+                title.value = stringResource(id = R.string.interests_locations) + viewModel!!.getLocationById(locationId.value).name + ")"
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
-                PointOfInterestListScreen(NavHostController = navController, viewModel!!, viewModel!!.getLocationById(stageId).pointsOfInterest) {
-                    stageId = it.itemId
+
+                PointOfInterestListScreen(NavHostController = navController, viewModel!!, viewModel!!.getLocationById(locationId.value).pointsOfInterest) {
+                    pointOfInterestId.value = it.itemId
                     navController.navigate(it.nextPage.route)
                 }
+
             }
 
             composable(Screens.ACCOUNT_CHANGE_DATA.route) {
                 title.value = stringResource(id = R.string.change_data_acc)
                 viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
+
                 AccountPage(
                     navController,
                     viewModel!!,
@@ -233,13 +254,24 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                     }
                 )
             }
-
-            composable(Screens.MAP.route) {
-                Greeting(Screens.MAP.route)
+            composable(Screens.LOCATION_MAP.route) {
+                title.value = viewModel!!.getLocationById(locationId.value).name
+                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
+                LocationMapScreen(navHostController = navController, viewModel = viewModel!!, location = viewModel!!.getLocationById(locationId.value))
             }
-            composable(Screens.CONTRIBUTION.route) {
-                Greeting(Screens.CONTRIBUTION.route)
+
+            composable(Screens.POINT_OF_INTEREST_MAP.route) {
+                title.value = viewModel!!.getLocationById(locationId.value).name
+                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
+                PointOfInterestMapScreen(navHostController = navController, viewModel = viewModel!!, item = viewModel!!.getPointOfInterestById(pointOfInterestId.value)!!)
+            }
+
+            composable(Screens.ADD_LOCATION.route) {
+                title.value = stringResource(R.string.add_locations)
+                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
+                AddLocationScreen(navController, viewModel!!);
             }
         }
     }
 }
+

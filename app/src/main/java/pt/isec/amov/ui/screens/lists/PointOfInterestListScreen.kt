@@ -37,7 +37,7 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
 {
     Column {
         Spacer(modifier = Modifier.height(16.dp))
-        SearchBar(Screens.LOCAL, vm)
+        SearchBar(Screens.POINT_OF_INTEREST, vm)
         Spacer(modifier = Modifier.height(16.dp))
 
         LazyColumn (
@@ -53,7 +53,7 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
                         .fillMaxWidth()
                         .padding(8.dp),
                     onClick = {
-                        //onSelected(NavigationData(it.id, Screens.LOCAL))
+                        onSelected(NavigationData(it.id, Screens.POINT_OF_INTEREST_DETAILS))
                     }
                 ) {
                     Row(
@@ -81,7 +81,7 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
 
                             IconButton(
                                 onClick = {
-                                   // onSelected(it.id)
+                                    onSelected(NavigationData(it.id, Screens.POINT_OF_INTEREST_DETAILS))
                                 },
                             ) {
                                 Icon(
