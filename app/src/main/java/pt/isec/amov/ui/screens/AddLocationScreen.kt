@@ -27,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -53,7 +52,6 @@ fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
         var latitude by remember { mutableStateOf("") }
         var longitude by remember { mutableStateOf("") }
         var locationOrigin by remember { mutableStateOf("")}
-        val applicationContext = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -130,8 +128,7 @@ fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
                     .align(Alignment.CenterHorizontally)
                     .padding(15.dp), text = stringResource(R.string.coordenadas_da_localiza_o)
             )
-
-            if(latitude.isNotBlank() && longitude.isNotBlank()) {
+            if (latitude.isNotBlank() && longitude.isNotBlank()) {
                 Text(
                     modifier = Modifier
                         .align(Alignment.CenterHorizontally)
@@ -144,15 +141,14 @@ fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
                     }
                 )
             }
-
             LocationSelectionButtons(
                 onInputButtonClick = {
                     showLatLonDialog = true
                     locationOrigin = ""
                 },
                 onMapButtonClick = {
-                        latitude = "0"
-                        longitude = "0"
+                        latitude = vm.currentLocation.value?.latitude.toString()
+                        longitude = vm.currentLocation.value?.longitude.toString()
                         locationOrigin = "Localização do seu dispositivo"
                 }
             )
@@ -165,7 +161,11 @@ fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
                     onDismiss = { showLatLonDialog = false }
                 )
             }
+
         }
+
+
+
         Spacer(modifier = Modifier.height(16.dp))
         Card {
             Text(
@@ -193,6 +193,7 @@ fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
                 }
             }
         }
+
         Spacer(modifier = Modifier.height(16.dp))
         NormalBtn(
             onClick =

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.preference.PreferenceManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,25 +16,30 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
+import org.osmdroid.config.Configuration
 import pt.isec.amov.App
 import pt.isec.amov.ui.screens.MainScreen
 import pt.isec.amov.ui.theme.PraticalWorkTheme
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
 import pt.isec.amov.ui.viewmodels.ActionsViewModelFactory
 
+@Suppress("DEPRECATION")
 class MainActivity : ComponentActivity() {
 
     private val app by lazy {application as App}
     val viewModel : ActionsViewModel by viewModels {
-        ActionsViewModelFactory(app.appData)
+        ActionsViewModelFactory(app.appData, app.locationHandler)
     }
 
     override fun onResume() {
         super.onResume()
+        viewModel.startLocationUpdates()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this))
 
         setContent {
             PraticalWorkTheme {

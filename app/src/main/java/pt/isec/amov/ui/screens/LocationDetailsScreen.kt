@@ -67,7 +67,7 @@ fun LocationDetailsScreen(
               }
 
           }
-            Log.i("img", location!!.photoUrl.toString())
+            Log.i("img", location.photoUrl.toString())
             if (location.photoUrl != "") {
                 AsyncImage(model = location.photoUrl, contentDescription = "",contentScale = ContentScale.Fit,modifier = Modifier
                     .fillMaxWidth()
@@ -141,7 +141,7 @@ fun LocationDetailsScreen(
                     fontSize = 25.sp
                 )
                 Text(
-                    text = "   "+location!!.category.name,
+                    text = "   "+location.category?.name,
                     color = Color.Black,
                     fontSize = 20.sp
                 )
@@ -164,7 +164,7 @@ fun LocationDetailsScreen(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = "Avaliação Atual: "+location!!.grade,
+                    text = "Avaliação Atual: "+location.grade,
                     color = Color.Gray,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
@@ -173,7 +173,7 @@ fun LocationDetailsScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 CustomRatingBar(
-                    rating = location!!.grade.toFloat(),
+                    rating = location.grade.toFloat(),
                     onRatingChanged = {}
                 )
 

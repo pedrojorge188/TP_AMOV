@@ -13,15 +13,15 @@ class AppData {
         init {
 
             addCategory(name = "Cidade", iconUrl = "", description = "Grande cidade com muitas pessoas")
-            addCategory(name = "Museu", iconUrl = "", description = "Local de interesse")
-            addCategory(name = "Discoteca", iconUrl = "", description = "Local de interesse")
+            addCategory(name = "Parque", iconUrl = "", description = "Local de interesse")
+            addCategory(name = "Centro Comercial", iconUrl = "", description = "Local de interesse")
 
-            addLocation("New York", 123.456, 789.012, "Descrição da Localização 1", "", "user123", categories[0])
-            addLocation("Lisboa", 234.567, 890.123, "Descrição da Localização 2", "", "user456", categories[0])
+            addLocation("New York", 40.730610, -73.935242, "Descrição da Localização 1", "", "user123", categories[0])
+            addLocation("Lisboa",  38.7071, -9.13549, "Descrição da Localização 2", "", "user456", categories[0])
 
-            addPointOfInterestToLocation(locations[0].id, "Museu do americano", "Descrição do Ponto de Interesse 1", "url_ponto1", 123.456, 789.012, "user789", categories[1])
-            addPointOfInterestToLocation(locations[1].id, "Urban", "Descrição do Ponto de Interesse 2", "url_ponto2", 234.567, 890.123, "user012", categories[2])
-            addPointOfInterestToLocation(locations[1].id, "LostInRio", "Descrição do Ponto de Interesse 2", "url_ponto2", 234.567, 890.123, "user012", categories[2])
+            addPointOfInterestToLocation(locations[0].id, "Central Park", "Descrição do Ponto de Interesse 1", "url_ponto1", 40.785091, -73.968285, "user789", categories[1])
+            addPointOfInterestToLocation(locations[1].id, "Colombo", "Descrição do Ponto de Interesse 2", "url_ponto2", 38.7558, -9.1885, "user012", categories[2])
+            addPointOfInterestToLocation(locations[1].id, "Vasco da gama", "Descrição do Ponto de Interesse 2", "url_ponto2", 38.771496914 , -9.088166314, "user012", categories[2])
         }
 
         val allLocations: List<Location>
