@@ -17,9 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 import pt.isec.amov.R
 import pt.isec.amov.models.PointOfInterest
@@ -56,6 +53,7 @@ fun PointOfInterestMapScreen(
                 .padding(25.dp)
                 .weight(1f)
         ) {
+            /*
             GoogleMap(
                 modifier = Modifier.fillMaxSize(),
                 cameraPositionState = cameraPositionState
@@ -65,8 +63,8 @@ fun PointOfInterestMapScreen(
                     title = item.name,
                     snippet = item.name,
                 )
-
             }
+             */
         }
     }
 }

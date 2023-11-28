@@ -40,7 +40,6 @@ import pt.isec.amov.ui.composables.NormalBtn
 import pt.isec.amov.ui.composables.SelectGalleryImg
 import pt.isec.amov.ui.composables.TakePhoto
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
-import pt.isec.amov.utils.location.CurrentLocation
 
 @Composable
 fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
@@ -152,10 +151,8 @@ fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
                     locationOrigin = ""
                 },
                 onMapButtonClick = {
-                        CurrentLocation.getCurrentLocation(applicationContext) { lat, lon ->
-                            latitude = lat
-                            longitude = lon
-                        }
+                        latitude = "0"
+                        longitude = "0"
                         locationOrigin = "Localização do seu dispositivo"
                 }
             )
