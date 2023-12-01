@@ -69,7 +69,7 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
             Screens.POINT_OF_INTEREST.route, Screens.LOCATION_MAP.route, Screens.ADD_LOCATION.route, Screens.POINT_OF_INTEREST_MAP.route
         )
         showAddBtn = destination.route in arrayOf(
-            Screens.ACCOUNT_CHANGE_DATA.route, Screens.POINT_OF_INTEREST_DETAILS.route, Screens.LOCATION.route,  Screens.LOCATION_DETAILS.route ,  Screens.POINT_OF_INTEREST.route, Screens.LOCATION_MAP.route, Screens.POINT_OF_INTEREST_MAP.route, Screens.ADD_LOCATION.route
+             Screens.LOCATION.route,  Screens.POINT_OF_INTEREST.route, Screens.ADD_LOCATION.route, Screens.ADD_POI.route
         )
         showBackArrow = destination.route in arrayOf(
             Screens.ACCOUNT_CHANGE_DATA.route, Screens.LOGIN.route, Screens.ADD_POI.route,
@@ -142,13 +142,15 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
                                         text = { Text(stringResource(R.string.add_category)) },
                                         onClick = { expandedMenu = false }
                                     )
-                                    DropdownMenuItem(
-                                        text = { Text(stringResource(R.string.add_location)) },
-                                        onClick = {
-                                            navController.navigate(Screens.ADD_LOCATION.route);
-                                            expandedMenu = false
-                                        }
-                                    )
+                                    if(currentScreen!!.destination.route != Screens.POINT_OF_INTEREST.route) {
+                                        DropdownMenuItem(
+                                            text = { Text(stringResource(R.string.add_location)) },
+                                            onClick = {
+                                                navController.navigate(Screens.ADD_LOCATION.route);
+                                                expandedMenu = false
+                                            }
+                                        )
+                                    }
                                     if(currentScreen!!.destination.route == Screens.POINT_OF_INTEREST.route){
                                         DropdownMenuItem(
                                             text = { Text(stringResource(R.string.add_interest_location)) },

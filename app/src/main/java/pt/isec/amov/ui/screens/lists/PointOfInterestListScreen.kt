@@ -44,7 +44,6 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
     Column {
         Spacer(modifier = Modifier.height(16.dp))
         SearchBar(Screens.POINT_OF_INTEREST, vm)
-        Spacer(modifier = Modifier.height(16.dp))
 
         if(locals.isEmpty())
             NormalBtn(onClick = { NavHostController.navigate(Screens.ADD_POI.route) }, text = stringResource(id = R.string.add_location))
