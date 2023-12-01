@@ -19,9 +19,9 @@ class AppData {
             addLocation("New York", 40.730610, -73.935242, "Descrição da Localização 1", "", "user123", categories[0])
             addLocation("Lisboa",  38.7071, -9.13549, "Descrição da Localização 2", "", "user456", categories[0])
 
-            addPointOfInterestToLocation(locations[0].id, "Central Park", "Descrição do Ponto de Interesse 1", "url_ponto1", 40.785091, -73.968285, "user789", categories[1])
-            addPointOfInterestToLocation(locations[1].id, "Colombo", "Descrição do Ponto de Interesse 2", "url_ponto2", 38.7558, -9.1885, "user012", categories[2])
-            addPointOfInterestToLocation(locations[1].id, "Vasco da gama", "Descrição do Ponto de Interesse 2", "url_ponto2", 38.771496914 , -9.088166314, "user012", categories[2])
+            addPointOfInterestToLocation(locations[0].id, "Central Park", "Descrição do Ponto de Interesse 1", "", 40.785091, -73.968285, "user789", categories[1])
+            addPointOfInterestToLocation(locations[1].id, "Colombo", "Descrição do Ponto de Interesse 2", "", 38.7558, -9.1885, "user012", categories[2])
+            addPointOfInterestToLocation(locations[1].id, "Vasco da gama", "Descrição do Ponto de Interesse 2", "", 38.771496914 , -9.088166314, "user012", categories[2])
         }
 
         val allLocations: List<Location>

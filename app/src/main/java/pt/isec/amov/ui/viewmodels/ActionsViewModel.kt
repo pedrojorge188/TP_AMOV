@@ -20,7 +20,11 @@ class ActionsViewModelFactory(private val appData: AppData, private val location
 }
 
 class ActionsViewModel(private val appData: AppData,  private val locationHandler: LocationHandler) : ViewModel(){
+
     val imagePath: MutableState<String?> = mutableStateOf(null)
+    var locationId:  MutableState<String?>  = mutableStateOf("")
+    var pointOfInterestId:  MutableState<String?>  = mutableStateOf("")
+
     private val _currentLocation = MutableLiveData(android.location.Location(null))
     val currentLocation : LiveData<android.location.Location>
         get() = _currentLocation
@@ -45,12 +49,12 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
         stopLocationUpdates()
     }
 
-    fun getPointOfInterestById(pointOfInterestId: String): PointOfInterest? {
-        return appData.allPointsOfInterest.find { it.id == pointOfInterestId }
+    fun getPointOfInterest(): PointOfInterest? {
+        return appData.allPointsOfInterest.find { it.id == this.pointOfInterestId.value.toString() }
     }
 
-    fun getLocationById(locationId: String): Location {
-        return appData.allLocations.find { it.id == locationId }!!
+    fun getLocation(): Location {
+        return appData.allLocations.find { it.id == this.locationId.value.toString() }!!
     }
 
     fun getCategorys(): List<Category>{
@@ -59,7 +63,14 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
 
     fun addLocation(locationName: String, locationDescription: String, authorsName: String, selectedCategory: Category, latitude: Double, longitude: Double) {
         appData.addLocation(locationName, latitude, longitude, locationDescription, imagePath.value, authorsName, selectedCategory)
+        this.imagePath.value = null
     }
+
+    fun addPOI(poiName: String, poiDescription: String, selectedCategory: Category, latitude: Double, longitude: Double) {
+        appData.addPointOfInterestToLocation(locationId.value.toString(),poiName,poiDescription,imagePath.value,latitude,longitude,"",selectedCategory)
+        this.imagePath.value = null
+    }
+
 }
 
 

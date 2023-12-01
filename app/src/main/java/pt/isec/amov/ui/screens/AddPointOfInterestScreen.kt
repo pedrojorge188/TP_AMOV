@@ -1,4 +1,3 @@
-
 package pt.isec.amov.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
@@ -40,18 +39,18 @@ import pt.isec.amov.ui.composables.SelectGalleryImg
 import pt.isec.amov.ui.composables.TakePhoto
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
 
-@Composable
-fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
 
-    var locationName by remember { mutableStateOf("") }
-    var locationDescription by remember { mutableStateOf("") }
-    var authorsName by remember { mutableStateOf("") }
+@Composable
+fun AddPointOfInterestScreen(navController: NavHostController, vm: ActionsViewModel) {
+
+    var POIName by remember { mutableStateOf("") }
+    var POIDescription by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
     var selectedCategory by remember { mutableStateOf<Category?>(null) }
     var showLatLonDialog by remember { mutableStateOf(false) }
     var latitude by remember { mutableStateOf("") }
     var longitude by remember { mutableStateOf("") }
-    var locationOrigin by remember { mutableStateOf("")}
+    var locationOrigin by remember { mutableStateOf("") }
 
 
     Column(
@@ -63,29 +62,21 @@ fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedTextField(
-            value = locationName,
+            value = POIName,
             onValueChange = {
-                locationName = it
+                POIName = it
             },
-            label = { Text(stringResource(R.string.location_name)) },
+            label = { Text(stringResource(R.string.name_POI)) },
             singleLine = true
         )
 
         OutlinedTextField(
-            value = locationDescription,
+            value = POIDescription,
             onValueChange = {
-                locationDescription = it
+                POIDescription = it
             },
             label = { Text(stringResource(R.string.insert_description)) },
             singleLine = false
-        )
-        OutlinedTextField(
-            value = authorsName,
-            onValueChange = {
-                authorsName = it
-            },
-            label = { Text(stringResource(R.string.authors_name_qa)) },
-            singleLine = true
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -202,23 +193,23 @@ fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
         NormalBtn(
             onClick =
             {
-                if (locationName.isNotBlank() && locationDescription.isNotBlank()
-                    && authorsName.isNotBlank() && selectedCategory != null
+                if (POIName.isNotBlank() && POIDescription.isNotBlank()
                     && latitude.isNotBlank() && longitude.isNotBlank()
                 ) {
 
-                    vm.addLocation(
-                        locationName, locationDescription, authorsName,
+                    vm.addPOI(
+                        POIName, POIDescription,
                         selectedCategory!!, latitude.toDouble(), longitude.toDouble()
                     )
 
                     navController.popBackStack()
 
                 } else {
-                    //Toast.makeText(LocalContext.current, "Ocorreu um erro", Toast.LENGTH_SHORT).show()
+
                 }
             },
             text = stringResource(id = R.string.add_location)
         )
     }
+
 }
