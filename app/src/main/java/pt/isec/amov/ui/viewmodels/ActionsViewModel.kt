@@ -6,10 +6,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import pt.isec.amov.data.AppData
 import pt.isec.amov.models.Category
 import pt.isec.amov.models.Location
 import pt.isec.amov.models.PointOfInterest
+import pt.isec.amov.models.User
+import pt.isec.amov.models.toUser
+import pt.isec.amov.utils.firebase.AuthUtil
 import pt.isec.amov.utils.location.LocationHandler
 
 @Suppress("UNCHECKED_CAST")
@@ -21,9 +26,18 @@ class ActionsViewModelFactory(private val appData: AppData, private val location
 
 class ActionsViewModel(private val appData: AppData,  private val locationHandler: LocationHandler) : ViewModel(){
 
+    private val _user = mutableStateOf(AuthUtil.currentUser?.toUser())
+    val user : MutableState<User?>
+        get() = _user
+
+    private val _error = mutableStateOf<String?>(null)
+    val error: MutableState<String?>
+        get() = _error
+
     val imagePath: MutableState<String?> = mutableStateOf(null)
     var locationId:  MutableState<String?>  = mutableStateOf("")
     var pointOfInterestId:  MutableState<String?>  = mutableStateOf("")
+
 
     private val _currentLocation = MutableLiveData(android.location.Location(null))
     val currentLocation : LiveData<android.location.Location>
@@ -71,6 +85,40 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
         this.imagePath.value = null
     }
 
+    /*Auth services*/
+    fun createUserWithEmail(email: String, password: String){
+        if(email.isBlank() || password.isBlank()){
+            return
+        }
+        viewModelScope.launch {
+            AuthUtil.createUserWithEmail(email,password) {
+                    expt ->
+                if(expt == null)
+                    _user.value = AuthUtil.currentUser?.toUser()
+                _error.value = expt?.message
+            }
+        }
+    }
+
+    fun signInWithEmail(email : String, password: String){
+        if(email.isBlank() || password.isBlank()){
+            return
+        }
+        viewModelScope.launch {
+            AuthUtil.signInWithEmail(email,password) {
+                    expt ->
+                if(expt == null)
+                    _user.value = AuthUtil.currentUser?.toUser()
+                _error.value = expt?.message
+            }
+        }
+    }
+
+    fun signOut() {
+        AuthUtil.signOut()
+        _user.value = null
+        _error.value = null
+    }
 }
 
 

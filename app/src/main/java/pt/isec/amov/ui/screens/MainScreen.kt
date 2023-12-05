@@ -118,6 +118,7 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
                                     DropdownMenuItem(
                                         text = { Text(stringResource(R.string.logout)) },
                                         onClick = {
+                                            viewModel.signOut()
                                             navController.navigate(Screens.MENU.route);
                                             scope.launch { snackbarHostState.showSnackbar("Terminou a sessão!") }
                                             expandedDetails = false
@@ -182,7 +183,7 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
                 .padding(it)
         ) {
             composable(Screens.MENU.route) {
-                Menu(stringResource(R.string.AppName), navController)
+                Menu(stringResource(R.string.AppName), navController, viewModel)
             }
             composable(Screens.LOGIN.route) {
                 title.value = stringResource(id = R.string.login)
