@@ -12,10 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -31,8 +29,8 @@ import pt.isec.amov.ui.viewmodels.Screens
 
 @Composable
 fun LoginScreen(navHostController: NavHostController?, viewModel: ActionsViewModel) {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
+    val email = remember{ mutableStateOf("") }
+    val password = remember{ mutableStateOf("") }
 
 
     Box(
@@ -57,9 +55,9 @@ fun LoginScreen(navHostController: NavHostController?, viewModel: ActionsViewMod
             )
             Spacer(modifier = Modifier.height(70.dp))
             OutlinedTextField(
-                value = username,
-                onValueChange = { username = it },
-                label = { Text("Username") },
+                value = email.value,
+                onValueChange = { email.value = it },
+                label = { Text("email") },
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -67,8 +65,8 @@ fun LoginScreen(navHostController: NavHostController?, viewModel: ActionsViewMod
             )
 
             OutlinedTextField(
-                value = password,
-                onValueChange = { password = it },
+                value = password.value,
+                onValueChange = { password.value = it },
                 label = { Text("Password") },
                 visualTransformation = PasswordVisualTransformation(),
                 singleLine = true,
