@@ -161,10 +161,11 @@ fun LocationDetailsScreen(
                     modifier = Modifier.padding(start = 20.dp)
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Avaliação Atual: "+location.grade,
+                    text = "Created  by: "+ location.createdBy,
                     color = Color.Gray,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold

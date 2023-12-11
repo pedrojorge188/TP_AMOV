@@ -45,6 +45,8 @@ class AppData {
             )
 
             locations.add(newLocation)
+
+
         }
 
         fun addCategory(name: String, iconUrl: String?, description: String) {

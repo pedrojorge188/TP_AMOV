@@ -79,14 +79,6 @@ fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
             label = { Text(stringResource(R.string.insert_description)) },
             singleLine = false
         )
-        OutlinedTextField(
-            value = authorsName,
-            onValueChange = {
-                authorsName = it
-            },
-            label = { Text(stringResource(R.string.authors_name_qa)) },
-            singleLine = true
-        )
 
         Spacer(modifier = Modifier.height(16.dp))
         Column {
@@ -208,7 +200,7 @@ fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
                 ) {
 
                     vm.addLocation(
-                        locationName, locationDescription, authorsName,
+                        locationName, locationDescription,
                         selectedCategory!!, latitude.toDouble(), longitude.toDouble()
                     )
 

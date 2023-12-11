@@ -75,8 +75,8 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
         return appData.allCategories
     }
 
-    fun addLocation(locationName: String, locationDescription: String, authorsName: String, selectedCategory: Category, latitude: Double, longitude: Double) {
-        appData.addLocation(locationName, latitude, longitude, locationDescription, imagePath.value, authorsName, selectedCategory)
+    fun addLocation(locationName: String, locationDescription: String, selectedCategory: Category, latitude: Double, longitude: Double) {
+        appData.addLocation(locationName, latitude, longitude, locationDescription, imagePath.value, _user.value!!.name, selectedCategory)
         this.imagePath.value = null
     }
 
