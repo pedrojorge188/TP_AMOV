@@ -92,37 +92,9 @@ class StoreUtil {
                 }
         }
 
-
-        fun readPOIFromFirebase(onLocationLoaded: (MutableList<PointOfInterest>) -> Unit) {
-            val db = FirebaseFirestore.getInstance()
-            val locationCollection = db.collection("pointsOfInterest")
-            val response = mutableListOf<PointOfInterest>()
-
-            locationCollection.get()
-                .addOnSuccessListener { documents ->
-                    for (document in documents) {
-                        val poi = PointOfInterest(
-                            document.getString("id") ?: "",
-                            document.getString("name") ?: "",
-                            document.getString("locationId") ?: "",
-                            document.getString("description") ?: "",
-                            document.getString("photoUrl") ?: "",
-                            document.getDouble("latitude") ?: 0.0,
-                            document.getDouble("longitude") ?: 0.0,
-                            document.getLong("votes")?.toInt() ?: 0,
-                            document.getString("createdBy")?: "",
-                            document.getString("category") ?: ""
-                        )
-                        response.add(poi)
-                    }
-
-                    onLocationLoaded(response)
-                }
-        }
-
         fun readLocationsFromFirebase(onLocationLoaded: (MutableList<Location>) -> Unit) {
             val db = FirebaseFirestore.getInstance()
-            val locationCollection = db.collection("location")
+            val locationCollection = db.collection("locations")
             val response = mutableListOf<Location>()
 
             locationCollection.get()
@@ -138,12 +110,67 @@ class StoreUtil {
                             document.getString("createdBy") ?: "",
                             document.getLong("votes")?.toInt() ?: 0,
                             document.getLong("grade")?.toInt() ?: 1,
-                            document.getString("category") ?: ""
+                            document.getString("category") ?: "",
                         )
                         response.add(location)
                     }
 
                     onLocationLoaded(response)
+                }
+        }
+
+        fun readPOIFromFirebase(locationId: String, onPOILoaded: (MutableList<PointOfInterest>) -> Unit) {
+            val db = FirebaseFirestore.getInstance()
+            val poiCollection = db.collection("locations")
+                .document(locationId)
+                .collection("pointsOfInterest")
+
+            val response = mutableListOf<PointOfInterest>()
+
+            poiCollection.get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        val poi = PointOfInterest(
+                            document.getString("id") ?: "",
+                            document.getString("name") ?: "",
+                            document.getString("locationId") ?: "",
+                            document.getString("description") ?: "",
+                            document.getString("photoUrl") ?: "",
+                            document.getDouble("latitude") ?: 0.0,
+                            document.getDouble("longitude") ?: 0.0,
+                            document.getLong("votes")?.toInt() ?: 0,
+                            document.getString("createdBy") ?: "",
+                            document.getString("category") ?: ""
+                        )
+                        response.add(poi)
+                    }
+                    onPOILoaded(response)
+                }
+        }
+
+        fun getCategoryById(AssocId: String?, onComplete: (Category?) -> Unit) {
+            val db = FirebaseFirestore.getInstance()
+            val categoriesCollection = db.collection("category")
+
+            categoriesCollection.get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        val id = document.getString("id") ?: ""
+                        val name = document.getString("name") ?: ""
+                        val iconUrl = document.getString("iconUrl")
+                        val description = document.getString("description") ?: ""
+
+                        val category = Category(id, name, iconUrl, description)
+                        if (category.id == AssocId) {
+                            onComplete(category)
+                            return@addOnSuccessListener
+                        }
+                    }
+                    onComplete(null) // Retorna null se não encontrou nenhuma categoria correspondente
+                }
+                .addOnFailureListener { exception ->
+                    // Lidar com falhas, se houver
+                    onComplete(null)
                 }
         }
 

@@ -78,6 +78,7 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
         )
     }
 
+
     Scaffold(
         snackbarHost = {
             SnackbarHost(snackbarHostState)
@@ -177,12 +178,14 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
         },
         modifier = Modifier.fillMaxSize()
     ) {
+
         NavHost(
             navController = navController,
             startDestination = Screens.MENU.route,
             modifier = Modifier
                 .padding(it)
         ) {
+
             composable(Screens.MENU.route) {
                 Menu(stringResource(R.string.AppName), navController, viewModel)
             }

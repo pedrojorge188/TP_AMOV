@@ -22,8 +22,8 @@ class AppData {
                 loadData()
             }
         }
-        fun loadData() {
 
+        fun loadData() {
             val poi = mutableListOf<PointOfInterest>()
 
             StoreUtil.loadCategoriesFromFireStone(
@@ -38,12 +38,13 @@ class AppData {
                 Log.d("LOADED_LOCATIONS:", loadedLocations.toString());
             }
 
-            StoreUtil.readPOIFromFirebase() {
-                loadedLocations -> setPointsOfInterest(loadedLocations)
-                Log.d("LOADED_POI:", loadedLocations.toString());
+
+            for (location in locations) {
+                StoreUtil.readPOIFromFirebase(locationId = location.id) {
+                        loadedLocations -> setPointsOfInterest(loadedLocations)
+                    Log.d("LOADED_POI:", loadedLocations.toString());
+                }
             }
-
-
         }
 
         val allLocations: List<Location>
