@@ -10,7 +10,9 @@ import pt.isec.amov.models.PointOfInterest
 import java.io.IOException
 import java.io.InputStream
 
+@Suppress("CAST_NEVER_SUCCEEDS")
 class StoreUtil {
+
     companion object StoreUtil {
         fun addLocationToFirestore(location: Location) {
             val db = FirebaseFirestore.getInstance()
@@ -24,14 +26,15 @@ class StoreUtil {
                 "createdBy" to location.createdBy,
                 "votes" to location.votes,
                 "grade" to location.grade,
-                "categoryId" to location.category?.id
+                "category" to location.category
             )
 
-            db.collection("locations").document(location.name)
+            db.collection("locations").document(location.id)
                 .set(locationData)
         }
 
         fun addPointOfInterestToLocation(
+            locationName: String?,
             poi: PointOfInterest
         ) {
             val db = FirebaseFirestore.getInstance();
@@ -44,10 +47,10 @@ class StoreUtil {
                 "latitude" to poi.latitude,
                 "longitude" to poi.longitude,
                 "createdBy" to poi.createdBy,
-                "categoryId" to poi.category.id
+                "category" to poi.category
             )
 
-            db.collection("locations").document(poi.name)
+            db.collection("locations").document(locationName!!)
                 .collection("pointsOfInterest")
                 .document(newPointOfInterest["name"] as String)
                 .set(newPointOfInterest)
@@ -67,6 +70,81 @@ class StoreUtil {
 
             db.collection("category").document(category.name)
                 .set(newPointOfInterest)
+        }
+
+        fun loadCategoriesFromFireStone(onCategoriesLoaded: (MutableList<Category>) -> Unit) {
+            val db = FirebaseFirestore.getInstance()
+            val categoriesCollection = db.collection("category")
+            val response = mutableListOf<Category>()
+
+            categoriesCollection.get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        val id = document.getString("id") ?: ""
+                        val name = document.getString("name") ?: ""
+                        val iconUrl = document.getString("iconUrl")
+                        val description = document.getString("description") ?: ""
+
+                        val category = Category(id, name, iconUrl, description)
+                        response.add(category)
+                    }
+                    onCategoriesLoaded(response)
+                }
+        }
+
+
+        fun readPOIFromFirebase(onLocationLoaded: (MutableList<PointOfInterest>) -> Unit) {
+            val db = FirebaseFirestore.getInstance()
+            val locationCollection = db.collection("pointsOfInterest")
+            val response = mutableListOf<PointOfInterest>()
+
+            locationCollection.get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        val poi = PointOfInterest(
+                            document.getString("id") ?: "",
+                            document.getString("name") ?: "",
+                            document.getString("locationId") ?: "",
+                            document.getString("description") ?: "",
+                            document.getString("photoUrl") ?: "",
+                            document.getDouble("latitude") ?: 0.0,
+                            document.getDouble("longitude") ?: 0.0,
+                            document.getLong("votes")?.toInt() ?: 0,
+                            document.getString("createdBy")?: "",
+                            document.getString("category") ?: ""
+                        )
+                        response.add(poi)
+                    }
+
+                    onLocationLoaded(response)
+                }
+        }
+
+        fun readLocationsFromFirebase(onLocationLoaded: (MutableList<Location>) -> Unit) {
+            val db = FirebaseFirestore.getInstance()
+            val locationCollection = db.collection("location")
+            val response = mutableListOf<Location>()
+
+            locationCollection.get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        val location = Location(
+                            document.getString("id") ?: "",
+                            document.getString("name") ?: "",
+                            document.getDouble("latitude") ?: 0.0,
+                            document.getDouble("longitude") ?: 0.0,
+                            document.getString("description") ?: "",
+                            document.getString("photoUrl") ?: "",
+                            document.getString("createdBy") ?: "",
+                            document.getLong("votes")?.toInt() ?: 0,
+                            document.getLong("grade")?.toInt() ?: 1,
+                            document.getString("category") ?: ""
+                        )
+                        response.add(location)
+                    }
+
+                    onLocationLoaded(response)
+                }
         }
 
 

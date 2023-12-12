@@ -10,5 +10,5 @@ data class PointOfInterest(
     val longitude: Double,
     val votes: Int = 0,
     val createdBy: String,
-    val category: Category
+    val category: String?
 )

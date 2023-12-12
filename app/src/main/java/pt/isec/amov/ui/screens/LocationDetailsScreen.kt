@@ -141,7 +141,7 @@ fun LocationDetailsScreen(
                     fontSize = 25.sp
                 )
                 Text(
-                    text = "   "+location.category?.name,
+                    text = "   "+location.category,
                     color = Color.Black,
                     fontSize = 20.sp
                 )

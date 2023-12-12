@@ -64,25 +64,45 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
     }
 
     fun getPointOfInterest(): PointOfInterest? {
-        return appData.allPointsOfInterest.find { it.id == this.pointOfInterestId.value.toString() }
+        viewModelScope.launch { appData.loadData() }
+        return appData.allPointsOfInterest.find {
+            it.id == this.pointOfInterestId.value.toString()
+        }
     }
 
     fun getLocation(): Location {
-        return appData.allLocations.find { it.id == this.locationId.value.toString() }!!
+        viewModelScope.launch { appData.loadData() }
+        return appData.allLocations.find { it.id == locationId.value.toString() }!!
     }
 
     fun getCategorys(): List<Category>{
+        viewModelScope.launch { appData.loadData() }
         return appData.allCategory
     }
 
+    fun getPointOfInterestList(): List<PointOfInterest> {
+        val response = mutableListOf<PointOfInterest>()
+        appData.allPointsOfInterest.forEach(){poi->
+            if(poi.locationId == locationId.value.toString())
+                response.add(poi)
+        }
+        return response
+    }
+
     fun addLocation(locationName: String, locationDescription: String, selectedCategory: Category, latitude: Double, longitude: Double) {
-        appData.addLocation(locationName, latitude, longitude, locationDescription, imagePath.value, _user.value!!.name, selectedCategory)
-        this.imagePath.value = null
+        viewModelScope.launch {
+            appData.addLocation(locationName, latitude, longitude, locationDescription, imagePath.value, _user.value!!.name, selectedCategory)
+            imagePath.value = null
+            appData.loadData()
+        }
     }
 
     fun addPOI(poiName: String, poiDescription: String, selectedCategory: Category, latitude: Double, longitude: Double) {
-        appData.addPointOfInterestToLocation(locationId.value.toString(),poiName,poiDescription,imagePath.value,latitude,longitude,"",selectedCategory)
-        this.imagePath.value = null
+        viewModelScope.launch {
+            appData.addPointOfInterestToLocation(locationId.value.toString(),poiName,poiDescription,imagePath.value,latitude,longitude,"",selectedCategory)
+            imagePath.value = null
+            appData.loadData()
+        }
     }
 
     /*Auth services*/
@@ -119,6 +139,7 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
         _user.value = null
         _error.value = null
     }
+
 }
 
 

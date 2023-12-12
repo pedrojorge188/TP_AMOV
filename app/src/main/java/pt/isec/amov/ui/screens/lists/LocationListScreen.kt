@@ -41,7 +41,7 @@ fun LocationListScreen(NavHostController: NavHostController,
     Column {
         Spacer(modifier = Modifier.height(16.dp))
         SearchBar(Screens.LOCATION, vm)
-
+        
         if(location.isEmpty()){
             NormalBtn(onClick = { NavHostController.navigate(Screens.ADD_LOCATION.route) }, text = stringResource(id = R.string.add_location))
         }

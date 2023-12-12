@@ -1,6 +1,9 @@
 package pt.isec.amov.data
 
 import android.util.Log
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import pt.isec.amov.models.Category
 import pt.isec.amov.models.Location
 import pt.isec.amov.models.PointOfInterest
@@ -13,6 +16,35 @@ class AppData {
         private val locations = mutableListOf<Location>()
         private val pointsOfInterest = mutableListOf<PointOfInterest>()
 
+        init {
+            val coroutineScope = CoroutineScope(Dispatchers.Main)
+            coroutineScope.launch {
+                loadData()
+            }
+        }
+        fun loadData() {
+
+            val poi = mutableListOf<PointOfInterest>()
+
+            StoreUtil.loadCategoriesFromFireStone(
+                onCategoriesLoaded = { loadedCategories ->
+                    setCategories(loadedCategories)
+                    Log.d("LOADED_CATEGORIES:", loadedCategories.toString());
+                }
+            )
+
+            StoreUtil.readLocationsFromFirebase() {
+                loadedLocations -> setLocations(loadedLocations)
+                Log.d("LOADED_LOCATIONS:", loadedLocations.toString());
+            }
+
+            StoreUtil.readPOIFromFirebase() {
+                loadedLocations -> setPointsOfInterest(loadedLocations)
+                Log.d("LOADED_POI:", loadedLocations.toString());
+            }
+
+
+        }
 
         val allLocations: List<Location>
             get() = locations
@@ -27,7 +59,7 @@ class AppData {
         }
 
         fun setPointsOfInterest(newPointsOfInterest: List<PointOfInterest>) {
-           pointsOfInterest.clear()
+            pointsOfInterest.clear()
             pointsOfInterest.addAll(newPointsOfInterest)
         }
 
@@ -37,7 +69,7 @@ class AppData {
         }
 
         fun addLocation(name: String, lat: Double, lon: Double, description: String, photoUrl: String?, createdBy: String, category: Category) {
-            Log.wtf("FIREBASE","aqui")
+
             val newLocation = Location(
                 id = UUID.randomUUID().toString(),
                 name = name,
@@ -46,7 +78,7 @@ class AppData {
                 description = description,
                 photoUrl = photoUrl,
                 createdBy = createdBy,
-                category = category
+                category = category.name
             )
 
             StoreUtil.addLocationToFirestore(location = newLocation )
@@ -77,13 +109,12 @@ class AppData {
                     latitude = latitude,
                     longitude = longitude,
                     createdBy = createdBy,
-                    category = category
+                    category = category.name
                 )
 
-                StoreUtil.addPointOfInterestToLocation(newPointOfInterest)
+                StoreUtil.addPointOfInterestToLocation(locationId,newPointOfInterest)
 
             }
         }
-
 
     }

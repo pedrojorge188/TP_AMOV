@@ -1,5 +1,6 @@
 package pt.isec.amov.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -213,6 +214,7 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
 
                 title.value = stringResource(id = R.string.location_list)
 
+                Log.i("TAG:", app.appData.allLocations.toString())
                 LocationListScreen(NavHostController = navController, viewModel, app.appData.allLocations) {
                     viewModel.locationId.value = it.itemId
                     navController.navigate(it.nextPage.route)
@@ -222,7 +224,7 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
             composable(Screens.POINT_OF_INTEREST.route) {
                 title.value = stringResource(id = R.string.interests_locations) + viewModel.getLocation().name + ")"
 
-                PointOfInterestListScreen(NavHostController = navController, viewModel, viewModel.getLocation().pointsOfInterest) {
+                PointOfInterestListScreen(NavHostController = navController, viewModel, viewModel.getPointOfInterestList()) {
                     viewModel.pointOfInterestId.value = it.itemId
                     navController.navigate(it.nextPage.route)
                 }

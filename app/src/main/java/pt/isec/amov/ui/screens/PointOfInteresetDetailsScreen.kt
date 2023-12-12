@@ -117,7 +117,7 @@ fun PointOfInteresetDetailsScreen(
                     fontSize = 25.sp
                 )
                 Text(
-                    text = "   "+ pointOfInterest!!.category.name,
+                    text = "   "+ pointOfInterest!!.category,
                     color = Color.Black,
                     fontSize = 20.sp
                 )

@@ -195,7 +195,7 @@ fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
             onClick =
             {
                 if (locationName.isNotBlank() && locationDescription.isNotBlank()
-                    && authorsName.isNotBlank() && selectedCategory != null
+                     && selectedCategory != null
                     && latitude.isNotBlank() && longitude.isNotBlank()
                 ) {
 
