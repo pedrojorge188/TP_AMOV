@@ -2,38 +2,155 @@ package pt.isec.amov.ui.viewmodels
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 import pt.isec.amov.data.AppData
 import pt.isec.amov.models.Category
 import pt.isec.amov.models.Location
 import pt.isec.amov.models.PointOfInterest
+import pt.isec.amov.models.User
+import pt.isec.amov.models.toUser
+import pt.isec.amov.utils.firebase.AuthUtil
+import pt.isec.amov.utils.location.LocationHandler
 
 @Suppress("UNCHECKED_CAST")
-class ActionsViewModelFactory(private val appData: AppData) : ViewModelProvider.NewInstanceFactory() {
+class ActionsViewModelFactory(private val appData: AppData, private val locationHandler: LocationHandler) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return ActionsViewModel(appData) as T
+        return ActionsViewModel(appData, locationHandler) as T
     }
 }
 
-class ActionsViewModel(private val appData: AppData) : ViewModel(){
-    val imagePath: MutableState<String?> = mutableStateOf(null)
+class ActionsViewModel(private val appData: AppData,  private val locationHandler: LocationHandler) : ViewModel(){
 
-    fun getPointOfInterestById(pointOfInterestId: String): PointOfInterest? {
-        return appData.allPointsOfInterest.find { it.id == pointOfInterestId }
+    private val _user = mutableStateOf(AuthUtil.currentUser?.toUser())
+    val user : MutableState<User?>
+        get() = _user
+
+    private val _error = mutableStateOf<String?>(null)
+    val error: MutableState<String?>
+        get() = _error
+
+    val imagePath: MutableState<String?> = mutableStateOf(null)
+    var locationId:  MutableState<String?>  = mutableStateOf("")
+    var pointOfInterestId:  MutableState<String?>  = mutableStateOf("")
+    val loading = mutableStateOf<Boolean>(false)
+
+    private val _currentLocation = MutableLiveData(android.location.Location(null))
+    val currentLocation : LiveData<android.location.Location>
+        get() = _currentLocation
+    private val locationEnabled : Boolean
+        get() = locationHandler.locationEnabled
+
+    init {
+        locationHandler.onLocation = {
+            _currentLocation.value = it
+        }
+    }
+    fun startLocationUpdates() {
+        locationHandler.startLocationUpdates()
     }
 
-    fun getLocationById(locationId: String): Location {
-        return appData.allLocations.find { it.id == locationId }!!
+    fun stopLocationUpdates() {
+        locationHandler.stopLocationUpdates()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        stopLocationUpdates()
+    }
+
+    fun getPointOfInterest(): PointOfInterest? {
+        viewModelScope.launch {
+            loading.value = true;
+            appData.loadData()
+            loading.value = false;
+        }
+        return appData.allPointsOfInterest.find {
+            it.id == this.pointOfInterestId.value.toString()
+        }
+    }
+
+    fun getLocation(): Location {
+        viewModelScope.launch {
+            loading.value = true;
+            appData.loadData()
+            loading.value = false;
+        }
+        return appData.allLocations.find { it.id == locationId.value.toString() }!!
     }
 
     fun getCategorys(): List<Category>{
-        return appData.allCategories
+        viewModelScope.launch {
+            loading.value = true;
+            appData.loadData()
+            loading.value = false;
+        }
+        return appData.allCategory
+    }
+    fun getPointOfInterestList(): List<PointOfInterest> {
+        val response = mutableListOf<PointOfInterest>()
+        appData.allPointsOfInterest.forEach(){poi->
+            if(poi.locationId == locationId.value.toString())
+                response.add(poi)
+        }
+        return response
     }
 
-    fun addLocation(locationName: String, locationDescription: String, authorsName: String, selectedCategory: Category, latitude: Double, longitude: Double) {
-        appData.addLocation(locationName, latitude, longitude, locationDescription, imagePath.value, authorsName, selectedCategory)
+    fun addLocation(locationName: String, locationDescription: String, selectedCategory: Category, latitude: Double, longitude: Double) {
+        viewModelScope.launch {
+            appData.addLocation(locationName, latitude, longitude, locationDescription, imagePath.value, _user.value!!.email, selectedCategory)
+            imagePath.value = null
+            appData.loadData()
+        }
     }
+
+    fun addPOI(poiName: String, poiDescription: String, selectedCategory: Category, latitude: Double, longitude: Double) {
+        viewModelScope.launch {
+            appData.addPointOfInterestToLocation(locationId.value.toString(),poiName,poiDescription,imagePath.value,latitude,longitude,user.value!!.email,selectedCategory)
+            imagePath.value = null
+            appData.loadData()
+        }
+    }
+
+    /*Auth services*/
+    fun createUserWithEmail(email: String, password: String){
+        if(email.isBlank() || password.isBlank()){
+            return
+        }
+        viewModelScope.launch {
+            AuthUtil.createUserWithEmail(email,password) {
+                    expt ->
+                if(expt == null)
+                    _user.value = AuthUtil.currentUser?.toUser()
+                _error.value = expt?.message
+            }
+        }
+    }
+
+    fun signInWithEmail(email : String, password: String){
+        if(email.isBlank() || password.isBlank()){
+            return
+        }
+        viewModelScope.launch {
+            AuthUtil.signInWithEmail(email,password) {
+                    expt ->
+                if(expt == null)
+                    _user.value = AuthUtil.currentUser?.toUser()
+                _error.value = expt?.message
+            }
+        }
+    }
+
+    fun signOut() {
+        AuthUtil.signOut()
+        _user.value = null
+        _error.value = null
+    }
+
 }
 
 

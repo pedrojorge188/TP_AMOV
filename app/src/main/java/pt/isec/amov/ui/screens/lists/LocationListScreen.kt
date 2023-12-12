@@ -20,9 +20,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import pt.isec.amov.R
 import pt.isec.amov.models.Location
+import pt.isec.amov.ui.composables.NormalBtn
 import pt.isec.amov.ui.composables.SearchBar
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
 import pt.isec.amov.ui.viewmodels.NavigationData
@@ -38,7 +41,10 @@ fun LocationListScreen(NavHostController: NavHostController,
     Column {
         Spacer(modifier = Modifier.height(16.dp))
         SearchBar(Screens.LOCATION, vm)
-        Spacer(modifier = Modifier.height(16.dp))
+        
+        if(location.isEmpty()){
+            NormalBtn(onClick = { NavHostController.navigate(Screens.ADD_LOCATION.route) }, text = stringResource(id = R.string.add_location))
+        }
 
         LazyColumn (
             modifier = Modifier
@@ -46,7 +52,6 @@ fun LocationListScreen(NavHostController: NavHostController,
         ) {
 
             items(location, key = { it.id } ) {
-
                 Card(
                     elevation = CardDefaults.cardElevation(4.dp),
                     modifier = Modifier

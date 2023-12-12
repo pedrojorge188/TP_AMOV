@@ -1,4 +1,4 @@
-package pt.isec.ans.locationmaps.utils.location
+package pt.isec.amov.utils.location
 
 import android.annotation.SuppressLint
 import android.location.Location

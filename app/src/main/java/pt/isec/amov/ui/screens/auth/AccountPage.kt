@@ -37,7 +37,7 @@ fun AccountPage(
     onChangeUsername: (String) -> Unit,
     onChangePassword: (String) -> Unit
 ) {
-    var updatedUsername by remember { mutableStateOf("") }
+    var updatedUsername by remember { mutableStateOf(viewModel.user.value?.email.toString()) }
     var updatedPassword by remember { mutableStateOf("") }
     var updatedConfirmPassword by remember { mutableStateOf("") }
 

@@ -2,9 +2,11 @@ package pt.isec.amov.ui.screens.lists
 
 import RedWarningIconButton
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -20,9 +22,13 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
+import pt.isec.amov.R
 import pt.isec.amov.models.PointOfInterest
+import pt.isec.amov.ui.composables.NormalBtn
 import pt.isec.amov.ui.composables.SearchBar
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
 import pt.isec.amov.ui.viewmodels.NavigationData
@@ -38,7 +44,9 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
     Column {
         Spacer(modifier = Modifier.height(16.dp))
         SearchBar(Screens.POINT_OF_INTEREST, vm)
-        Spacer(modifier = Modifier.height(16.dp))
+
+        if(locals.isEmpty())
+            NormalBtn(onClick = { NavHostController.navigate(Screens.ADD_POI.route) }, text = stringResource(id = R.string.add_interest_location))
 
         LazyColumn (
             modifier = Modifier
@@ -46,7 +54,6 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
         ) {
 
             items(locals, key = { it.id }) {
-
                 Card(
                     elevation = CardDefaults.cardElevation(4.dp),
                     modifier = Modifier
@@ -89,6 +96,16 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
                                     contentDescription = "Info"
                                 )
                             }
+                        }
+
+                    }
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth(20F)
+                            .fillMaxHeight(20F)
+                    ) {
+                        if (it.photoUrl != "") {
+                            AsyncImage(model = it.photoUrl, contentDescription = "")
                         }
 
                     }

@@ -1,4 +1,4 @@
-package pt.isec.ans.locationmaps.utils.location
+package pt.isec.amov.utils.location
 
 import android.location.Location
 
@@ -8,4 +8,3 @@ interface LocationHandler {
     fun startLocationUpdates()
     fun stopLocationUpdates()
 }
-

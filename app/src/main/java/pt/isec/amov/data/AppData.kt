@@ -1,38 +1,76 @@
 package pt.isec.amov.data
 
+import android.util.Log
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import pt.isec.amov.models.Category
 import pt.isec.amov.models.Location
 import pt.isec.amov.models.PointOfInterest
+import pt.isec.amov.utils.firebase.StoreUtil
 import java.util.UUID
 
 class AppData {
 
+        private val categories = mutableListOf<Category>()
         private val locations = mutableListOf<Location>()
         private val pointsOfInterest = mutableListOf<PointOfInterest>()
-        private val categories = mutableListOf<Category>()
+
         init {
+            val coroutineScope = CoroutineScope(Dispatchers.Main)
+            coroutineScope.launch {
+                loadData()
+            }
+        }
 
-            addCategory(name = "Cidade", iconUrl = "", description = "Grande cidade com muitas pessoas")
-            addCategory(name = "Museu", iconUrl = "", description = "Local de interesse")
-            addCategory(name = "Discoteca", iconUrl = "", description = "Local de interesse")
+        fun loadData() {
+            val poi = mutableListOf<PointOfInterest>()
 
-            addLocation("New York", 123.456, 789.012, "Descrição da Localização 1", "", "user123", categories[0])
-            addLocation("Lisboa", 234.567, 890.123, "Descrição da Localização 2", "", "user456", categories[0])
+            StoreUtil.loadCategoriesFromFireStone(
+                onCategoriesLoaded = { loadedCategories ->
+                    setCategories(loadedCategories)
+                    Log.d("LOADED_CATEGORIES:", loadedCategories.toString());
+                }
+            )
 
-            addPointOfInterestToLocation(locations[0].id, "Museu do americano", "Descrição do Ponto de Interesse 1", "url_ponto1", 123.456, 789.012, "user789", categories[1])
-            addPointOfInterestToLocation(locations[1].id, "Urban", "Descrição do Ponto de Interesse 2", "url_ponto2", 234.567, 890.123, "user012", categories[2])
-            addPointOfInterestToLocation(locations[1].id, "LostInRio", "Descrição do Ponto de Interesse 2", "url_ponto2", 234.567, 890.123, "user012", categories[2])
+            StoreUtil.readLocationsFromFirebase() {
+                loadedLocations -> setLocations(loadedLocations)
+                Log.d("LOADED_LOCATIONS:", loadedLocations.toString());
+            }
+
+
+            for (location in locations) {
+                StoreUtil.readPOIFromFirebase(locationId = location.id) {
+                        loadedLocations -> setPointsOfInterest(loadedLocations)
+                    Log.d("LOADED_POI:", loadedLocations.toString());
+                }
+            }
         }
 
         val allLocations: List<Location>
             get() = locations
         val allPointsOfInterest: List<PointOfInterest>
             get() = pointsOfInterest
-
-        val allCategories: List<Category>
+        val allCategory: List<Category>
             get() = categories
 
+        fun setLocations(newLocations: List<Location>) {
+            locations.clear()
+            locations.addAll(newLocations)
+        }
+
+        fun setPointsOfInterest(newPointsOfInterest: List<PointOfInterest>) {
+            pointsOfInterest.clear()
+            pointsOfInterest.addAll(newPointsOfInterest)
+        }
+
+        fun setCategories(newCategories: List<Category>) {
+            categories.clear()
+            categories.addAll(newCategories)
+        }
+
         fun addLocation(name: String, lat: Double, lon: Double, description: String, photoUrl: String?, createdBy: String, category: Category) {
+
             val newLocation = Location(
                 id = UUID.randomUUID().toString(),
                 name = name,
@@ -41,23 +79,25 @@ class AppData {
                 description = description,
                 photoUrl = photoUrl,
                 createdBy = createdBy,
-                category = category
+                category = category.name
             )
 
-            locations.add(newLocation)
+            StoreUtil.addLocationToFirestore(location = newLocation )
         }
 
         fun addCategory(name: String, iconUrl: String?, description: String) {
             val newCategory = Category(
+                id = UUID.randomUUID().toString(),
                 name = name,
                 iconUrl = iconUrl,
                 description = description
             )
 
-            categories.add(newCategory)
+            StoreUtil.addCategory(newCategory)
         }
 
         fun addPointOfInterestToLocation(locationId: String, name: String, description: String, photoUrl: String?, latitude: Double, longitude: Double, createdBy: String, category: Category) {
+
             val location = locations.find { it.id == locationId }
 
             if (location != null) {
@@ -70,16 +110,12 @@ class AppData {
                     latitude = latitude,
                     longitude = longitude,
                     createdBy = createdBy,
-                    category = category
+                    category = category.name
                 )
 
-                pointsOfInterest.add(newPointOfInterest)
-                location.pointsOfInterest.add(newPointOfInterest)
-
-            } else {
+                StoreUtil.addPointOfInterestToLocation(locationId,newPointOfInterest)
 
             }
         }
-
 
     }

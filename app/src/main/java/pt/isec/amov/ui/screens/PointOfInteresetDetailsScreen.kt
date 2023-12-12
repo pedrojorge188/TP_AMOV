@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import pt.isec.amov.R
 import pt.isec.amov.models.PointOfInterest
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
@@ -61,15 +62,20 @@ fun PointOfInteresetDetailsScreen(
 
         }
 
-        //imagem tem de ser alterada mais tarde
-        Image(
-            painter = painterResource(id = R.drawable.museu),
-            contentDescription = "Museu",
-            contentScale = ContentScale.Fit,
-            modifier = Modifier
+        if (pointOfInterest.photoUrl != "") {
+            AsyncImage(model = pointOfInterest.photoUrl, contentDescription = "",contentScale = ContentScale.Fit,modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
-        )
+                .height(200.dp))
+        }else{
+            Image(
+                painter = painterResource(id = R.drawable.logo),
+                contentDescription = "",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp)
+            )
+        }
 
         Row(
             modifier = Modifier
@@ -111,7 +117,7 @@ fun PointOfInteresetDetailsScreen(
                     fontSize = 25.sp
                 )
                 Text(
-                    text = "   "+ pointOfInterest!!.category.name,
+                    text = "   "+ pointOfInterest!!.category,
                     color = Color.Black,
                     fontSize = 20.sp
                 )
@@ -130,8 +136,6 @@ fun PointOfInteresetDetailsScreen(
                     fontSize = 18.sp,
                     modifier = Modifier.padding(start = 20.dp)
                 )
-
-
             }
         }
     }

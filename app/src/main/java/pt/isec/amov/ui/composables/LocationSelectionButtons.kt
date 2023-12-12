@@ -60,7 +60,7 @@ fun LocationSelectionButtons(
         }
         Button(
             onClick = {
-                onMapButtonClick
+                onMapButtonClick.invoke()
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF02458A),

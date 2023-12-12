@@ -19,12 +19,14 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import pt.isec.amov.R
 import pt.isec.amov.ui.composables.NormalBtn
+import pt.isec.amov.ui.viewmodels.ActionsViewModel
 import pt.isec.amov.ui.viewmodels.Screens
 
 @Composable
 fun Menu(
     title: String,
-    navHostController: NavHostController?
+    navHostController: NavHostController?,
+    vm : ActionsViewModel
 ) {
 
     Box(
@@ -50,15 +52,22 @@ fun Menu(
                     .height(200.dp)
             )
             Spacer(modifier = Modifier.height(90.dp))
-            NormalBtn(
-                onClick = { navHostController?.navigate(Screens.LOGIN.route) },
-                text = stringResource(R.string.login)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            NormalBtn(
-                onClick = { navHostController?.navigate(Screens.REGISTER.route) },
-                text = stringResource(R.string.Register)
-            )
+            if(vm.user.value != null){
+                NormalBtn(
+                    onClick = { navHostController?.navigate(Screens.LOCATION.route) },
+                    text = vm.user.value!!.email
+                )
+            }else{
+                NormalBtn(
+                    onClick = { navHostController?.navigate(Screens.LOGIN.route) },
+                    text = stringResource(R.string.login)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                NormalBtn(
+                    onClick = { navHostController?.navigate(Screens.REGISTER.route) },
+                    text = stringResource(R.string.Register)
+                )
+            }
             Spacer(modifier = Modifier.height(16.dp))
             NormalBtn(
                 onClick = { navHostController?.navigate(Screens.CREDITS.route) },

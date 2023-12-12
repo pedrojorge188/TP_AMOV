@@ -1,7 +1,6 @@
-@file:Suppress("UNUSED_EXPRESSION")
-
 package pt.isec.amov.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -30,7 +29,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -47,15 +45,13 @@ import pt.isec.amov.ui.screens.lists.PointOfInterestListScreen
 import pt.isec.amov.ui.screens.maps.LocationMapScreen
 import pt.isec.amov.ui.screens.maps.PointOfInterestMapScreen
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
-import pt.isec.amov.ui.viewmodels.ActionsViewModelFactory
 import pt.isec.amov.ui.viewmodels.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainScreen(navController: NavHostController = rememberNavController()) {
+fun MainScreen(navController: NavHostController = rememberNavController(), viewModel : ActionsViewModel, app: App) {
 
     val context = LocalContext.current
-    val app = context.applicationContext as App
     val currentScreen by navController.currentBackStackEntryAsState()
     var showBackArrow by remember { mutableStateOf(false) }
     var showDetailsBtn by remember { mutableStateOf(false) }
@@ -66,9 +62,6 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    var viewModel : ActionsViewModel? = null
-    var locationId = remember { mutableStateOf("") };
-    var pointOfInterestId = remember { mutableStateOf("") };
 
     navController.addOnDestinationChangedListener { controller, destination, arguments ->
         showDetailsBtn = destination.route in arrayOf(
@@ -77,13 +70,14 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
             Screens.POINT_OF_INTEREST.route, Screens.LOCATION_MAP.route, Screens.ADD_LOCATION.route, Screens.POINT_OF_INTEREST_MAP.route
         )
         showAddBtn = destination.route in arrayOf(
-            Screens.ACCOUNT_CHANGE_DATA.route, Screens.POINT_OF_INTEREST_DETAILS.route, Screens.LOCATION.route,  Screens.LOCATION_DETAILS.route ,  Screens.POINT_OF_INTEREST.route, Screens.LOCATION_MAP.route, Screens.POINT_OF_INTEREST_MAP.route, Screens.ADD_LOCATION.route
+             Screens.LOCATION.route,  Screens.POINT_OF_INTEREST.route, Screens.ADD_LOCATION.route, Screens.ADD_POI.route
         )
         showBackArrow = destination.route in arrayOf(
-            Screens.ACCOUNT_CHANGE_DATA.route, Screens.LOGIN.route,
+            Screens.ACCOUNT_CHANGE_DATA.route, Screens.LOGIN.route, Screens.ADD_POI.route,
             Screens.REGISTER.route, Screens.CREDITS.route, Screens.POINT_OF_INTEREST_DETAILS.route, Screens.LOCATION_DETAILS.route, Screens.POINT_OF_INTEREST.route, Screens.LOCATION_MAP.route, Screens.ADD_LOCATION.route , Screens.POINT_OF_INTEREST_MAP.route
         )
     }
+
 
     Scaffold(
         snackbarHost = {
@@ -126,6 +120,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                                     DropdownMenuItem(
                                         text = { Text(stringResource(R.string.logout)) },
                                         onClick = {
+                                            viewModel.signOut()
                                             navController.navigate(Screens.MENU.route);
                                             scope.launch { snackbarHostState.showSnackbar("Terminou a sessão!") }
                                             expandedDetails = false
@@ -150,17 +145,22 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                                         text = { Text(stringResource(R.string.add_category)) },
                                         onClick = { expandedMenu = false }
                                     )
-                                    DropdownMenuItem(
-                                        text = { Text(stringResource(R.string.add_location)) },
-                                        onClick = {
-                                            navController.navigate(Screens.ADD_LOCATION.route);
-                                            expandedMenu = false
-                                        }
-                                    )
+                                    if(currentScreen!!.destination.route != Screens.POINT_OF_INTEREST.route) {
+                                        DropdownMenuItem(
+                                            text = { Text(stringResource(R.string.add_location)) },
+                                            onClick = {
+                                                navController.navigate(Screens.ADD_LOCATION.route);
+                                                expandedMenu = false
+                                            }
+                                        )
+                                    }
                                     if(currentScreen!!.destination.route == Screens.POINT_OF_INTEREST.route){
                                         DropdownMenuItem(
                                             text = { Text(stringResource(R.string.add_interest_location)) },
-                                            onClick = { expandedMenu = false  }
+                                            onClick = {
+                                                navController.navigate(Screens.ADD_POI.route);
+                                                expandedMenu = false
+                                            }
                                         )
                                     }
                                 }
@@ -178,61 +178,57 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
         },
         modifier = Modifier.fillMaxSize()
     ) {
+
         NavHost(
             navController = navController,
             startDestination = Screens.MENU.route,
             modifier = Modifier
                 .padding(it)
         ) {
+
             composable(Screens.MENU.route) {
-                Menu(stringResource(R.string.AppName), navController)
+                Menu(stringResource(R.string.AppName), navController, viewModel)
             }
             composable(Screens.LOGIN.route) {
                 title.value = stringResource(id = R.string.login)
-                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
-                LoginScreen(navHostController = navController, viewModel!!)
+                LoginScreen(navHostController = navController, viewModel)
             }
             composable(Screens.REGISTER.route) {
                 title.value = stringResource(id = R.string.Register)
-                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
-                RegisterScreen(navHostController = navController, viewModel!!)
+                RegisterScreen(navHostController = navController, viewModel)
             }
             composable(Screens.CREDITS.route) {
                 title.value = stringResource(id = R.string.Credits)
-                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
-                CreditsScreen(navHostController = navController, viewModel!!)
+                CreditsScreen(navHostController = navController, viewModel)
             }
             composable(Screens.LOCATION_DETAILS.route) {
-                title.value = viewModel!!.getLocationById(locationId.value).name
-                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
-
-                LocationDetailsScreen(navHostController = navController, viewModel!!, viewModel!!.getLocationById(locationId.value))
+                title.value = viewModel.getLocation().name
+                LocationDetailsScreen(navHostController = navController, viewModel, viewModel.getLocation())
             }
 
             composable(Screens.POINT_OF_INTEREST_DETAILS.route) {
-                title.value = viewModel!!.getPointOfInterestById(pointOfInterestId.value)!!.name
-                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
+                title.value = viewModel.getPointOfInterest()!!.name
 
-                PointOfInteresetDetailsScreen(navHostController = navController, viewModel!!, viewModel!!.getPointOfInterestById(pointOfInterestId.value))
+                PointOfInteresetDetailsScreen(navHostController = navController,
+                    viewModel, viewModel.getPointOfInterest())
             }
 
             composable(Screens.LOCATION.route) {
 
                 title.value = stringResource(id = R.string.location_list)
-                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
 
-                LocationListScreen(NavHostController = navController, viewModel!!, app.appData.allLocations) {
-                    locationId.value = it.itemId
+                Log.i("TAG:", app.appData.allLocations.toString())
+                LocationListScreen(NavHostController = navController, viewModel, app.appData.allLocations) {
+                    viewModel.locationId.value = it.itemId
                     navController.navigate(it.nextPage.route)
                 }
             }
 
             composable(Screens.POINT_OF_INTEREST.route) {
-                title.value = stringResource(id = R.string.interests_locations) + viewModel!!.getLocationById(locationId.value).name + ")"
-                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
+                title.value = stringResource(id = R.string.interests_locations) + viewModel.getLocation().name + ")"
 
-                PointOfInterestListScreen(NavHostController = navController, viewModel!!, viewModel!!.getLocationById(locationId.value).pointsOfInterest) {
-                    pointOfInterestId.value = it.itemId
+                PointOfInterestListScreen(NavHostController = navController, viewModel, viewModel.getPointOfInterestList()) {
+                    viewModel.pointOfInterestId.value = it.itemId
                     navController.navigate(it.nextPage.route)
                 }
 
@@ -240,11 +236,10 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
 
             composable(Screens.ACCOUNT_CHANGE_DATA.route) {
                 title.value = stringResource(id = R.string.change_data_acc)
-                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
 
                 AccountPage(
                     navController,
-                    viewModel!!,
+                    viewModel,
                     onChangeUsername = {
                             newUsername ->
 
@@ -255,21 +250,22 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                 )
             }
             composable(Screens.LOCATION_MAP.route) {
-                title.value = viewModel!!.getLocationById(locationId.value).name
-                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
-                LocationMapScreen(navHostController = navController, viewModel = viewModel!!, location = viewModel!!.getLocationById(locationId.value))
+                title.value = viewModel.getLocation().name
+                LocationMapScreen(navHostController = navController, viewModel = viewModel, location = viewModel.getLocation())
             }
 
             composable(Screens.POINT_OF_INTEREST_MAP.route) {
-                title.value = viewModel!!.getLocationById(locationId.value).name
-                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
-                PointOfInterestMapScreen(navHostController = navController, viewModel = viewModel!!, item = viewModel!!.getPointOfInterestById(pointOfInterestId.value)!!)
+                title.value = viewModel.getLocation().name
+                PointOfInterestMapScreen(navHostController = navController, viewModel = viewModel, item = viewModel.getPointOfInterest()!!)
             }
 
             composable(Screens.ADD_LOCATION.route) {
                 title.value = stringResource(R.string.add_locations)
-                viewModel = viewModel(factory = ActionsViewModelFactory(app.appData))
-                AddLocationScreen(navController, viewModel!!);
+                AddLocationScreen(navController, viewModel);
+            }
+            composable(Screens.ADD_POI.route) {
+                title.value = stringResource(R.string.add_interest_location)
+                AddPointOfInterestScreen(navController, viewModel);
             }
         }
     }
