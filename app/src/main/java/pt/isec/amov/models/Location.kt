@@ -10,6 +10,6 @@ data class Location(
     val createdBy: String,
     val votes: Int = 0,
     val grade: Int = 1,
-    val category: Category?,
-    val pointsOfInterest: MutableList<PointOfInterest> = mutableListOf()
+    var category: Category?,
+    var pointsOfInterest: MutableList<PointOfInterest> = mutableListOf()
 )

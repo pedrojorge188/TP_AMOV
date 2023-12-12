@@ -72,7 +72,7 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
     }
 
     fun getCategorys(): List<Category>{
-        return appData.allCategories
+        return appData.allCategory
     }
 
     fun addLocation(locationName: String, locationDescription: String, selectedCategory: Category, latitude: Double, longitude: Double) {

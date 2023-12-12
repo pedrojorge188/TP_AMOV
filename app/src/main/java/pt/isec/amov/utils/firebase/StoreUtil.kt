@@ -69,25 +69,6 @@ class StoreUtil {
                 .set(newPointOfInterest)
         }
 
-        fun getCategories() : List<Category> {
-            val db = FirebaseFirestore.getInstance();
-            val categories = mutableListOf<Category>()
-            db.collection("categories")
-                .addSnapshotListener { querySnapshot, e ->
-                    if (e != null) {
-                        emptyList<Category>()
-                        return@addSnapshotListener
-                    }
-
-                    querySnapshot?.documents?.forEach { document ->
-                        val category = document.toObject(Category::class.java)
-                        category?.let { categories.add(it) }
-                    }
-
-                }
-            return categories
-        }
-
 
         fun getFileFromAsset(assetManager: AssetManager, strName: String): InputStream? {
             var istr: InputStream? = null

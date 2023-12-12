@@ -46,7 +46,7 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
         SearchBar(Screens.POINT_OF_INTEREST, vm)
 
         if(locals.isEmpty())
-            NormalBtn(onClick = { NavHostController.navigate(Screens.ADD_POI.route) }, text = stringResource(id = R.string.add_location))
+            NormalBtn(onClick = { NavHostController.navigate(Screens.ADD_POI.route) }, text = stringResource(id = R.string.add_interest_location))
 
         LazyColumn (
             modifier = Modifier

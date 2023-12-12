@@ -13,10 +13,28 @@ class AppData {
         private val locations = mutableListOf<Location>()
         private val pointsOfInterest = mutableListOf<PointOfInterest>()
 
+
         val allLocations: List<Location>
             get() = locations
         val allPointsOfInterest: List<PointOfInterest>
             get() = pointsOfInterest
+        val allCategory: List<Category>
+            get() = categories
+
+        fun setLocations(newLocations: List<Location>) {
+            locations.clear()
+            locations.addAll(newLocations)
+        }
+
+        fun setPointsOfInterest(newPointsOfInterest: List<PointOfInterest>) {
+           pointsOfInterest.clear()
+            pointsOfInterest.addAll(newPointsOfInterest)
+        }
+
+        fun setCategories(newCategories: List<Category>) {
+            categories.clear()
+            categories.addAll(newCategories)
+        }
 
         fun addLocation(name: String, lat: Double, lon: Double, description: String, photoUrl: String?, createdBy: String, category: Category) {
             Log.wtf("FIREBASE","aqui")
