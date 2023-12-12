@@ -102,21 +102,17 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
 
     fun addLocation(locationName: String, locationDescription: String, selectedCategory: Category, latitude: Double, longitude: Double) {
         viewModelScope.launch {
-            loading.value = true;
             appData.addLocation(locationName, latitude, longitude, locationDescription, imagePath.value, _user.value!!.email, selectedCategory)
             imagePath.value = null
             appData.loadData()
-            loading.value = false;
         }
     }
 
     fun addPOI(poiName: String, poiDescription: String, selectedCategory: Category, latitude: Double, longitude: Double) {
         viewModelScope.launch {
-            loading.value = true;
             appData.addPointOfInterestToLocation(locationId.value.toString(),poiName,poiDescription,imagePath.value,latitude,longitude,user.value!!.email,selectedCategory)
             imagePath.value = null
             appData.loadData()
-            loading.value = false;
         }
     }
 
@@ -126,14 +122,12 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
             return
         }
         viewModelScope.launch {
-            loading.value = true;
             AuthUtil.createUserWithEmail(email,password) {
                     expt ->
                 if(expt == null)
                     _user.value = AuthUtil.currentUser?.toUser()
                 _error.value = expt?.message
             }
-            loading.value = false;
         }
     }
 
@@ -142,14 +136,12 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
             return
         }
         viewModelScope.launch {
-            loading.value = true;
             AuthUtil.signInWithEmail(email,password) {
                     expt ->
                 if(expt == null)
                     _user.value = AuthUtil.currentUser?.toUser()
                 _error.value = expt?.message
             }
-            loading.value = false;
         }
     }
 
