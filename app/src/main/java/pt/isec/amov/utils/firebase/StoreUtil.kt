@@ -167,33 +167,6 @@ class StoreUtil {
         }
 
 
-        fun getCategoryById(AssocId: String?, onComplete: (Category?) -> Unit) {
-            val db = FirebaseFirestore.getInstance()
-            val categoriesCollection = db.collection("category")
-
-            categoriesCollection.get()
-                .addOnSuccessListener { documents ->
-                    for (document in documents) {
-                        val id = document.getString("id") ?: ""
-                        val name = document.getString("name") ?: ""
-                        val iconUrl = document.getString("iconUrl")
-                        val description = document.getString("description") ?: ""
-
-                        val category = Category(id, name, iconUrl, description)
-                        if (category.id == AssocId) {
-                            onComplete(category)
-                            return@addOnSuccessListener
-                        }
-                    }
-                    onComplete(null) // Retorna null se não encontrou nenhuma categoria correspondente
-                }
-                .addOnFailureListener { exception ->
-                    // Lidar com falhas, se houver
-                    onComplete(null)
-                }
-        }
-
-
         fun getFileFromAsset(assetManager: AssetManager, strName: String): InputStream? {
             var istr: InputStream? = null
             try {

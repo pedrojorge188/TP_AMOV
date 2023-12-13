@@ -217,7 +217,6 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
 
                 title.value = stringResource(id = R.string.location_list)
 
-                Log.i("TAG:", app.appData.allLocations.toString())
                 LocationListScreen(NavHostController = navController, viewModel, app.appData.allLocations) {
                     viewModel.locationId.value = it.itemId
                     navController.navigate(it.nextPage.route)

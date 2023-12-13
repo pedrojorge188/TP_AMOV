@@ -1,6 +1,8 @@
 package pt.isec.amov.data
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import pt.isec.amov.models.Category
 import pt.isec.amov.models.Location
 import pt.isec.amov.models.PointOfInterest
@@ -10,7 +12,10 @@ import java.util.UUID
 class AppData {
 
         private val categories = mutableListOf<Category>()
-        private val locations = mutableListOf<Location>()
+        private val _locations = MutableLiveData<List<Location>>()
+        val locations: LiveData<List<Location>>
+            get() = _locations
+
         private val pointsOfInterest = mutableListOf<PointOfInterest>()
 
         init {
@@ -42,19 +47,19 @@ class AppData {
             
         }
 
-        val allLocations: List<Location>
-            get() = locations
+        val allLocations: LiveData<List<Location>>
+            get() = _locations
         val allPointsOfInterest: List<PointOfInterest>
             get() = pointsOfInterest
         val allCategory: List<Category>
             get() = categories
 
         fun setLocations(newLocations: List<Location>) {
-            locations.clear()
-            locations.addAll(newLocations)
+            _locations.value = newLocations
         }
 
-        fun setPointsOfInterest(newPointsOfInterest: List<PointOfInterest>) {
+
+    fun setPointsOfInterest(newPointsOfInterest: List<PointOfInterest>) {
             pointsOfInterest.clear()
             pointsOfInterest.addAll(newPointsOfInterest)
         }
@@ -93,7 +98,7 @@ class AppData {
 
         fun addPointOfInterestToLocation(locationId: String, name: String, description: String, photoUrl: String?, latitude: Double, longitude: Double, createdBy: String, category: Category) {
 
-            val location = locations.find { it.id == locationId }
+            val location = _locations.value?.find { it.id == locationId }
 
             if (location != null) {
                 val newPointOfInterest = PointOfInterest(

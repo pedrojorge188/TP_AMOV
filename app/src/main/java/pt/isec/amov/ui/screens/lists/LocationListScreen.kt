@@ -19,9 +19,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
 import pt.isec.amov.R
 import pt.isec.amov.models.Location
@@ -35,14 +38,16 @@ import pt.isec.amov.ui.viewmodels.Screens
 @Composable
 fun LocationListScreen(NavHostController: NavHostController,
                        vm: ActionsViewModel,
-                       location : List<Location>,
+                       locationLiveData : LiveData<List<Location>>,
                        onSelected : (NavigationData) -> Unit )
 {
     Column {
         Spacer(modifier = Modifier.height(16.dp))
         SearchBar(Screens.LOCATION, vm)
-        
-        if(location.isEmpty()){
+
+        val location: State<List<Location>?> = locationLiveData.observeAsState()
+
+        if(location.value!!.isEmpty()){
             NormalBtn(onClick = { NavHostController.navigate(Screens.ADD_LOCATION.route) }, text = stringResource(id = R.string.add_location))
         }
 
@@ -51,7 +56,7 @@ fun LocationListScreen(NavHostController: NavHostController,
                 .padding(horizontal = 20.dp, vertical = 20.dp)
         ) {
 
-            items(location, key = { it.id } ) {
+            items(location.value!!, key = { it.id } ) {
                 Card(
                     elevation = CardDefaults.cardElevation(4.dp),
                     modifier = Modifier
