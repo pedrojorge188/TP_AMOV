@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import pt.isec.amov.utils.camera.Utils
+import pt.isec.amov.utils.firebase.StoreUtil
 
 @Composable
 fun SelectGalleryImg(imagePath: MutableState<String?>) {
@@ -30,7 +31,13 @@ fun SelectGalleryImg(imagePath: MutableState<String?>) {
             imagePath.value = null
             return@rememberLauncherForActivityResult
         }
+
         imagePath.value = Utils.createFileFromUri(context, uri)
+        val inputStream = context.contentResolver.openInputStream(uri)
+
+        if (inputStream != null && imagePath.value != null) {
+            StoreUtil.uploadFile(inputStream, imagePath.value!!)
+        }
     }
     Button(
         onClick = {

@@ -21,7 +21,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import pt.isec.amov.utils.camera.Utils
+import pt.isec.amov.utils.firebase.StoreUtil
 import java.io.File
 
 @Composable
@@ -36,7 +38,13 @@ fun TakePhoto(imagePath: MutableState<String?>) {
             imagePath.value = null
             return@rememberLauncherForActivityResult
         }
+
         imagePath.value = tempFile
+        val inputStream = context.contentResolver.openInputStream(File(tempFile).toUri())
+        if (inputStream != null) {
+            StoreUtil.uploadFile(inputStream, imagePath.value!!)
+        }
+
     }
     Button(
         onClick = {

@@ -17,6 +17,7 @@ import pt.isec.amov.models.toUser
 import pt.isec.amov.utils.firebase.AuthUtil
 import pt.isec.amov.utils.location.LocationHandler
 
+
 @Suppress("UNCHECKED_CAST")
 class ActionsViewModelFactory(private val appData: AppData, private val locationHandler: LocationHandler) : ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -93,14 +94,14 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
 
     fun addLocation(locationName: String, locationDescription: String, selectedCategory: Category, latitude: Double, longitude: Double) {
         viewModelScope.launch {
-            appData.addLocation(locationName, latitude, longitude, locationDescription, imagePath.value, _user.value!!.email, selectedCategory)
+            appData.addLocation(locationName, latitude, longitude, locationDescription, "/images"+imagePath.value, _user.value!!.email, selectedCategory)
             imagePath.value = null
         }
     }
 
     fun addPOI(poiName: String, poiDescription: String, selectedCategory: Category, latitude: Double, longitude: Double) {
         viewModelScope.launch {
-            appData.addPointOfInterestToLocation(locationId.value.toString(),poiName,poiDescription,imagePath.value,latitude,longitude,user.value!!.email,selectedCategory)
+            appData.addPointOfInterestToLocation(locationId.value.toString(),poiName,poiDescription,"/images"+imagePath.value,latitude,longitude,user.value!!.email,selectedCategory)
             imagePath.value = null
         }
     }

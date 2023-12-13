@@ -1,6 +1,7 @@
 package pt.isec.amov.utils.firebase
 
 import android.content.res.AssetManager
+import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.storage
@@ -194,7 +195,7 @@ class StoreUtil {
             }.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val downloadUri = task.result
-                    println(downloadUri.toString())
+                    Log.d("DOWNLOAD_URI", downloadUri.toString())
                 } else {
                     // Handle failures
                     // ...

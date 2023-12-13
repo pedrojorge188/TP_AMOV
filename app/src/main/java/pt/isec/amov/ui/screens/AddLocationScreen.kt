@@ -186,9 +186,8 @@ fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
                     .fillMaxWidth(50F)
                     .fillMaxHeight(50F)
             ) {
-                if (vm.imagePath.value != null) {
-                    AsyncImage(model = vm.imagePath.value, contentDescription = "")
-                }
+                if(vm.imagePath.value != null)
+                    AsyncImage(vm.imagePath.value , contentDescription = "")
             }
         }
 
