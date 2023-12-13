@@ -49,7 +49,7 @@ fun LocationMapScreen(
                 .weight(1f)
                 .fillMaxWidth()
         ) {
-            MapScene(POI = viewModel.getPointOfInterestList() , geoPoint = geoPoint, true)
+            MapScene(POI = viewModel.getPointOfInterestList().value , geoPoint = geoPoint, true)
         }
     }
 }

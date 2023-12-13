@@ -18,7 +18,9 @@ class AppData {
         val categories: LiveData<List<Location>>
             get() = _locations
 
-        private val pointsOfInterest = mutableListOf<PointOfInterest>()
+        private val _pointsOfInterest = MutableLiveData<List<PointOfInterest>>()
+        val pointsOfInterest: LiveData<List<PointOfInterest>>
+            get() = _pointsOfInterest
 
         init {
             val collectionsToObserve = listOf("category", "locations", "pointsOfInterest")
@@ -51,8 +53,8 @@ class AppData {
 
         val allLocations: LiveData<List<Location>>
             get() = _locations
-        val allPointsOfInterest: List<PointOfInterest>
-            get() = pointsOfInterest
+        val allPointsOfInterest: LiveData<List<PointOfInterest>>
+            get() = _pointsOfInterest
         val allCategory: LiveData<List<Category>>
             get() = _categories
 
@@ -61,9 +63,8 @@ class AppData {
         }
 
         fun setPointsOfInterest(newPointsOfInterest: List<PointOfInterest>) {
-                pointsOfInterest.clear()
-                pointsOfInterest.addAll(newPointsOfInterest)
-            }
+              _pointsOfInterest.value = newPointsOfInterest
+        }
 
         fun setCategories(newCategories: List<Category>) {
             _categories.value = newCategories

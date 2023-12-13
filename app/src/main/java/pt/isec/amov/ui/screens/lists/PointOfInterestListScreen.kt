@@ -21,9 +21,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import pt.isec.amov.R
@@ -38,14 +41,17 @@ import pt.isec.amov.ui.viewmodels.Screens
 @Composable
 fun PointOfInterestListScreen(NavHostController: NavHostController,
                               vm: ActionsViewModel,
-                              locals : List<PointOfInterest>,
+                              localsLiveData : LiveData<List<PointOfInterest>>,
                               onSelected : (NavigationData) -> Unit)
 {
+
+    val locals: State<List<PointOfInterest>?> = localsLiveData.observeAsState()
+
     Column {
         Spacer(modifier = Modifier.height(16.dp))
         SearchBar(Screens.POINT_OF_INTEREST, vm)
 
-        if(locals.isEmpty())
+        if(locals.value!!.isEmpty())
             NormalBtn(onClick = { NavHostController.navigate(Screens.ADD_POI.route) }, text = stringResource(id = R.string.add_interest_location))
 
         LazyColumn (
@@ -53,7 +59,7 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
                 .padding(horizontal = 20.dp, vertical = 20.dp)
         ) {
 
-            items(locals, key = { it.id }) {
+            items(locals.value!!, key = { it.id }) {
                 Card(
                     elevation = CardDefaults.cardElevation(4.dp),
                     modifier = Modifier

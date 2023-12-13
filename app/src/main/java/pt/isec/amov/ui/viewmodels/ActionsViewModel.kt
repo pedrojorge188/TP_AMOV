@@ -63,10 +63,12 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
     }
 
     fun getPointOfInterest(): PointOfInterest? {
+        /*
         viewModelScope.launch {
             appData.loadData()
         }
-        return appData.allPointsOfInterest.find {
+        */
+        return  appData.allPointsOfInterest.value?.find {
             it.id == this.pointOfInterestId.value.toString()
         }
     }
@@ -78,11 +80,13 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
     fun getCategorys(): LiveData<List<Category>> {
         return appData.allCategory
     }
-    fun getPointOfInterestList(): List<PointOfInterest> {
-        val response = mutableListOf<PointOfInterest>()
-        appData.allPointsOfInterest.forEach(){poi->
-            if(poi.locationId == locationId.value.toString())
-                response.add(poi)
+
+    fun getPointOfInterestList(): LiveData<List<PointOfInterest>> {
+        val response = MutableLiveData<List<PointOfInterest>>()
+
+        appData.allPointsOfInterest.observeForever { allPOIs ->
+            val filteredPOIs = allPOIs.filter { it.locationId == locationId.value.toString() }
+            response.value = filteredPOIs
         }
         return response
     }
