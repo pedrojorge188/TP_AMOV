@@ -11,9 +11,11 @@ import java.util.UUID
 
 class AppData {
 
-        private val categories = mutableListOf<Category>()
+        private val _categories = MutableLiveData<List<Category>>()
         private val _locations = MutableLiveData<List<Location>>()
         val locations: LiveData<List<Location>>
+            get() = _locations
+        val categories: LiveData<List<Location>>
             get() = _locations
 
         private val pointsOfInterest = mutableListOf<PointOfInterest>()
@@ -51,22 +53,20 @@ class AppData {
             get() = _locations
         val allPointsOfInterest: List<PointOfInterest>
             get() = pointsOfInterest
-        val allCategory: List<Category>
-            get() = categories
+        val allCategory: LiveData<List<Category>>
+            get() = _categories
 
         fun setLocations(newLocations: List<Location>) {
             _locations.value = newLocations
         }
 
-
-    fun setPointsOfInterest(newPointsOfInterest: List<PointOfInterest>) {
-            pointsOfInterest.clear()
-            pointsOfInterest.addAll(newPointsOfInterest)
-        }
+        fun setPointsOfInterest(newPointsOfInterest: List<PointOfInterest>) {
+                pointsOfInterest.clear()
+                pointsOfInterest.addAll(newPointsOfInterest)
+            }
 
         fun setCategories(newCategories: List<Category>) {
-            categories.clear()
-            categories.addAll(newCategories)
+            _categories.value = newCategories
         }
 
         fun addLocation(name: String, lat: Double, lon: Double, description: String, photoUrl: String?, createdBy: String, category: Category) {

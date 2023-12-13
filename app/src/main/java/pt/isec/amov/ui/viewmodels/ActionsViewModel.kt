@@ -75,7 +75,7 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
         return appData.allLocations.value?.find { it.id == locationId.value.toString() }!!
     }
 
-    fun getCategorys(): List<Category>{
+    fun getCategorys(): LiveData<List<Category>> {
         return appData.allCategory
     }
     fun getPointOfInterestList(): List<PointOfInterest> {
