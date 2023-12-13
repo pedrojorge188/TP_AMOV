@@ -1,9 +1,6 @@
 package pt.isec.amov.data
 
 import android.util.Log
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import pt.isec.amov.models.Category
 import pt.isec.amov.models.Location
 import pt.isec.amov.models.PointOfInterest
@@ -17,14 +14,13 @@ class AppData {
         private val pointsOfInterest = mutableListOf<PointOfInterest>()
 
         init {
-            val coroutineScope = CoroutineScope(Dispatchers.Main)
-            coroutineScope.launch {
+            val collectionsToObserve = listOf("category", "locations", "pointsOfInterest")
+            StoreUtil.observeCollectionsForChanges(collectionsToObserve) {
                 loadData()
             }
         }
 
         fun loadData() {
-            val poi = mutableListOf<PointOfInterest>()
 
             StoreUtil.loadCategoriesFromFireStone(
                 onCategoriesLoaded = { loadedCategories ->
@@ -33,18 +29,17 @@ class AppData {
                 }
             )
 
+            StoreUtil.readPOIFromFirebase(
+                onPOILoaded = { poi -> setPointsOfInterest(poi)
+                    Log.d("LOADED_POI:", poi.toString());
+                }
+            )
+
             StoreUtil.readLocationsFromFirebase() {
                 loadedLocations -> setLocations(loadedLocations)
                 Log.d("LOADED_LOCATIONS:", loadedLocations.toString());
             }
-
-
-            for (location in locations) {
-                StoreUtil.readPOIFromFirebase(locationId = location.id) {
-                        loadedLocations -> setPointsOfInterest(loadedLocations)
-                    Log.d("LOADED_POI:", loadedLocations.toString());
-                }
-            }
+            
         }
 
         val allLocations: List<Location>

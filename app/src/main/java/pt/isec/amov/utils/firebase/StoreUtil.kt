@@ -33,6 +33,24 @@ class StoreUtil {
                 .set(locationData)
         }
 
+        private val observers = mutableMapOf<String, FirestoreObserver>()
+        fun observeCollectionsForChanges(collections: List<String>, onDataChanged: () -> Unit) {
+            collections.forEach { collectionName ->
+                val observer = observers[collectionName]
+
+                if (observer == null) {
+                    val firestoreObserver = FirestoreObserver()
+                    observers[collectionName] = firestoreObserver
+
+                    when (collectionName) {
+                        "category" -> firestoreObserver.observeCategories(onDataChanged)
+                        "locations" -> firestoreObserver.observeLocations(onDataChanged)
+                        "pointsOfInterest" -> firestoreObserver.observePointsOfInterest(onDataChanged)
+                    }
+                }
+            }
+        }
+
         fun addPointOfInterestToLocation(
             locationName: String?,
             poi: PointOfInterest
@@ -119,15 +137,13 @@ class StoreUtil {
                 }
         }
 
-        fun readPOIFromFirebase(locationId: String, onPOILoaded: (MutableList<PointOfInterest>) -> Unit) {
+        fun readPOIFromFirebase(onPOILoaded: (MutableList<PointOfInterest>) -> Unit) {
             val db = FirebaseFirestore.getInstance()
-            val poiCollection = db.collection("locations")
-                .document(locationId)
-                .collection("pointsOfInterest")
 
             val response = mutableListOf<PointOfInterest>()
 
-            poiCollection.get()
+            db.collectionGroup("pointsOfInterest")
+                .get()
                 .addOnSuccessListener { documents ->
                     for (document in documents) {
                         val poi = PointOfInterest(
@@ -146,7 +162,10 @@ class StoreUtil {
                     }
                     onPOILoaded(response)
                 }
+                .addOnFailureListener { exception ->
+                }
         }
+
 
         fun getCategoryById(AssocId: String?, onComplete: (Category?) -> Unit) {
             val db = FirebaseFirestore.getInstance()

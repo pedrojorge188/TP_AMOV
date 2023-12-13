@@ -37,7 +37,6 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
     val imagePath: MutableState<String?> = mutableStateOf(null)
     var locationId:  MutableState<String?>  = mutableStateOf("")
     var pointOfInterestId:  MutableState<String?>  = mutableStateOf("")
-    val loading = mutableStateOf<Boolean>(false)
 
     private val _currentLocation = MutableLiveData(android.location.Location(null))
     val currentLocation : LiveData<android.location.Location>
@@ -65,9 +64,7 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
 
     fun getPointOfInterest(): PointOfInterest? {
         viewModelScope.launch {
-            loading.value = true;
             appData.loadData()
-            loading.value = false;
         }
         return appData.allPointsOfInterest.find {
             it.id == this.pointOfInterestId.value.toString()
@@ -75,20 +72,10 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
     }
 
     fun getLocation(): Location {
-        viewModelScope.launch {
-            loading.value = true;
-            appData.loadData()
-            loading.value = false;
-        }
         return appData.allLocations.find { it.id == locationId.value.toString() }!!
     }
 
     fun getCategorys(): List<Category>{
-        viewModelScope.launch {
-            loading.value = true;
-            appData.loadData()
-            loading.value = false;
-        }
         return appData.allCategory
     }
     fun getPointOfInterestList(): List<PointOfInterest> {
@@ -104,7 +91,6 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
         viewModelScope.launch {
             appData.addLocation(locationName, latitude, longitude, locationDescription, imagePath.value, _user.value!!.email, selectedCategory)
             imagePath.value = null
-            appData.loadData()
         }
     }
 
@@ -112,7 +98,6 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
         viewModelScope.launch {
             appData.addPointOfInterestToLocation(locationId.value.toString(),poiName,poiDescription,imagePath.value,latitude,longitude,user.value!!.email,selectedCategory)
             imagePath.value = null
-            appData.loadData()
         }
     }
 
@@ -152,5 +137,3 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
     }
 
 }
-
-
