@@ -38,7 +38,7 @@ fun CheckInternetConnectivity() {
 
     if (!isConnected) {
         Box(
-            modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.8f)).clickable(enabled = true) { }
+            modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.8f)).clickable(enabled = false) { }
         ) {
             CenteredRowWithProgress()
         }
