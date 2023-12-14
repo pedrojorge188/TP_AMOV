@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import org.osmdroid.config.Configuration
 import pt.isec.amov.App
+import pt.isec.amov.ui.composables.CheckInternetConnectivity
 import pt.isec.amov.ui.screens.MainScreen
 import pt.isec.amov.ui.theme.PraticalWorkTheme
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
@@ -42,13 +43,15 @@ class MainActivity : ComponentActivity() {
         Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this))
 
         setContent {
+
             PraticalWorkTheme {
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen(viewModel = viewModel,app = app);
+                    MainScreen(viewModel = viewModel,app = app)
+                    CheckInternetConnectivity()
                 }
             }
         }
