@@ -18,11 +18,14 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -32,6 +35,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import pt.isec.amov.R
+import pt.isec.amov.models.Category
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
 import pt.isec.amov.ui.viewmodels.Screens
 
@@ -43,7 +47,9 @@ fun SearchBar(Screen: Screens, vm: ActionsViewModel) {
     var expandedCategory by remember { mutableStateOf(false) }
     var search by remember { mutableStateOf("") }
     var orderBy by remember { mutableStateOf("") }
-    var selectedCategory by remember { mutableStateOf("") }
+    var selectedCategory by remember { mutableStateOf<Category?>(null) }
+
+    val categories: State<List<Category>?> = vm.getCategorys().observeAsState()
 
     Box(
         modifier = Modifier
@@ -133,12 +139,17 @@ fun SearchBar(Screen: Screens, vm: ActionsViewModel) {
                         onDismissRequest = { expandedCategory = false }
                     ) {
 
-                        vm.getCategorys().forEach() {
+                        categories.value?.forEach() { category ->
                             DropdownMenuItem(
-                                text = { it.name },
                                 onClick = {
-                                    selectedCategory = it.name
+                                    selectedCategory = category
                                     expandedCategory = false
+                                },
+                                text = {
+                                    Text(
+                                        text = category.name,
+                                        style = LocalTextStyle.current.copy(color = Color.Black)
+                                    )
                                 }
                             )
                         }
@@ -147,12 +158,12 @@ fun SearchBar(Screen: Screens, vm: ActionsViewModel) {
             }
 
             //mais tarde adicionar categoria
-            if(orderBy != "" || search != "" || selectedCategory != ""){
+            if(orderBy != "" || search != "" || selectedCategory != null){
                 Button(
                     onClick = {
                               orderBy = "";
                               search  = "";
-                              selectedCategory = "";
+                              selectedCategory = null;
                     },
 
                     colors = ButtonDefaults.buttonColors(

@@ -19,7 +19,9 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -52,6 +54,7 @@ fun AddPointOfInterestScreen(navController: NavHostController, vm: ActionsViewMo
     var longitude by remember { mutableStateOf("") }
     var locationOrigin by remember { mutableStateOf("") }
 
+    val categories: State<List<Category>?> = vm.getCategorys().observeAsState()
 
     Column(
         modifier = Modifier
@@ -97,7 +100,7 @@ fun AddPointOfInterestScreen(navController: NavHostController, vm: ActionsViewMo
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                vm.getCategorys().forEach { category ->
+                categories.value?.forEach() { category ->
                     DropdownMenuItem(
                         onClick = {
                             selectedCategory = category

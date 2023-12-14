@@ -1,6 +1,7 @@
 package pt.isec.amov.utils.firebase
 
 import android.content.res.AssetManager
+import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.storage
@@ -31,6 +32,24 @@ class StoreUtil {
 
             db.collection("locations").document(location.id)
                 .set(locationData)
+        }
+
+        private val observers = mutableMapOf<String, FirestoreObserver>()
+        fun observeCollectionsForChanges(collections: List<String>, onDataChanged: () -> Unit) {
+            collections.forEach { collectionName ->
+                val observer = observers[collectionName]
+
+                if (observer == null) {
+                    val firestoreObserver = FirestoreObserver()
+                    observers[collectionName] = firestoreObserver
+
+                    when (collectionName) {
+                        "category" -> firestoreObserver.observeCategories(onDataChanged)
+                        "locations" -> firestoreObserver.observeLocations(onDataChanged)
+                        "pointsOfInterest" -> firestoreObserver.observePointsOfInterest(onDataChanged)
+                    }
+                }
+            }
         }
 
         fun addPointOfInterestToLocation(
@@ -119,15 +138,13 @@ class StoreUtil {
                 }
         }
 
-        fun readPOIFromFirebase(locationId: String, onPOILoaded: (MutableList<PointOfInterest>) -> Unit) {
+        fun readPOIFromFirebase(onPOILoaded: (MutableList<PointOfInterest>) -> Unit) {
             val db = FirebaseFirestore.getInstance()
-            val poiCollection = db.collection("locations")
-                .document(locationId)
-                .collection("pointsOfInterest")
 
             val response = mutableListOf<PointOfInterest>()
 
-            poiCollection.get()
+            db.collectionGroup("pointsOfInterest")
+                .get()
                 .addOnSuccessListener { documents ->
                     for (document in documents) {
                         val poi = PointOfInterest(
@@ -146,31 +163,7 @@ class StoreUtil {
                     }
                     onPOILoaded(response)
                 }
-        }
-
-        fun getCategoryById(AssocId: String?, onComplete: (Category?) -> Unit) {
-            val db = FirebaseFirestore.getInstance()
-            val categoriesCollection = db.collection("category")
-
-            categoriesCollection.get()
-                .addOnSuccessListener { documents ->
-                    for (document in documents) {
-                        val id = document.getString("id") ?: ""
-                        val name = document.getString("name") ?: ""
-                        val iconUrl = document.getString("iconUrl")
-                        val description = document.getString("description") ?: ""
-
-                        val category = Category(id, name, iconUrl, description)
-                        if (category.id == AssocId) {
-                            onComplete(category)
-                            return@addOnSuccessListener
-                        }
-                    }
-                    onComplete(null) // Retorna null se não encontrou nenhuma categoria correspondente
-                }
                 .addOnFailureListener { exception ->
-                    // Lidar com falhas, se houver
-                    onComplete(null)
                 }
         }
 
@@ -202,7 +195,7 @@ class StoreUtil {
             }.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val downloadUri = task.result
-                    println(downloadUri.toString())
+                    Log.d("DOWNLOAD_URI", downloadUri.toString())
                 } else {
                     // Handle failures
                     // ...

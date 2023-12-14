@@ -20,7 +20,9 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -52,7 +54,7 @@ fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
     var latitude by remember { mutableStateOf("") }
     var longitude by remember { mutableStateOf("") }
     var locationOrigin by remember { mutableStateOf("")}
-
+    val categories: State<List<Category>?> = vm.getCategorys().observeAsState()
 
     Column(
         modifier = Modifier
@@ -98,7 +100,7 @@ fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
                 modifier = Modifier
                     .fillMaxWidth()
             ) {
-                vm.getCategorys().forEach { category ->
+                categories.value?.forEach() { category ->
                     DropdownMenuItem(
                         onClick = {
                             selectedCategory = category
@@ -184,9 +186,8 @@ fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
                     .fillMaxWidth(50F)
                     .fillMaxHeight(50F)
             ) {
-                if (vm.imagePath.value != null) {
-                    AsyncImage(model = vm.imagePath.value, contentDescription = "")
-                }
+                if(vm.imagePath.value != null)
+                    AsyncImage(vm.imagePath.value , contentDescription = "")
             }
         }
 

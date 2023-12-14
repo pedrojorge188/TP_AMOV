@@ -20,16 +20,24 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.google.firebase.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.storage
+import kotlinx.coroutines.tasks.await
 import pt.isec.amov.R
 import pt.isec.amov.models.PointOfInterest
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
@@ -63,9 +71,40 @@ fun PointOfInteresetDetailsScreen(
         }
 
         if (pointOfInterest.photoUrl != "") {
-            AsyncImage(model = pointOfInterest.photoUrl, contentDescription = "",contentScale = ContentScale.Fit,modifier = Modifier
-                .fillMaxWidth()
-                .height(200.dp))
+            val storage = Firebase.storage
+            val storageRef: StorageReference? = if (pointOfInterest.photoUrl!!.isNotBlank()) {
+                storage.reference.child(pointOfInterest.photoUrl)
+            } else {
+                null
+            }
+            val imageUrl = remember { mutableStateOf<String?>(null) }
+
+            LaunchedEffect(key1 = storageRef) {
+                if (storageRef != null) {
+                    try {
+                        val downloadUrl = storageRef.downloadUrl.await().toString()
+                        imageUrl.value = downloadUrl
+                    } catch (e: Exception) {
+                        imageUrl.value = null
+                    }
+                }
+            }
+
+            if (imageUrl.value != null) {
+                AsyncImage(
+                    model = imageUrl.value!!,
+                    contentDescription = "",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                )
+            } else {
+                Text(
+                    text = stringResource(R.string.imagem_n_o_dispon_vel),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.fillMaxWidth().padding(8.dp)
+                )
+            }
         }else{
             Image(
                 painter = painterResource(id = R.drawable.logo),
