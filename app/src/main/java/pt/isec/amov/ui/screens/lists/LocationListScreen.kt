@@ -1,5 +1,6 @@
 package pt.isec.amov.ui.screens.lists
 
+import DeleteDialog
 import RedWarningIconButton
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -74,12 +74,13 @@ fun LocationListScreen(NavHostController: NavHostController,
                             .padding(horizontal = 16.dp, vertical = 8.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(
-                            text = it.name,
-                            modifier = Modifier
-                                .padding(horizontal = 20.dp, vertical = 20.dp) ,
-                            fontSize = 16.sp
-                        )
+                            Text(
+                                text = it.name,
+                                modifier = Modifier
+                                    .padding(horizontal = 20.dp, vertical = 20.dp) ,
+                                fontSize = 16.sp
+                            )
+                            Spacer(modifier = Modifier.weight(1f,true))
                             IconButton(
                                 onClick = {
                                     onSelected(NavigationData(it.id, Screens.LOCATION_DETAILS))
@@ -93,16 +94,9 @@ fun LocationListScreen(NavHostController: NavHostController,
 
                             if(vm.user.value != null)
                                 if(it.createdBy.equals( vm.user.value!!.email )){
-                                    IconButton(
-                                        onClick = {
+                                    DeleteDialog(onClick = {
                                             vm.deleteLocation(it.id);
-                                        },
-                                    ) {
-                                        Icon(
-                                            Icons.Filled.Delete,
-                                            contentDescription = "Info"
-                                        )
-                                    }
+                                    })
                                 }
 
                             if(it.votes < 2){

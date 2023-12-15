@@ -54,4 +54,7 @@
     <string name="name_POI">Nome do Ponto de interesse</string>
     <string name="imagem_n_o_dispon_vel">A carregar imagem       </string>
     <string name="verifique_a_sua_liga_o">Verifique a sua ligação</string>
+    <string name="yes">Sim</string>
+    <string name="certain">Tem a certeza que deseja eliminar este item!</string>
+    <string name="delete">Eliminar</string>
 </resources>
