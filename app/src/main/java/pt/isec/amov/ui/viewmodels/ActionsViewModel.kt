@@ -141,4 +141,14 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
         _error.value = null
     }
 
+    fun deleteLocation(id: String) {
+
+    }
+
+    fun deletePOI(name: String) {
+        viewModelScope.launch {
+            appData.deletePOI(name)
+        }
+    }
+
 }

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -24,6 +25,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
 import pt.isec.amov.R
@@ -75,20 +77,9 @@ fun LocationListScreen(NavHostController: NavHostController,
                         Text(
                             text = it.name,
                             modifier = Modifier
-                                .padding(horizontal = 20.dp, vertical = 20.dp)
+                                .padding(horizontal = 20.dp, vertical = 20.dp) ,
+                            fontSize = 16.sp
                         )
-                        Row {
-
-                            if(it.votes < 2){
-                                RedWarningIconButton(
-                                    onClick = {
-
-                                    },
-                                    itemInfo = it.name,
-                                    it.votes.toFloat()
-                                )
-                            }
-
                             IconButton(
                                 onClick = {
                                     onSelected(NavigationData(it.id, Screens.LOCATION_DETAILS))
@@ -99,9 +90,31 @@ fun LocationListScreen(NavHostController: NavHostController,
                                     contentDescription = "Info"
                                 )
                             }
-                        }
 
-                    }
+                            if(vm.user.value != null)
+                                if(it.createdBy.equals( vm.user.value!!.email )){
+                                    IconButton(
+                                        onClick = {
+                                            vm.deleteLocation(it.id);
+                                        },
+                                    ) {
+                                        Icon(
+                                            Icons.Filled.Delete,
+                                            contentDescription = "Info"
+                                        )
+                                    }
+                                }
+
+                            if(it.votes < 2){
+                                RedWarningIconButton(
+                                    onClick = {
+
+                                    },
+                                    itemInfo = it.name,
+                                    it.votes.toFloat()
+                                )
+                            }
+                        }
                 }
             }
         }

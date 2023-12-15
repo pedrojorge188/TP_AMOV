@@ -119,4 +119,8 @@ class AppData {
             }
         }
 
+    fun deletePOI(name: String) {
+        StoreUtil.deletePointOfInterestFromLocation(name)
     }
+
+}

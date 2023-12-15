@@ -1,6 +1,5 @@
 package pt.isec.amov.ui
 
-import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -103,11 +102,6 @@ class MainActivity : ComponentActivity() {
 
     }
 
-    @Deprecated("Deprecated in Java")
-    @SuppressLint("MissingSuperCall")
-    override fun onBackPressed() {
-
-    }
 }
 
 

@@ -10,6 +10,7 @@ import pt.isec.amov.models.Location
 import pt.isec.amov.models.PointOfInterest
 import java.io.IOException
 import java.io.InputStream
+import java.util.Locale
 
 @Suppress("CAST_NEVER_SUCCEEDS")
 class StoreUtil {
@@ -74,6 +75,42 @@ class StoreUtil {
                 .document(newPointOfInterest["name"] as String)
                 .set(newPointOfInterest)
         }
+
+        fun deletePointOfInterestFromLocation(poiName: String) {
+            val db = FirebaseFirestore.getInstance()
+            val normalizedPoiName = poiName.trim().lowercase(Locale.getDefault()).replace("\\s+".toRegex(), "")
+
+            Log.i("NAME_POI_TO_DELETE", normalizedPoiName)
+
+            db.collectionGroup("pointsOfInterest")
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        val documentName = document.getString("name")?.trim()?.lowercase(Locale.getDefault())
+                        ?.replace("\\s+".toRegex(), "")
+                        if (documentName == normalizedPoiName) {
+                            val storage = Firebase.storage
+                            if (document.getString("photoUrl")!!.isNotBlank()) {
+                                val storageRef = storage.reference.child(document.getString("photoUrl")!!)
+                                storageRef.delete()
+                            } else {
+                                Log.i("DELETE_PHOTO", "URL da foto em branco, nenhum arquivo para deletar")
+                            }
+                            document.reference.delete()
+                                .addOnSuccessListener {
+                                    Log.i("DELETE_POI", "POI($poiName) Eliminado com sucesso")
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.w("DELETE_POI", "Erro ao excluir POI($poiName): $e")
+                                }
+                        }
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.w("DELETE_POI", "Erro ao buscar POI($poiName): $e")
+                }
+        }
+
 
 
         fun addCategory(
