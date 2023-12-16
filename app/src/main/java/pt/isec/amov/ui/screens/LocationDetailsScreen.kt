@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -104,11 +105,17 @@ fun LocationDetailsScreen(
                             .height(200.dp)
                     )
                 } else {
-                    Text(
-                        text = stringResource(R.string.imagem_n_o_dispon_vel),
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.fillMaxWidth().padding(8.dp)
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = stringResource(R.string.imagem_n_o_dispon_vel),
+                            textAlign = TextAlign.Center)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        CircularProgressIndicator()
+                    }
                 }
 
             }else{

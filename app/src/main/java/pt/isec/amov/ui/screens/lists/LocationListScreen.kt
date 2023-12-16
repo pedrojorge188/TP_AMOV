@@ -1,5 +1,6 @@
 package pt.isec.amov.ui.screens.lists
 
+import DeleteDialog
 import RedWarningIconButton
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,6 +25,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
 import pt.isec.amov.R
@@ -72,23 +74,13 @@ fun LocationListScreen(NavHostController: NavHostController,
                             .padding(horizontal = 16.dp, vertical = 8.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Text(
-                            text = it.name,
-                            modifier = Modifier
-                                .padding(horizontal = 20.dp, vertical = 20.dp)
-                        )
-                        Row {
-
-                            if(it.votes < 2){
-                                RedWarningIconButton(
-                                    onClick = {
-
-                                    },
-                                    itemInfo = it.name,
-                                    it.votes.toFloat()
-                                )
-                            }
-
+                            Text(
+                                text = it.name,
+                                modifier = Modifier
+                                    .padding(horizontal = 20.dp, vertical = 20.dp) ,
+                                fontSize = 16.sp
+                            )
+                            Spacer(modifier = Modifier.weight(1f,true))
                             IconButton(
                                 onClick = {
                                     onSelected(NavigationData(it.id, Screens.LOCATION_DETAILS))
@@ -99,9 +91,24 @@ fun LocationListScreen(NavHostController: NavHostController,
                                     contentDescription = "Info"
                                 )
                             }
-                        }
 
-                    }
+                            if(vm.user.value != null)
+                                if(it.createdBy.equals( vm.user.value!!.email )){
+                                    DeleteDialog(onClick = {
+                                            vm.deleteLocation(it.id);
+                                    })
+                                }
+
+                            if(it.votes < 2){
+                                RedWarningIconButton(
+                                    onClick = {
+
+                                    },
+                                    itemInfo = it.name,
+                                    it.votes.toFloat()
+                                )
+                            }
+                        }
                 }
             }
         }

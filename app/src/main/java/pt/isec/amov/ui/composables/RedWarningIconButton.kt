@@ -3,6 +3,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -56,6 +57,47 @@ fun RedWarningIconButton(
                     }
                 ) {
                     Text(text = stringResource(R.string.vote))
+                }
+            }
+        )
+    }
+}
+
+
+@Composable
+fun DeleteDialog(
+    onClick: () -> Unit
+) {
+    val openDialog = remember { mutableStateOf(false) }
+
+    IconButton(
+        onClick = { openDialog.value = true },
+    ) {
+        Icon(
+            Icons.Filled.Delete,
+            contentDescription = "danger",
+            tint = Color.Black
+        )
+    }
+
+    if (openDialog.value) {
+        AlertDialog(
+            onDismissRequest = { openDialog.value = false },
+            title = { Text(text = stringResource(R.string.delete)) },
+            text = {
+                Column {
+                    Text(text = stringResource(R.string.certain))
+                    Spacer(modifier = Modifier.height(16.dp))
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        openDialog.value = false
+                        onClick()
+                    }
+                ) {
+                    Text(text = stringResource(R.string.yes))
                 }
             }
         )
