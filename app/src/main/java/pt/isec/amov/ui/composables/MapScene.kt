@@ -26,9 +26,10 @@ import org.osmdroid.views.overlay.Polygon
 import pt.isec.amov.R
 import pt.isec.amov.models.Location
 import pt.isec.amov.models.PointOfInterest
+import pt.isec.amov.ui.viewmodels.ActionsViewModel
 
 @Composable
-fun MapScene(POI: List<PointOfInterest>?, geoPoint: GeoPoint, location: Boolean) {
+fun MapScene(POI: List<PointOfInterest>?, geoPoint: GeoPoint, location: Boolean, vm: ActionsViewModel) {
     Box(
         modifier = Modifier
             .padding(8.dp)
@@ -54,6 +55,14 @@ fun MapScene(POI: List<PointOfInterest>?, geoPoint: GeoPoint, location: Boolean)
                         }
                         overlays.add(circle)
                     }
+
+                    overlays.add(
+                        Marker(this).apply {
+                            position = GeoPoint(vm.currentLocation.value!!.latitude, vm.currentLocation.value!!.longitude)
+                            setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
+                            title = vm.user.value!!.email
+                        },
+                    )
 
                     if (POI != null)
                         for (poi in POI) {
@@ -83,7 +92,7 @@ fun MapScene(POI: List<PointOfInterest>?, geoPoint: GeoPoint, location: Boolean)
 }
 
 @Composable
-fun MapAllScene(L: LiveData<List<Location>>, geoPoint: GeoPoint) {
+fun MapAllScene(L: LiveData<List<Location>>, geoPoint: GeoPoint, vm : ActionsViewModel) {
     val location: State<List<Location>?> = L.observeAsState()
     Box(
         modifier = Modifier
@@ -94,8 +103,8 @@ fun MapAllScene(L: LiveData<List<Location>>, geoPoint: GeoPoint) {
             .background(Color(255, 240, 128)),
     ) {
 
-        if (location.value != null) {
 
+        if (location.value != null) {
             AndroidView(
                 factory = { context ->
                     MapView(context).apply {
@@ -103,6 +112,14 @@ fun MapAllScene(L: LiveData<List<Location>>, geoPoint: GeoPoint) {
                         setMultiTouchControls(true)
                         controller.setCenter(geoPoint)
                         controller.setZoom(3.0)
+
+                        overlays.add(
+                            Marker(this).apply {
+                                position = GeoPoint(vm.currentLocation.value!!.latitude, vm.currentLocation.value!!.longitude)
+                                setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+                                title = vm.user.value!!.email
+                            },
+                        )
 
                         if (location.value != null)
                             for (l in location.value!!) {

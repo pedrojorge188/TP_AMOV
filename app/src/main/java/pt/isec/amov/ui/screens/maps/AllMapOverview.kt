@@ -53,7 +53,7 @@ fun AllMapOverview(
                 .weight(1f)
                 .fillMaxWidth()
         ) {
-            MapAllScene(L = L , geoPoint = geoPoint)
+            MapAllScene(L = L , geoPoint = geoPoint, viewModel)
         }
     }
 }
