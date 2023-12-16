@@ -9,20 +9,25 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,31 +54,33 @@ fun LocationListScreen(NavHostController: NavHostController,
 
         val location: State<List<Location>?> = locationLiveData.observeAsState()
 
-        if(location.value!!.isEmpty()){
-            NormalBtn(onClick = { NavHostController.navigate(Screens.ADD_LOCATION.route) }, text = stringResource(id = R.string.add_location))
-        }
+        if(location.value != null) {
 
-        LazyColumn (
-            modifier = Modifier
-                .padding(horizontal = 20.dp, vertical = 20.dp)
-        ) {
+            if(location.value!!.isEmpty()){
+                NormalBtn(onClick = { NavHostController.navigate(Screens.ADD_LOCATION.route) }, text = stringResource(id = R.string.add_location))
+            }
 
-            items(location.value!!, key = { it.id } ) {
-                Card(
-                    elevation = CardDefaults.cardElevation(4.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    onClick = {
-                        onSelected(NavigationData(it.id, Screens.POINT_OF_INTEREST))
-                    }
-                ) {
-                    Row(
+            LazyColumn (
+                modifier = Modifier
+                    .padding(horizontal = 20.dp, vertical = 20.dp)
+            ) {
+
+                items(location.value!!, key = { it.id } ) {
+                    Card(
+                        elevation = CardDefaults.cardElevation(4.dp),
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 8.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                            .padding(8.dp),
+                        onClick = {
+                            onSelected(NavigationData(it.id, Screens.POINT_OF_INTEREST))
+                        }
                     ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 8.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
                             Text(
                                 text = it.name,
                                 modifier = Modifier
@@ -95,7 +102,7 @@ fun LocationListScreen(NavHostController: NavHostController,
                             if(vm.user.value != null)
                                 if(it.createdBy.equals( vm.user.value!!.email )){
                                     DeleteDialog(onClick = {
-                                            vm.deleteLocation(it.id);
+                                        vm.deleteLocation(it.id);
                                     })
                                 }
 
@@ -109,8 +116,26 @@ fun LocationListScreen(NavHostController: NavHostController,
                                 )
                             }
                         }
+                    }
                 }
             }
+
+        }
+        FloatingActionButton(
+            onClick = {
+                NavHostController.navigate(Screens.MAP_OVERVIEW.route)
+            },
+            modifier = Modifier
+                .padding(16.dp)
+                .size(56.dp)
+                .align(Alignment.End),
+            containerColor  = Color(0xFF02458A) // Definindo a cor do botão flutuante
+        ) {
+            Icon(
+                Icons.Default.LocationOn,
+                contentDescription = "Add",
+                tint = Color.White
+            )
         }
     }
 }

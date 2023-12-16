@@ -1,6 +1,5 @@
 package pt.isec.amov.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -42,6 +41,7 @@ import pt.isec.amov.ui.screens.auth.LoginScreen
 import pt.isec.amov.ui.screens.auth.RegisterScreen
 import pt.isec.amov.ui.screens.lists.LocationListScreen
 import pt.isec.amov.ui.screens.lists.PointOfInterestListScreen
+import pt.isec.amov.ui.screens.maps.AllMapOverview
 import pt.isec.amov.ui.screens.maps.LocationMapScreen
 import pt.isec.amov.ui.screens.maps.PointOfInterestMapScreen
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
@@ -74,7 +74,7 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
         )
         showBackArrow = destination.route in arrayOf(
             Screens.ACCOUNT_CHANGE_DATA.route, Screens.LOGIN.route, Screens.ADD_POI.route,
-            Screens.REGISTER.route, Screens.CREDITS.route, Screens.POINT_OF_INTEREST_DETAILS.route, Screens.LOCATION_DETAILS.route, Screens.POINT_OF_INTEREST.route, Screens.LOCATION_MAP.route, Screens.ADD_LOCATION.route , Screens.POINT_OF_INTEREST_MAP.route
+            Screens.REGISTER.route, Screens.CREDITS.route, Screens.POINT_OF_INTEREST_DETAILS.route, Screens.LOCATION_DETAILS.route, Screens.POINT_OF_INTEREST.route, Screens.LOCATION_MAP.route, Screens.ADD_LOCATION.route , Screens.POINT_OF_INTEREST_MAP.route , Screens.MAP_OVERVIEW.route
         )
     }
 
@@ -265,6 +265,10 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
             composable(Screens.ADD_POI.route) {
                 title.value = stringResource(R.string.add_interest_location)
                 AddPointOfInterestScreen(navController, viewModel);
+            }
+            composable(Screens.MAP_OVERVIEW.route) {
+                title.value = stringResource(R.string.location_name)
+                AllMapOverview(navController, viewModel, app.appData.allLocations);
             }
         }
     }

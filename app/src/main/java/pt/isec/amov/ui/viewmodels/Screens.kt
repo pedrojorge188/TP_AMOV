@@ -13,8 +13,8 @@ enum class Screens(display: String, val showAppBar: Boolean){
     ADD_LOCATION("addLocation", true),
     ADD_POI("addPOI", true),
     ACCOUNT_CHANGE_DATA("Contribution", true),
-    CREDITS("Credits", true);
-
+    CREDITS("Credits", true),
+    MAP_OVERVIEW("allListedMap", true);
     val route : String
         get() = this.toString()
 }
