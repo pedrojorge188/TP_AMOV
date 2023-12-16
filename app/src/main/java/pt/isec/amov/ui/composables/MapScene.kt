@@ -43,7 +43,7 @@ fun MapScene(POI: List<PointOfInterest>?, geoPoint: GeoPoint, location: Boolean)
                     setTileSource(TileSourceFactory.MAPNIK);
                     setMultiTouchControls(true)
                     controller.setCenter(geoPoint)
-                    controller.setZoom(18.0)
+                    controller.setZoom(16.0)
 
                     if (location) {
                         val points = createCirclePoints(geoPoint, 15_000.0)
@@ -67,7 +67,7 @@ fun MapScene(POI: List<PointOfInterest>?, geoPoint: GeoPoint, location: Boolean)
                                 Marker(this).apply {
                                     position = GeoPoint(poi.latitude, poi.longitude)
                                     icon = originalDrawable
-                                    setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+                                    setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
                                     title = poi.name
                                     snippet = poi.description
                                 },

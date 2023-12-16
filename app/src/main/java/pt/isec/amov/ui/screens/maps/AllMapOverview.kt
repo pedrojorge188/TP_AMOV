@@ -32,7 +32,7 @@ fun AllMapOverview(
 ){
     val geoPoint by remember { mutableStateOf(
         GeoPoint(
-            0.0, 0.0
+            0.0, -8.69
         )
     ) }
 
