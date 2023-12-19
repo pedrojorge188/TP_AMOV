@@ -57,4 +57,5 @@
     <string name="yes">Sí</string>
     <string name="certain">¿Está seguro de que desea eliminar este elemento?</string>
     <string name="delete">Eliminar</string>
+    <string name="all_locations">Todas as localizações</string>
 </resources>
