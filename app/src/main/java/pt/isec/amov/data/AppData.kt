@@ -126,5 +126,8 @@ class AppData {
     fun deleteLocation(id: String) {
         StoreUtil.deleteLocation(id)
     }
+    fun deleteCategory(id: String) {
+        StoreUtil.deleteCategory(id)
+    }
 
 }

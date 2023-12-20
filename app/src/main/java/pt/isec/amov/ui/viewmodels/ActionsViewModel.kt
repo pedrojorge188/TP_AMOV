@@ -37,6 +37,7 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
 
     val imagePath: MutableState<String?> = mutableStateOf(null)
     var locationId:  MutableState<String?>  = mutableStateOf("")
+    var categoryId:  MutableState<String?>  = mutableStateOf("")
     var pointOfInterestId:  MutableState<String?>  = mutableStateOf("")
 
     private val _currentLocation = MutableLiveData(android.location.Location(null))
@@ -77,6 +78,9 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
     fun getLocation(): Location {
         return appData.allLocations.value?.find { it.id == locationId.value.toString() }!!
     }
+    fun getCategory(): Category {
+        return appData.allCategory.value?.find { it.id == categoryId.value.toString() }!!
+    }
 
     fun getCategorys(): LiveData<List<Category>> {
         return appData.allCategory
@@ -96,6 +100,11 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
         viewModelScope.launch {
             appData.addLocation(locationName, latitude, longitude, locationDescription, "/images"+imagePath.value, _user.value!!.email, selectedCategory)
             imagePath.value = null
+        }
+    }
+    fun addCategory(categoryName: String, categoryDescription: String) {
+        viewModelScope.launch {
+            appData.addCategory(categoryName,null, categoryDescription)
         }
     }
 
@@ -146,11 +155,18 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
             appData.deleteLocation(id)
         }
     }
+    fun deleteCategory(id: String) {
+        viewModelScope.launch {
+            appData.deleteCategory(id)
+        }
+    }
 
     fun deletePOI(name: String) {
         viewModelScope.launch {
             appData.deletePOI(name)
         }
     }
+
+
 
 }

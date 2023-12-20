@@ -67,14 +67,19 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
         showDetailsBtn = destination.route in arrayOf(
             Screens.ACCOUNT_CHANGE_DATA.route,
             Screens.POINT_OF_INTEREST_DETAILS.route, Screens.LOCATION.route, Screens.LOCATION_DETAILS.route ,
-            Screens.POINT_OF_INTEREST.route, Screens.LOCATION_MAP.route, Screens.ADD_LOCATION.route, Screens.POINT_OF_INTEREST_MAP.route
+            Screens.POINT_OF_INTEREST.route, Screens.LOCATION_MAP.route, Screens.ADD_LOCATION.route,
+            Screens.POINT_OF_INTEREST_MAP.route,Screens.MANAGE_CATEGORY.route,Screens.CATEGORY_DETAILS.route
         )
         showAddBtn = destination.route in arrayOf(
-             Screens.LOCATION.route,  Screens.POINT_OF_INTEREST.route, Screens.ADD_LOCATION.route, Screens.ADD_POI.route
+             Screens.LOCATION.route,  Screens.POINT_OF_INTEREST.route, Screens.ADD_LOCATION.route,
+            Screens.ADD_POI.route,Screens.MANAGE_CATEGORY.route,Screens.CATEGORY_DETAILS.route
         )
         showBackArrow = destination.route in arrayOf(
             Screens.ACCOUNT_CHANGE_DATA.route, Screens.LOGIN.route, Screens.ADD_POI.route,
-            Screens.REGISTER.route, Screens.CREDITS.route, Screens.POINT_OF_INTEREST_DETAILS.route, Screens.LOCATION_DETAILS.route, Screens.POINT_OF_INTEREST.route, Screens.LOCATION_MAP.route, Screens.ADD_LOCATION.route , Screens.POINT_OF_INTEREST_MAP.route , Screens.MAP_OVERVIEW.route
+            Screens.REGISTER.route, Screens.CREDITS.route, Screens.POINT_OF_INTEREST_DETAILS.route,
+            Screens.LOCATION_DETAILS.route, Screens.POINT_OF_INTEREST.route, Screens.LOCATION_MAP.route,
+            Screens.ADD_LOCATION.route , Screens.POINT_OF_INTEREST_MAP.route , Screens.MAP_OVERVIEW.route,
+            Screens.MANAGE_CATEGORY.route,Screens.CATEGORY_DETAILS.route
         )
     }
 
@@ -143,7 +148,10 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
                                 ) {
                                     DropdownMenuItem(
                                         text = { Text(stringResource(R.string.add_category)) },
-                                        onClick = { expandedMenu = false }
+                                        onClick = {
+                                            navController.navigate(Screens.MANAGE_CATEGORY.route);
+                                            expandedMenu = false
+                                        }
                                     )
                                     if(currentScreen!!.destination.route != Screens.POINT_OF_INTEREST.route) {
                                         DropdownMenuItem(
@@ -205,6 +213,10 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
                 title.value = viewModel.getLocation().name
                 LocationDetailsScreen(navHostController = navController, viewModel, viewModel.getLocation())
             }
+            composable(Screens.CATEGORY_DETAILS.route) {
+                title.value = viewModel.getCategory().name
+                CategoryDetailsScreen(navHostController = navController, viewModel, viewModel.getCategory())
+            }
 
             composable(Screens.POINT_OF_INTEREST_DETAILS.route) {
                 title.value = viewModel.getPointOfInterest()!!.name
@@ -261,6 +273,17 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
             composable(Screens.ADD_LOCATION.route) {
                 title.value = stringResource(R.string.add_locations)
                 AddLocationScreen(navController, viewModel);
+            }
+            composable(Screens.MANAGE_CATEGORY.route) {
+                title.value = stringResource(R.string.add_category)
+                /*LocationListScreen(NavHostController = navController, viewModel, app.appData.allLocations) {
+                    viewModel.locationId.value = it.itemId
+                    navController.navigate(it.nextPage.route)
+                }*/
+                ManageCategoryScreen(navController, viewModel,app.appData.allCategory){
+                    viewModel.categoryId.value = it.itemId
+                    navController.navigate(it.nextPage.route)
+                }
             }
             composable(Screens.ADD_POI.route) {
                 title.value = stringResource(R.string.add_interest_location)

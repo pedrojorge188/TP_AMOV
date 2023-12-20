@@ -41,6 +41,8 @@
     <string name="local_de_interesse">Punto de interés -</string>
     <string name="add_locations">Agregar una ubicación</string>
     <string name="location_name">Nombre de la ubicación</string>
+    <string name="category_name">Nombre de la categoría</string>
+
     <string name="foto_da_localiza_o">Foto de la ubicación</string>
     <string name="choose_from_gallery">Elegir de la galería</string>
     <string name="location_photo">Foto de la ubicación</string>0

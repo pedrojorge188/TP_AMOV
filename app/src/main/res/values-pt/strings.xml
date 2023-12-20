@@ -13,7 +13,7 @@
     <string name="search">Pesquisa</string>
     <string name="location_list">Lista Localizações</string>
     <string name="details">detalhes</string>
-    <string name="add_category">Adicionar categória</string>
+    <string name="add_category">Adicionar categoria</string>
     <string name="add_location">Adicionar localização</string>
     <string name="add_interest_location">Adicionar local de interesse</string>
     <string name="interests_locations">Locais de Interesse (</string>
@@ -41,6 +41,8 @@
     <string name="local_de_interesse">Local de Interesse -</string>
     <string name="add_locations">Adiconar uma Localização</string>
     <string name="location_name">Nome da Localização</string>
+    <string name="category_name">Nome da categoria</string>
+
     <string name="foto_da_localiza_o">Foto da localização</string>
     <string name="choose_from_gallery">Escolher da galeria</string>
     <string name="location_photo">Foto da localização</string>0

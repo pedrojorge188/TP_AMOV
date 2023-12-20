@@ -110,6 +110,33 @@ class StoreUtil {
                     Log.w("DELETE_POI", "Erro ao buscar POI($poiName): $e")
                 }
         }
+        fun deleteCategory(id: String) {
+            val db = FirebaseFirestore.getInstance()
+
+            db.collection("category")
+                .document(id)
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if (documentSnapshot.exists()) {
+                        db.collection("category")
+                            .document(id)
+                            .delete()
+                            .addOnSuccessListener {
+                                Log.i("DELETE_CATEGORY", "Category($id) Eliminada com sucesso")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w("DELETE_CATEGORY", "Erro ao excluir Category($id): $e")
+                            }
+                    } else {
+                        Log.w("DELETE_CATEGORY", "Category($id) não encontrada")
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Log.w("DELETE_CATEGORY", "Erro ao buscar Category($id): $e")
+                }
+        }
+
+
 
         fun deleteLocation(id: String) {
             val db = FirebaseFirestore.getInstance()
