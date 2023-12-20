@@ -31,6 +31,7 @@ import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
 import pt.isec.amov.R
 import pt.isec.amov.models.PointOfInterest
+import pt.isec.amov.ui.composables.CustomRatingBar
 import pt.isec.amov.ui.composables.NormalBtn
 import pt.isec.amov.ui.composables.SearchBar
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
@@ -84,39 +85,53 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
                         onSelected(NavigationData(it.id, Screens.POINT_OF_INTEREST_DETAILS))
                     }
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 8.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                            Text(
-                                text = it.name,
+                    Column {
+                            Row(
                                 modifier = Modifier
-                                    .padding(horizontal = 20.dp, vertical = 20.dp) ,
-                                fontSize = 16.sp
-                            )
-
-                            Spacer(modifier = Modifier.weight(1f,true))
-
-                            if(it.votes < 2){
-                                RedWarningIconButton(
-                                    onClick = {
-                                        //ação para colocar mais uma nota
-                                    },
-                                    itemInfo = it.name,
-                                    it.votes.toFloat()
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = it.name,
+                                    modifier = Modifier
+                                        .padding(horizontal = 20.dp, vertical = 20.dp) ,
+                                    fontSize = 16.sp
                                 )
-                            }
-                            if(vm.user.value != null)
-                                if(it.createdBy.equals( vm.user.value!!.email )) {
-                                    DeleteDialog(onClick = {
-                                        vm.deletePOI(it.name);
-                                    })
-                                }
 
+                                Spacer(modifier = Modifier.weight(1f,true))
+
+                                if(it.votes < 2){
+                                    RedWarningIconButton(
+                                        onClick = {
+                                            //ação para colocar mais uma nota
+                                        },
+                                        itemInfo = it.name,
+                                        it.votes.toFloat()
+                                    )
+                                }
+                                if(vm.user.value != null)
+                                    if(it.createdBy.equals( vm.user.value!!.email )) {
+                                        DeleteDialog(onClick = {
+                                            vm.deletePOI(it.name);
+                                        })
+                                    }
+                            }
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 26.dp, end = 20.dp, bottom = 20.dp),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+
+                                CustomRatingBar(
+                                    rating = it.grade
+                                ) {}
+
+
+                            }
+                        }
                     }
-                }
             }
         }
     }

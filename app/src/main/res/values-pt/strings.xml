@@ -61,4 +61,5 @@
     <string name="delete">Eliminar</string>
     <string name="all_locations">Todas as localizações</string>
     <string name="error_adding_point_of_interest_to_location">Erro ao adicionar ponto de interesse</string>
+    <string name="created_by">Criado por: %1$s</string>
 </resources>

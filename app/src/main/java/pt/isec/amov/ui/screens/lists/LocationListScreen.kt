@@ -37,6 +37,7 @@ import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
 import pt.isec.amov.R
 import pt.isec.amov.models.Location
+import pt.isec.amov.ui.composables.CustomRatingBar
 import pt.isec.amov.ui.composables.NormalBtn
 import pt.isec.amov.ui.composables.SearchBar
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
@@ -85,7 +86,7 @@ fun LocationListScreen(NavHostController: NavHostController,
 
                 items(location.value!!, key = { it.id } ) {
                     Card(
-                        elevation = CardDefaults.cardElevation(4.dp),
+                        elevation = CardDefaults.cardElevation(6.dp),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp),
@@ -93,47 +94,63 @@ fun LocationListScreen(NavHostController: NavHostController,
                             onSelected(NavigationData(it.id, Screens.POINT_OF_INTEREST))
                         }
                     ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 8.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = it.name,
+                        Column {
+                            Row(
                                 modifier = Modifier
-                                    .padding(horizontal = 20.dp, vertical = 20.dp) ,
-                                fontSize = 16.sp
-                            )
-                            Spacer(modifier = Modifier.weight(1f,true))
-                            IconButton(
-                                onClick = {
-                                    onSelected(NavigationData(it.id, Screens.LOCATION_DETAILS))
-                                },
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween
                             ) {
-                                Icon(
-                                    Icons.Filled.MoreVert,
-                                    contentDescription = "Info"
+                                Text(
+                                    text = it.name,
+                                    modifier = Modifier
+                                        .padding(horizontal = 20.dp, vertical = 20.dp) ,
+                                    fontSize = 16.sp
                                 )
-                            }
-
-                            if(vm.user.value != null)
-                                if(it.createdBy.equals( vm.user.value!!.email )){
-                                    DeleteDialog(onClick = {
-                                        vm.deleteLocation(it.id);
-                                    })
+                                Spacer(modifier = Modifier.weight(1f,true))
+                                IconButton(
+                                    onClick = {
+                                        onSelected(NavigationData(it.id, Screens.LOCATION_DETAILS))
+                                    },
+                                ) {
+                                    Icon(
+                                        Icons.Filled.MoreVert,
+                                        contentDescription = "Info"
+                                    )
                                 }
 
-                            if(it.votes < 2){
-                                RedWarningIconButton(
-                                    onClick = {
+                                if(vm.user.value != null)
+                                    if(it.createdBy.equals( vm.user.value!!.email )){
+                                        DeleteDialog(onClick = {
+                                            vm.deleteLocation(it.id);
+                                        })
+                                    }
 
-                                    },
-                                    itemInfo = it.name,
-                                    it.votes.toFloat()
-                                )
+                                if(it.votes < 2){
+                                    RedWarningIconButton(
+                                        onClick = {
+
+                                        },
+                                        itemInfo = it.name,
+                                        it.votes.toFloat()
+                                    )
+                                }
+                            }
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 26.dp, end = 20.dp, bottom = 20.dp),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+
+                                CustomRatingBar(
+                                    rating = it.grade
+                                ) {}
+
+
                             }
                         }
+
                     }
                 }
             }
