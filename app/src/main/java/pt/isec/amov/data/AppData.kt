@@ -88,12 +88,14 @@ class AppData {
             })
         }
 
-        fun addCategory(name: String, iconUrl: String?, description: String, onResult: (Throwable?) -> Unit) {
+        fun addCategory(name: String, iconUrl: String?,createdBy: String, description: String, onResult: (Throwable?) -> Unit) {
             val newCategory = Category(
                 id = UUID.randomUUID().toString(),
                 name = name,
                 iconUrl = iconUrl,
+                createdBy = createdBy,
                 description = description
+
             )
 
             StoreUtil.addCategory(newCategory, onResult = { result ->

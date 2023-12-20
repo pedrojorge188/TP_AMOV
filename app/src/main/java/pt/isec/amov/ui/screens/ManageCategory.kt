@@ -137,10 +137,12 @@ fun ManageCategoryScreen(navController: NavHostController, vm: ActionsViewModel,
                                 )
                             }
 
+                            if (vm.user.value?.email == it.createdBy){
+                                DeleteDialog(onClick = {
+                                    vm.deleteCategory(it.name);
+                                })
+                            }
 
-                                    DeleteDialog(onClick = {
-                                        vm.deleteCategory(it.name);
-                                    })
 
 
 

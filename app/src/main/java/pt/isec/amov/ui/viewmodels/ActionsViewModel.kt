@@ -109,7 +109,7 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
     }
     fun addCategory(categoryName: String, categoryDescription: String) {
         viewModelScope.launch {
-            appData.addCategory(categoryName,null, categoryDescription){
+            appData.addCategory(categoryName,null,_user.value!!.email, categoryDescription){
                     expt ->
                 if(expt != null) {
                     _error.value = expt.message

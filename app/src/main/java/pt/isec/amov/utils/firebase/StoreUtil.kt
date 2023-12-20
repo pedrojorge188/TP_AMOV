@@ -64,6 +64,7 @@ class StoreUtil {
                 "id" to category.id,
                 "name" to category.name,
                 "iconUrl" to category.iconUrl,
+                "createdBy" to category.createdBy,
                 "description" to category.description
             )
 
@@ -226,9 +227,10 @@ class StoreUtil {
                         val id = document.getString("id") ?: ""
                         val name = document.getString("name") ?: ""
                         val iconUrl = document.getString("iconUrl")
+                        val createdBy = document.getString("createdBy") ?: ""
                         val description = document.getString("description") ?: ""
 
-                        val category = Category(id, name, iconUrl, description)
+                        val category = Category(id, name, iconUrl,createdBy, description)
                         response.add(category)
                     }
                     onCategoriesLoaded(response)
