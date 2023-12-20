@@ -16,24 +16,6 @@ import java.util.Locale
 class StoreUtil {
 
     companion object StoreUtil {
-        fun addLocationToFirestore(location: Location) {
-            val db = FirebaseFirestore.getInstance()
-            val locationData = hashMapOf(
-                "id" to location.id,
-                "name" to location.name,
-                "latitude" to location.latitude,
-                "longitude" to location.longitude,
-                "description" to location.description,
-                "photoUrl" to location.photoUrl,
-                "createdBy" to location.createdBy,
-                "votes" to location.votes,
-                "grade" to location.grade,
-                "category" to location.category
-            )
-
-            db.collection("locations").document(location.id)
-                .set(locationData)
-        }
 
         private val observers = mutableMapOf<String, FirestoreObserver>()
         fun observeCollectionsForChanges(collections: List<String>, onDataChanged: () -> Unit) {
@@ -52,10 +34,49 @@ class StoreUtil {
                 }
             }
         }
+        fun addLocationToFirestore(location: Location, onResult: (Throwable?) -> Unit) {
+            val db = FirebaseFirestore.getInstance()
+            val locationData = hashMapOf(
+                "id" to location.id,
+                "name" to location.name,
+                "latitude" to location.latitude,
+                "longitude" to location.longitude,
+                "description" to location.description,
+                "photoUrl" to location.photoUrl,
+                "createdBy" to location.createdBy,
+                "votes" to location.votes,
+                "grade" to location.grade,
+                "category" to location.category
+            )
 
+            db.collection("locations").document(location.id)
+                .set(locationData)
+                .addOnCompleteListener { result ->
+                    onResult(result.exception)
+                }
+        }
+        fun addCategory(
+            category: Category,
+            onResult: (Throwable?) -> Unit
+        ) {
+            val db = FirebaseFirestore.getInstance();
+            val newPointOfInterest = hashMapOf(
+                "id" to category.id,
+                "name" to category.name,
+                "iconUrl" to category.iconUrl,
+                "description" to category.description
+            )
+
+            db.collection("category").document(category.name)
+                .set(newPointOfInterest)
+                .addOnCompleteListener { result ->
+                    onResult(result.exception)
+                }
+        }
         fun addPointOfInterestToLocation(
             locationName: String?,
-            poi: PointOfInterest
+            poi: PointOfInterest,
+            onResult: (Throwable?) -> Unit
         ) {
             val db = FirebaseFirestore.getInstance();
             val newPointOfInterest = hashMapOf(
@@ -74,9 +95,12 @@ class StoreUtil {
                 .collection("pointsOfInterest")
                 .document(newPointOfInterest["name"] as String)
                 .set(newPointOfInterest)
+                .addOnCompleteListener { result ->
+                    onResult(result.exception)
+                }
         }
 
-        fun deletePointOfInterest(poiName: String) {
+        fun deletePointOfInterest(poiName: String, onResult: (Throwable?) -> Unit) {
             val db = FirebaseFirestore.getInstance()
             val normalizedPoiName = poiName.trim().lowercase(Locale.getDefault()).replace("\\s+".toRegex(), "")
 
@@ -106,11 +130,12 @@ class StoreUtil {
                         }
                     }
                 }
-                .addOnFailureListener { e ->
-                    Log.w("DELETE_POI", "Erro ao buscar POI($poiName): $e")
+                .addOnCompleteListener { result ->
+                    onResult(result.exception)
                 }
+
         }
-        fun deleteCategory(id: String) {
+        fun deleteCategory(id: String, onResult: (Throwable?) -> Unit) {
             val db = FirebaseFirestore.getInstance()
 
             db.collection("category")
@@ -134,11 +159,14 @@ class StoreUtil {
                 .addOnFailureListener { e ->
                     Log.w("DELETE_CATEGORY", "Erro ao buscar Category($id): $e")
                 }
+                .addOnCompleteListener { result ->
+                    onResult(result.exception)
+                }
         }
 
 
 
-        fun deleteLocation(id: String) {
+        fun deleteLocation(id: String, onResult: (Throwable?) -> Unit) {
             val db = FirebaseFirestore.getInstance()
             val normalizedlocationName = id.trim().lowercase(Locale.getDefault()).replace("\\s+".toRegex(), "")
 
@@ -180,22 +208,11 @@ class StoreUtil {
                         }
                     }
                 }
+                .addOnCompleteListener { result ->
+                    onResult(result.exception)
+                }
         }
 
-        fun addCategory(
-            category: Category
-        ) {
-            val db = FirebaseFirestore.getInstance();
-            val newPointOfInterest = hashMapOf(
-                "id" to category.id,
-                "name" to category.name,
-                "iconUrl" to category.iconUrl,
-                "description" to category.description
-            )
-
-            db.collection("category").document(category.name)
-                .set(newPointOfInterest)
-        }
 
         fun loadCategoriesFromFireStone(onCategoriesLoaded: (MutableList<Category>) -> Unit) {
             val db = FirebaseFirestore.getInstance()

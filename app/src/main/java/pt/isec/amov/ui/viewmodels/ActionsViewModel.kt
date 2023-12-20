@@ -98,19 +98,34 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
 
     fun addLocation(locationName: String, locationDescription: String, selectedCategory: Category, latitude: Double, longitude: Double) {
         viewModelScope.launch {
-            appData.addLocation(locationName, latitude, longitude, locationDescription, "/images"+imagePath.value, _user.value!!.email, selectedCategory)
+            appData.addLocation(locationName, latitude, longitude, locationDescription, "/images"+imagePath.value, _user.value!!.email, selectedCategory){
+                expt ->
+                    if(expt != null) {
+                        _error.value = expt.message
+                    }
+            }
             imagePath.value = null
         }
     }
     fun addCategory(categoryName: String, categoryDescription: String) {
         viewModelScope.launch {
-            appData.addCategory(categoryName,null, categoryDescription)
+            appData.addCategory(categoryName,null, categoryDescription){
+                    expt ->
+                if(expt != null) {
+                    _error.value = expt.message
+                }
+            }
         }
     }
 
     fun addPOI(poiName: String, poiDescription: String, selectedCategory: Category, latitude: Double, longitude: Double) {
         viewModelScope.launch {
-            appData.addPointOfInterestToLocation(locationId.value.toString(),poiName,poiDescription,"/images"+imagePath.value,latitude,longitude,user.value!!.email,selectedCategory)
+            appData.addPointOfInterestToLocation(locationId.value.toString(),poiName,poiDescription,"/images"+imagePath.value,latitude,longitude,user.value!!.email,selectedCategory){
+                    expt ->
+                if(expt != null) {
+                    _error.value = expt.message
+                }
+            }
             imagePath.value = null
         }
     }
@@ -152,18 +167,33 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
 
     fun deleteLocation(id: String) {
         viewModelScope.launch {
-            appData.deleteLocation(id)
+            appData.deleteLocation(id){
+                    expt ->
+                if(expt != null) {
+                    _error.value = expt.message
+                }
+            }
         }
     }
     fun deleteCategory(id: String) {
         viewModelScope.launch {
-            appData.deleteCategory(id)
+            appData.deleteCategory(id){
+                    expt ->
+                if(expt != null) {
+                    _error.value = expt.message
+                }
+            }
         }
     }
 
     fun deletePOI(name: String) {
         viewModelScope.launch {
-            appData.deletePOI(name)
+            appData.deletePOI(name){
+                    expt ->
+                if(expt != null) {
+                    _error.value = expt.message
+                }
+            }
         }
     }
 

@@ -70,7 +70,7 @@ class AppData {
             _categories.value = newCategories
         }
 
-        fun addLocation(name: String, lat: Double, lon: Double, description: String, photoUrl: String?, createdBy: String, category: Category) {
+        fun addLocation(name: String, lat: Double, lon: Double, description: String, photoUrl: String?, createdBy: String, category: Category, onResult: (Throwable?) -> Unit) {
 
             val newLocation = Location(
                 id = UUID.randomUUID().toString(),
@@ -83,10 +83,12 @@ class AppData {
                 category = category.name
             )
 
-            StoreUtil.addLocationToFirestore(location = newLocation )
+            StoreUtil.addLocationToFirestore(location = newLocation, onResult = { result ->
+                onResult(result)
+            })
         }
 
-        fun addCategory(name: String, iconUrl: String?, description: String) {
+        fun addCategory(name: String, iconUrl: String?, description: String, onResult: (Throwable?) -> Unit) {
             val newCategory = Category(
                 id = UUID.randomUUID().toString(),
                 name = name,
@@ -94,10 +96,12 @@ class AppData {
                 description = description
             )
 
-            StoreUtil.addCategory(newCategory)
+            StoreUtil.addCategory(newCategory, onResult = { result ->
+                onResult(result)
+            })
         }
 
-        fun addPointOfInterestToLocation(locationId: String, name: String, description: String, photoUrl: String?, latitude: Double, longitude: Double, createdBy: String, category: Category) {
+        fun addPointOfInterestToLocation(locationId: String, name: String, description: String, photoUrl: String?, latitude: Double, longitude: Double, createdBy: String, category: Category, onResult: (Throwable?) -> Unit) {
 
             val location = _locations.value?.find { it.id == locationId }
 
@@ -114,20 +118,31 @@ class AppData {
                     category = category.name
                 )
 
-                StoreUtil.addPointOfInterestToLocation(locationId,newPointOfInterest)
+                StoreUtil.addPointOfInterestToLocation(locationId,newPointOfInterest, onResult = { result ->
+                    onResult(result)
+                })
 
             }
         }
 
-    fun deletePOI(name: String) {
-        StoreUtil.deletePointOfInterest(name)
+    fun deletePOI(name: String, onResult: (Throwable?) -> Unit) {
+        StoreUtil.deletePointOfInterest(name) {
+            result ->
+                onResult(result)
+        }
     }
 
-    fun deleteLocation(id: String) {
-        StoreUtil.deleteLocation(id)
+    fun deleteLocation(id: String, onResult: (Throwable?) -> Unit) {
+        StoreUtil.deleteLocation(id){
+                result ->
+            onResult(result)
+        }
     }
-    fun deleteCategory(id: String) {
-        StoreUtil.deleteCategory(id)
+    fun deleteCategory(id: String, onResult: (Throwable?) -> Unit) {
+        StoreUtil.deleteCategory(id){
+                result ->
+            onResult(result)
+        }
     }
 
 }

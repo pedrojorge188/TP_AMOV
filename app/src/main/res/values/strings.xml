@@ -59,4 +59,5 @@
     <string name="certain">Are you sure you want to delete this item!</string>
     <string name="delete">Delete</string>
     <string name="all_locations">All Locations</string>
+    <string name="error_adding_point_of_interest_to_location">Error adding Point of Interest to location</string>
 </resources>
