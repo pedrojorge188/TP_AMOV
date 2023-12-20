@@ -12,9 +12,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -64,6 +67,21 @@ fun AddPointOfInterestScreen(navController: NavHostController, vm: ActionsViewMo
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        if(vm.error.value != null) {
+
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp, vertical = 20.dp)
+            ) {
+                Icon(
+                    Icons.Filled.Warning,
+                    contentDescription = "danger",
+                    tint = Color.Red
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(text = "Error: ${vm.error.value}", color = Color.Red)
+            }
+        }
         OutlinedTextField(
             value = POIName,
             onValueChange = {
@@ -208,10 +226,10 @@ fun AddPointOfInterestScreen(navController: NavHostController, vm: ActionsViewMo
                     navController.popBackStack()
 
                 } else {
-
+                    vm.error.value = "You must enter all requirements!"
                 }
             },
-            text = stringResource(id = R.string.add_location)
+            text = stringResource(id = R.string.add_interest_location)
         )
     }
 

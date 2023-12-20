@@ -9,6 +9,6 @@ data class Location(
     val photoUrl: String?,
     val createdBy: String,
     val votes: Int = 0,
-    val grade: Int = 1,
+    val grade: Double = 0.0,
     val category: String?
 )

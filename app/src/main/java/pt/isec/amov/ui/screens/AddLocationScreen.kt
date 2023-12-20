@@ -13,9 +13,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -47,7 +50,6 @@ fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
 
     var locationName by remember { mutableStateOf("") }
     var locationDescription by remember { mutableStateOf("") }
-    var authorsName by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
     var selectedCategory by remember { mutableStateOf<Category?>(null) }
     var showLatLonDialog by remember { mutableStateOf(false) }
@@ -64,6 +66,22 @@ fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        if(vm.error.value != null) {
+
+            Row(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp, vertical = 20.dp)
+            ) {
+                Icon(
+                    Icons.Filled.Warning,
+                    contentDescription = "danger",
+                    tint = Color.Red
+                )
+                Spacer(modifier = Modifier.width(16.dp))
+                Text(text = "Error: ${vm.error.value}", color = Color.Red)
+            }
+        }
+
         OutlinedTextField(
             value = locationName,
             onValueChange = {
@@ -208,7 +226,7 @@ fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
                     navController.popBackStack()
 
                 } else {
-                    //Toast.makeText(LocalContext.current, "Ocorreu um erro", Toast.LENGTH_SHORT).show()
+                    vm.error.value = "You must enter all requirements!"
                 }
             },
             text = stringResource(id = R.string.add_location)

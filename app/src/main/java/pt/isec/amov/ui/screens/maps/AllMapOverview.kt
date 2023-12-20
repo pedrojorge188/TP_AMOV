@@ -13,22 +13,26 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
 import org.osmdroid.util.GeoPoint
+import pt.isec.amov.R
 import pt.isec.amov.models.Location
-import pt.isec.amov.ui.composables.MapScene
+import pt.isec.amov.ui.composables.MapAllScene
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
+
 @Composable
-fun LocationMapScreen(
+fun AllMapOverview(
     navHostController: NavHostController,
     viewModel: ActionsViewModel,
-    location: Location
-) {
+    L: LiveData<List<Location>>,
+){
     val geoPoint by remember { mutableStateOf(
         GeoPoint(
-            location.latitude, location.longitude
+            0.0, -8.69
         )
     ) }
 
@@ -37,7 +41,7 @@ fun LocationMapScreen(
         verticalArrangement = Arrangement.Top
     ) {
         Text(
-            text = location.name,
+            text = stringResource(R.string.all_locations),
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth(),
@@ -49,8 +53,7 @@ fun LocationMapScreen(
                 .weight(1f)
                 .fillMaxWidth()
         ) {
-            MapScene(POI = viewModel.getPointOfInterestList().value , geoPoint = geoPoint, true, viewModel)
+            MapAllScene(L = L , geoPoint = geoPoint, viewModel)
         }
     }
 }
-

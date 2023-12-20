@@ -50,7 +50,7 @@ fun PointOfInterestMapScreen(
             style = MaterialTheme.typography.titleLarge
         )
 
-        MapScene(POI = lPOI, geoPoint = geoPoint, location = false)
+        MapScene(POI = lPOI, geoPoint = geoPoint, location = false, viewModel)
 
     }
 }
