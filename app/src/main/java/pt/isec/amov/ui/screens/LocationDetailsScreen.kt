@@ -197,6 +197,12 @@ fun LocationDetailsScreen(
                         )
                         Spacer(modifier = Modifier.width(15.dp))
                     }
+                    Text(
+                        text = "",
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 25.sp
+                    )
                     Column {
                         Text(
                             text = stringResource(R.string.category_txt),

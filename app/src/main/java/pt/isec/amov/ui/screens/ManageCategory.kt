@@ -1,6 +1,7 @@
 package pt.isec.amov.ui.screens
 
 import DeleteDialog
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -37,6 +38,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -44,8 +46,8 @@ import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
 import pt.isec.amov.R
 import pt.isec.amov.models.Category
-import pt.isec.amov.ui.composables.IconDropdown
 import pt.isec.amov.ui.composables.NormalBtn
+import pt.isec.amov.ui.composables.getResourceIdForImage
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
 import pt.isec.amov.ui.viewmodels.NavigationData
 import pt.isec.amov.ui.viewmodels.Screens
@@ -133,8 +135,25 @@ fun ManageCategoryScreen(navController: NavHostController, vm: ActionsViewModel,
                 .padding(horizontal = 16.dp)
         ) {
             iconList.forEach { icon ->
+                val int= getResourceIdForImage(icon)
                 DropdownMenuItem(
-                    text = { Text(getTranslation(icon)) },
+                    text = {
+                        Row{
+                            if (int !=null) {
+                                Image(
+
+                                    painter = painterResource(id = int),
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .width(10.dp)
+                                        .height(10.dp)
+
+                                )
+                                Spacer(modifier = Modifier.width(15.dp))
+                            }
+                            Text(getTranslation(icon))
+                        }
+                           },
                     onClick = {
                         type= icon
                         expanded = false
