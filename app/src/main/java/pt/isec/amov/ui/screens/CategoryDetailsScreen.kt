@@ -50,8 +50,9 @@ fun CategoryDetailsScreen(
                                 .height(60.dp)
 
                         )
+                        Spacer(modifier = Modifier.width(15.dp))
                     }
-                    Spacer(modifier = Modifier.width(15.dp))
+
                     Column {
                         Text(
                             text = stringResource(R.string.category_txt),

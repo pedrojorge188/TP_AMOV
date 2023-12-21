@@ -52,6 +52,15 @@
     <string name="coordenadas_da_localiza_o">Coordenadas de la ubicación</string>
     <string name="authors_name_qa">Ingrese su nombre</string>
     <string name="insert_description">Escriba una descripción</string>
+    <string name="cidade">Ciudad</string>
+    <string name="desporto">Deporte</string>
+    <string name="ginasio">Gimnasio</string>
+    <string name="montanhas">Montañas</string>
+    <string name="restaurante">Restaurante</string>
+    <string name="museu">Museo</string>
+    <string name="natureza">Naturaleza</string>
+    <string name="praia">Playa</string>
+    <string name="Tipo">Tipo</string>
     <string name="my_location_market">Ubicación de su dispositivo</string>
     <string name="name_POI">Nombre del punto de interés</string>
     <string name="imagem_n_o_dispon_vel">Cargando imagen       </string>

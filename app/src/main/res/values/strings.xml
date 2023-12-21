@@ -51,7 +51,16 @@
     <string name="coordenadas_da_localiza_o">Location Coordinates</string>
     <string name="authors_name_qa">Insert your name</string>
     <string name="insert_description">Write a description</string>
+    <string name="cidade">City</string>
+    <string name="desporto">Sport</string>
+    <string name="ginasio">Gym</string>
+    <string name="montanhas">Mountains</string>
+    <string name="restaurante">Restaurant</string>
+    <string name="museu">Museum</string>
+    <string name="natureza">Nature</string>
+    <string name="praia">Beach</string>
     <string name="my_location_market">Your device\'s location</string>
+    <string name="Tipo">Type</string>
     <string name="name_POI">Point of Interest Name</string>
     <string name="imagem_n_o_dispon_vel">Loading image       </string>
     <string name="verifique_a_sua_liga_o">Check your connection</string>

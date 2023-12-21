@@ -116,9 +116,9 @@ fun ManageCategoryScreen(navController: NavHostController, vm: ActionsViewModel,
             shape = MaterialTheme.shapes.large
         ) {
             if(type == ""){
-                Text(text = "Tipo")
+                Text(text = stringResource(R.string.Tipo))
             }else{
-                Text(text = type)
+                Text(text = getTranslation(type))
             }
             Icon(
                 imageVector = Icons.Default.ArrowDropDown,
@@ -134,7 +134,7 @@ fun ManageCategoryScreen(navController: NavHostController, vm: ActionsViewModel,
         ) {
             iconList.forEach { icon ->
                 DropdownMenuItem(
-                    text = { Text(icon) },
+                    text = { Text(getTranslation(icon)) },
                     onClick = {
                         type= icon
                         expanded = false
@@ -211,5 +211,20 @@ fun ManageCategoryScreen(navController: NavHostController, vm: ActionsViewModel,
             }
         }
 
+    }
+}
+@Composable
+private fun getTranslation(txt: String): String {
+    // Mapeia o nome da imagem para o ID do recurso
+    return when (txt) {
+        "cidade" -> stringResource(R.string.cidade)
+        "desporto" -> stringResource(R.string.desporto)
+        "ginasio" -> stringResource(R.string.ginasio)
+        "montanhas" -> stringResource(R.string.montanhas)
+        "restaurante" -> stringResource(R.string.restaurante)
+        "museu" -> stringResource(R.string.museu)
+        "natureza" -> stringResource(R.string.natureza)
+        "praia" -> stringResource(R.string.praia)
+        else -> "erro"
     }
 }
