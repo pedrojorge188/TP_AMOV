@@ -197,6 +197,9 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
         }
     }
 
+    fun getCategoryIcon(name: String) : String {
+        return appData.allCategory.value?.find { it.name == name }?.iconUrl ?: ""
+    }
 
 
 }

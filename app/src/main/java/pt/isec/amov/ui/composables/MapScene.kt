@@ -2,6 +2,9 @@
 
 package pt.isec.amov.ui.composables
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -66,21 +69,38 @@ fun MapScene(POI: List<PointOfInterest>?, geoPoint: GeoPoint, location: Boolean,
 
                     if (POI != null)
                         for (poi in POI) {
-                            val originalDrawable = ContextCompat.getDrawable(context, org.osmdroid.library.R.drawable.ic_menu_mylocation)
-                            val color = ContextCompat.getColor(context, R.color.red)
-                            originalDrawable?.let {
-                                val mutableDrawable = DrawableCompat.wrap(it.mutate())
-                                DrawableCompat.setTint(mutableDrawable, color)
-                            }
-                            overlays.add(
-                                Marker(this).apply {
+                            val imageName = vm.getCategoryIcon(poi.category ?: "")
+                            val int= getResourceIdForImage(imageName)
+                            if (int != 0) {
+                                val bitmap = BitmapFactory.decodeResource(context.resources, int ?: 0)
+                                val width = 120
+                                val height = 120
+                                val scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, false)
+                                val marker = Marker(this).apply {
                                     position = GeoPoint(poi.latitude, poi.longitude)
-                                    icon = originalDrawable
                                     setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
                                     title = poi.name
                                     snippet = poi.description
-                                },
-                            )
+                                    icon = BitmapDrawable(context.resources, scaledBitmap)
+                                }
+                                overlays.add(marker)
+                            } else {
+                                val originalDrawable = ContextCompat.getDrawable(context, org.osmdroid.library.R.drawable.ic_menu_mylocation)
+                                val color = ContextCompat.getColor(context, R.color.red)
+                                originalDrawable?.let {
+                                    val mutableDrawable = DrawableCompat.wrap(it.mutate())
+                                    DrawableCompat.setTint(mutableDrawable, color)
+                                }
+                                overlays.add(
+                                    Marker(this).apply {
+                                        position = GeoPoint(poi.latitude, poi.longitude)
+                                        icon = originalDrawable
+                                        setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
+                                        title = poi.name
+                                        snippet = poi.description
+                                    },
+                                )
+                            }
                         }
                 }
             },
@@ -123,24 +143,38 @@ fun MapAllScene(L: LiveData<List<Location>>, geoPoint: GeoPoint, vm : ActionsVie
 
                         if (location.value != null)
                             for (l in location.value!!) {
-                                val originalDrawable = ContextCompat.getDrawable(
-                                    context,
-                                    org.osmdroid.library.R.drawable.ic_menu_compass
-                                )
-                                val color = ContextCompat.getColor(context, R.color.red)
-                                originalDrawable?.let {
-                                    val mutableDrawable = DrawableCompat.wrap(it.mutate())
-                                    DrawableCompat.setTint(mutableDrawable, color)
-                                }
-                                overlays.add(
-                                    Marker(this).apply {
+                                val imageName = vm.getCategoryIcon(l.category ?: "")
+                                val int= getResourceIdForImage(imageName)
+                                if (int != 0) {
+                                    val bitmap = BitmapFactory.decodeResource(context.resources, int ?: 0)
+                                    val width = 80
+                                    val height = 80
+                                    val scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height, false)
+                                    val marker = Marker(this).apply {
                                         position = GeoPoint(l.latitude, l.longitude)
-                                        icon = originalDrawable
-                                        setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+                                        setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
                                         title = l.name
                                         snippet = l.description
-                                    },
-                                )
+                                        icon = BitmapDrawable(context.resources, scaledBitmap)
+                                    }
+                                    overlays.add(marker)
+                                } else {
+                                    val originalDrawable = ContextCompat.getDrawable(context, org.osmdroid.library.R.drawable.ic_menu_mylocation)
+                                    val color = ContextCompat.getColor(context, R.color.red)
+                                    originalDrawable?.let {
+                                        val mutableDrawable = DrawableCompat.wrap(it.mutate())
+                                        DrawableCompat.setTint(mutableDrawable, color)
+                                    }
+                                    overlays.add(
+                                        Marker(this).apply {
+                                            position = GeoPoint(l.latitude, l.longitude)
+                                            icon = originalDrawable
+                                            setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_CENTER)
+                                            title = l.name
+                                            snippet = l.description
+                                        },
+                                    )
+                                }
                             }
                     }
                 },

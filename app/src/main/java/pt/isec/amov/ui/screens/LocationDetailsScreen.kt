@@ -44,6 +44,7 @@ import kotlinx.coroutines.tasks.await
 import pt.isec.amov.R
 import pt.isec.amov.models.Location
 import pt.isec.amov.ui.composables.CustomRatingBar
+import pt.isec.amov.ui.composables.getResourceIdForImage
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
 import pt.isec.amov.ui.viewmodels.Screens
 
@@ -127,6 +128,7 @@ fun LocationDetailsScreen(
                 )
             }
 
+
         Row(
             modifier = Modifier
                 .padding(horizontal = 20.dp, vertical = 20.dp)
@@ -170,28 +172,45 @@ fun LocationDetailsScreen(
                 )
             }
         }
-
         LazyColumn( modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 20.dp, vertical = 20.dp))
         {
 
             item {
+                val int= getResourceIdForImage(viewModel.getCategoryIcon(location.category ?: ""))
                 CustomRatingBar(
                     rating = location.grade
                 ) {}
                 Spacer(modifier = Modifier.height(16.dp))
-                Text(
-                    text = stringResource(R.string.category_txt),
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 25.sp
-                )
-                Text(
-                    text = "   "+location.category,
-                    color = Color.Black,
-                    fontSize = 20.sp
-                )
+
+                Row (horizontalArrangement = Arrangement.SpaceBetween){
+                    if (int !=null) {
+                        Image(
+
+                            painter = painterResource(id = int),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .width(60.dp)
+                                .height(60.dp)
+
+                        )
+                        Spacer(modifier = Modifier.width(15.dp))
+                    }
+                    Column {
+                        Text(
+                            text = stringResource(R.string.category_txt),
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 25.sp
+                        )
+                        Text(
+                            text = "   "+location.category,
+                            color = Color.Black,
+                            fontSize = 20.sp
+                        )
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 

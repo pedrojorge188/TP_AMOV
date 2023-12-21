@@ -43,6 +43,7 @@ import kotlinx.coroutines.tasks.await
 import pt.isec.amov.R
 import pt.isec.amov.models.PointOfInterest
 import pt.isec.amov.ui.composables.CustomRatingBar
+import pt.isec.amov.ui.composables.getResourceIdForImage
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
 import pt.isec.amov.ui.viewmodels.Screens
 
@@ -157,23 +158,40 @@ fun PointOfInteresetDetailsScreen(
         {
 
             item {
+                val int= getResourceIdForImage(viewModel.getCategoryIcon(pointOfInterest.category ?: ""))
                 CustomRatingBar(
                     rating = pointOfInterest?.grade ?: 0.0
                 ) {}
 
                 Spacer(modifier = Modifier.height(16.dp))
 
-                Text(
-                    text = stringResource(R.string.category_txt),
-                    color = Color.Black,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 25.sp
-                )
-                Text(
-                    text = "   "+ pointOfInterest!!.category,
-                    color = Color.Black,
-                    fontSize = 20.sp
-                )
+                Row (horizontalArrangement = Arrangement.SpaceBetween){
+                    if (int !=null) {
+                        Image(
+
+                            painter = painterResource(id = int),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .width(60.dp)
+                                .height(60.dp)
+
+                        )
+                        Spacer(modifier = Modifier.width(15.dp))
+                    }
+                    Column {
+                        Text(
+                            text = stringResource(R.string.category_txt),
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 25.sp
+                        )
+                        Text(
+                            text = "   "+pointOfInterest.category,
+                            color = Color.Black,
+                            fontSize = 20.sp
+                        )
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
