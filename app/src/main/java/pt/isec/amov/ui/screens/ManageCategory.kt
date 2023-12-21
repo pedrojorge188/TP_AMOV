@@ -1,6 +1,7 @@
 package pt.isec.amov.ui.screens
 
 import DeleteDialog
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,12 +13,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,6 +44,7 @@ import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
 import pt.isec.amov.R
 import pt.isec.amov.models.Category
+import pt.isec.amov.ui.composables.IconDropdown
 import pt.isec.amov.ui.composables.NormalBtn
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
 import pt.isec.amov.ui.viewmodels.NavigationData
@@ -47,6 +55,9 @@ import pt.isec.amov.ui.viewmodels.Screens
 fun ManageCategoryScreen(navController: NavHostController, vm: ActionsViewModel,categoryLiveData : LiveData<List<Category>>,onSelected : (NavigationData) -> Unit ) {
     var addCategory by remember { mutableStateOf("") }
     var addCategoryDescription by remember { mutableStateOf("") }
+    val iconList = listOf("cidade", "desporto", "ginasio", "montanhas", "restaurante", "museu","natureza","praia")
+    var expanded by remember  { mutableStateOf(false) }
+    var type by remember { mutableStateOf("") }
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -86,13 +97,61 @@ fun ManageCategoryScreen(navController: NavHostController, vm: ActionsViewModel,
             label = { Text(stringResource(R.string.insert_description)) },
             singleLine = true
         )
+
+
+
+        Button(
+            onClick = { expanded = !expanded },
+
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color.White,
+                contentColor = Color(0xFF02458A)
+            ),
+            modifier = Modifier
+                .width(300.dp)
+                .padding(12.dp)
+                .height(60.dp)
+                .border(2.dp,Color(0xFF02458A))
+            , // Altura ajustada
+            shape = MaterialTheme.shapes.large
+        ) {
+            if(type == ""){
+                Text(text = "Tipo")
+            }else{
+                Text(text = type)
+            }
+            Icon(
+                imageVector = Icons.Default.ArrowDropDown,
+                contentDescription = "More"
+            )
+        }
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        ) {
+            iconList.forEach { icon ->
+                DropdownMenuItem(
+                    text = { Text(icon) },
+                    onClick = {
+                        type= icon
+                        expanded = false
+                    }
+                )
+
+
+            }
+        }
         Spacer(modifier = Modifier.height(16.dp))
         NormalBtn(
             onClick = {
-                if (addCategory.isNotBlank() && addCategoryDescription.isNotBlank()) {
-                    vm.addCategory(addCategory, addCategoryDescription)
+                if (addCategory.isNotBlank() && addCategoryDescription.isNotBlank() && type.isNotBlank()){
+                    vm.addCategory(addCategory, addCategoryDescription,type)
                     addCategory = ""
                     addCategoryDescription= ""
+                    type = ""
                 }else{
                     vm.error.value = "You must enter all requirements!"
                 }

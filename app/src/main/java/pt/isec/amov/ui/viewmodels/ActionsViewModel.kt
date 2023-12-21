@@ -107,9 +107,9 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
             imagePath.value = null
         }
     }
-    fun addCategory(categoryName: String, categoryDescription: String) {
+    fun addCategory(categoryName: String, categoryDescription: String,type: String) {
         viewModelScope.launch {
-            appData.addCategory(categoryName,null,_user.value!!.email, categoryDescription){
+            appData.addCategory(categoryName,type,_user.value!!.email, categoryDescription){
                     expt ->
                 if(expt != null) {
                     _error.value = expt.message
