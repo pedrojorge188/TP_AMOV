@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -54,7 +56,6 @@ fun LocationDetailsScreen(
     viewModel: ActionsViewModel,
     location : Location?
 ) {
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -128,10 +129,16 @@ fun LocationDetailsScreen(
                 )
             }
 
+        Divider(
+            color = Color.Black,
+            thickness = 1.dp,
+            modifier = Modifier.fillMaxWidth().padding(vertical = 20.dp)
+        )
+
 
         Row(
             modifier = Modifier
-                .padding(horizontal = 20.dp, vertical = 20.dp)
+                .padding(horizontal = 20.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
@@ -174,14 +181,41 @@ fun LocationDetailsScreen(
         }
         LazyColumn( modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 20.dp, vertical = 20.dp))
+            .padding(horizontal = 15.dp, vertical = 15.dp))
         {
 
             item {
                 val int= getResourceIdForImage(viewModel.getCategoryIcon(location.category ?: ""))
-                CustomRatingBar(
-                    rating = location.grade
-                ) {}
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 40.dp, end = 40.dp, bottom = 20.dp ),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = location.likes.toString(),
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
+                    Icon(
+                        painter = painterResource(id = R.drawable.like),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.weight(1f,true))
+                    Text(
+                        text = location.dislikes.toString(),
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
+
+                    Icon(
+                        painter = painterResource(id = R.drawable.dislike),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+
+                }
+
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Row (horizontalArrangement = Arrangement.SpaceBetween){
@@ -234,7 +268,13 @@ fun LocationDetailsScreen(
                 )
 
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(modifier = Modifier.height(20.dp))
+
+                CustomRatingBar(
+                    rating = location.grade
+                ) {}
+
+                Spacer(modifier = Modifier.height(20.dp))
 
                 Text(
                     text = stringResource(R.string.created_by, location.createdBy),
@@ -242,7 +282,6 @@ fun LocationDetailsScreen(
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
-
 
             }
         }

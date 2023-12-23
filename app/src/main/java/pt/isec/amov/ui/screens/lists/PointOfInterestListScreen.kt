@@ -176,7 +176,6 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
                             Icon(
                                 painter = painterResource(id = R.drawable.like),
                                 contentDescription = null,
-                                tint = Color(0xFF008100),
                                 modifier = Modifier.size(24.dp)
                             )
                             Spacer(modifier = Modifier.weight(1f,true))
@@ -188,7 +187,6 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
                             Icon(
                                 painter = painterResource(id = R.drawable.dislike),
                                 contentDescription = null,
-                                tint = Color.Red,
                                 modifier = Modifier.size(24.dp)
                             )
 

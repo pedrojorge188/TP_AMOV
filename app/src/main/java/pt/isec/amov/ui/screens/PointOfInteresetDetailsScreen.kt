@@ -12,11 +12,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -125,15 +127,37 @@ fun PointOfInteresetDetailsScreen(
                     .height(150.dp)
             )
         }
-
+        Divider(
+            color = Color.Black,
+            thickness = 1.dp,
+            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
+        )
         Row(
             modifier = Modifier
-                .padding(horizontal = 20.dp, vertical = 20.dp)
+                .padding(horizontal = 20.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
             Button(
-                onClick = { navHostController.navigate(Screens.POINT_OF_INTEREST_MAP.route) },
+                onClick = { navHostController.navigate(Screens.POINT_OF_INTEREST.route) },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF02458A),
+                    contentColor = Color.White
+                ),
+                shape = MaterialTheme.shapes.medium,
+                modifier = Modifier
+                    .padding(10.dp)
+                    .height(52.dp)
+                    .weight(1f)
+            ) {
+                Icon(
+                    Icons.Filled.Info,
+                    contentDescription = "LocationOn",
+                    tint = Color.White
+                )
+            }
+            Button(
+                onClick = { navHostController.navigate(Screens.LOCATION_MAP.route) },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Color(0xFF02458A),
                     contentColor = Color.White
@@ -159,9 +183,6 @@ fun PointOfInteresetDetailsScreen(
 
             item {
                 val int= getResourceIdForImage(viewModel.getCategoryIcon(pointOfInterest.category ?: ""))
-                CustomRatingBar(
-                    rating = pointOfInterest?.grade ?: 0.0
-                ) {}
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -201,12 +222,20 @@ fun PointOfInteresetDetailsScreen(
                     fontWeight = FontWeight.Bold,
                     fontSize = 25.sp
                 )
+
                 Text(
                     text = pointOfInterest!!.description,
                     color = Color.Black,
                     fontSize = 18.sp,
                     modifier = Modifier.padding(start = 20.dp)
                 )
+
+                Spacer(modifier = Modifier.height(20.dp))
+
+                CustomRatingBar(
+                    rating = pointOfInterest?.grade ?: 0.0
+                ) {}
+
             }
         }
     }
