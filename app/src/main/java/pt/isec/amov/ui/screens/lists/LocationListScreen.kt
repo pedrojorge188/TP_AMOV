@@ -2,6 +2,7 @@ package pt.isec.amov.ui.screens.lists
 
 import DeleteDialog
 import RedWarningIconButton
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,7 +27,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,6 +48,7 @@ import pt.isec.amov.ui.composables.SearchBar
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
 import pt.isec.amov.ui.viewmodels.NavigationData
 import pt.isec.amov.ui.viewmodels.Screens
+import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,9 +57,14 @@ fun LocationListScreen(NavHostController: NavHostController,
                        locationLiveData : LiveData<List<Location>>,
                        onSelected : (NavigationData) -> Unit )
 {
+    var orderBy by remember { mutableStateOf("") } // Adicione um estado para armazenar a ordenação
+
     Column {
         Spacer(modifier = Modifier.height(16.dp))
-        SearchBar(Screens.LOCATION, vm)
+        SearchBar(Screens.LOCATION, vm){
+            orderBy = it
+
+        }
 
         if(vm.error.value != null) {
 
@@ -83,8 +94,7 @@ fun LocationListScreen(NavHostController: NavHostController,
                 modifier = Modifier
                     .padding(horizontal = 20.dp, vertical = 20.dp)
             ) {
-
-                items(location.value!!, key = { it.id } ) {
+                items(location.value!!.sortedWith(compareBy { it.whatOrder(orderBy, vm) }), key = { it.id } ) {
                     Card(
                         elevation = CardDefaults.cardElevation(6.dp),
                         modifier = Modifier
@@ -196,6 +206,24 @@ fun LocationListScreen(NavHostController: NavHostController,
             )
         }
     }
+}
+fun Location.whatOrder(orderBy: String, vm: ActionsViewModel): Comparable<*> {
+    Log.d("ORDERBY", "Value: $orderBy")
+
+    if (orderBy=="") return this.name.lowercase().reversed()
+    else if (orderBy=="Ord.Alfabética") return this.name.lowercase()
+    else if (orderBy=="Distância"){
+        var currentlatitude=0.0
+        var currentlongitude=0.0
+        vm.currentLocation.value?.let { location ->
+             currentlatitude = location.latitude
+             currentlongitude = location.longitude
+        }
+        val latitudeDifference = (this.latitude - currentlatitude).absoluteValue
+        val longitudeDifference = (this.longitude - currentlongitude).absoluteValue
+        return Math.sqrt(latitudeDifference * latitudeDifference + longitudeDifference * longitudeDifference)
+    }
+    else    return this.name.lowercase().reversed()
 }
 
 

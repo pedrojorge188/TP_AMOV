@@ -1,5 +1,6 @@
 package pt.isec.amov.ui.composables
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,7 +42,7 @@ import pt.isec.amov.ui.viewmodels.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar(Screen: Screens, vm: ActionsViewModel) {
+fun SearchBar(Screen: Screens, vm: ActionsViewModel,onOrderChanged: (String) -> Unit) {
 
     var expandedOrderBy by remember { mutableStateOf(false) }
     var expandedCategory by remember { mutableStateOf(false) }
@@ -161,9 +162,11 @@ fun SearchBar(Screen: Screens, vm: ActionsViewModel) {
             if(orderBy != "" || search != "" || selectedCategory != null){
                 Button(
                     onClick = {
-                              orderBy = "";
+                        Log.d("ORDERBY_I", "Value: $orderBy")
+                        onOrderChanged(orderBy)
                               search  = "";
                               selectedCategory = null;
+
                     },
 
                     colors = ButtonDefaults.buttonColors(

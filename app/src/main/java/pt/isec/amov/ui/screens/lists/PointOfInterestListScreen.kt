@@ -23,7 +23,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -49,11 +53,13 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
 {
 
     val locals: State<List<PointOfInterest>?> = localsLiveData.observeAsState()
-
+    var orderBy by remember { mutableStateOf("") } // Adicione um estado para armazenar a ordenação
     Column {
 
         Spacer(modifier = Modifier.height(16.dp))
-        SearchBar(Screens.POINT_OF_INTEREST, vm)
+        SearchBar(Screens.POINT_OF_INTEREST, vm){
+            orderBy = it
+        }
         if(vm.error.value != null) {
 
             Row(
