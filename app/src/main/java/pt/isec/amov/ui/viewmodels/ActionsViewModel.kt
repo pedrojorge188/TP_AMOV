@@ -108,9 +108,9 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
         }
     }
 
-    fun addVote(locationId: String, userEmail: String) {
+    fun addVote(locationId: String, userEmail: String, poiName: String) {
         viewModelScope.launch {
-            appData.addVote(locationId, userEmail) {
+            appData.addVote(locationId, userEmail, poiName) {
                     expt ->
                 if(expt != null) {
                     _error.value = expt.message

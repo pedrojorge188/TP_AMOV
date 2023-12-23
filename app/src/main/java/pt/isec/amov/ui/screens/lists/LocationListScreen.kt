@@ -161,10 +161,11 @@ fun LocationListScreen(NavHostController: NavHostController,
 
                                         },
                                         itemName = it.name,
-                                        itemId = it.id,
+                                        locationId = it.id,
                                         itemVotedBy = it.votedBy,
+                                        poiName = "",
                                         userEmail = vm.user.value!!.email,
-                                        it.votes.toFloat(),
+                                        progressValue = it.votes.toFloat(),
                                         vm = vm
                                     )
                                 }

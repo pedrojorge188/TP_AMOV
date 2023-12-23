@@ -88,8 +88,8 @@ class AppData {
             })
         }
 
-        fun addVote(locationId: String, userEmail: String, onResult: (Throwable?) -> Unit) {
-            StoreUtil.addVote(locationId, userEmail, onResult = { result ->
+        fun addVote(locationId: String, userEmail: String, poiName: String, onResult: (Throwable?) -> Unit) {
+            StoreUtil.addVote(locationId, userEmail, poiName, onResult = { result ->
                 onResult(result)
             })
         }

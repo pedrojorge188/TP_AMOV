@@ -33,7 +33,8 @@ import pt.isec.amov.ui.viewmodels.ActionsViewModel
 fun RedWarningIconButton(
     onClick: () -> Unit,
     itemName: String,
-    itemId: String,
+    locationId: String,
+    poiName: String,
     itemVotedBy: List<String>? = null,
     userEmail: String,
     progressValue: Float,
@@ -74,7 +75,7 @@ fun RedWarningIconButton(
                     onClick = {
                         openDialog.value = false
                         // Incrementar os votos
-                        vm.addVote(itemId, userEmail)
+                        vm.addVote(locationId, userEmail, poiName)
                         onClick()
                     }
                 ) {

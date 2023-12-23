@@ -78,18 +78,22 @@ class StoreUtil {
                 }
         }
 
-        fun addVote(locationId: String, userEmail: String, onResult: (Throwable?) -> Unit) {
+        fun addVote(locationId: String, userEmail: String, poiName: String, onResult: (Throwable?) -> Unit) {
             val db = FirebaseFirestore.getInstance()
-            val locationRef = db.collection("locations").document(locationId)
+            val collectionRef = if (poiName.isNullOrBlank()) {
+                db.collection("locations").document(locationId)
+            } else {
+                db.collection("locations").document(locationId).collection("pointsOfInterest").document(poiName)
+            }
 
             db.runTransaction { transaction ->
-                val snapshot = transaction.get(locationRef)
+                val snapshot = transaction.get(collectionRef)
                 val votes = snapshot.getLong("votes")?.toInt() ?: 0
                 val votedBy = snapshot.get("votedBy") as? List<String> ?: emptyList()
 
                 if (!votedBy.contains(userEmail)) {
-                    transaction.update(locationRef, "votes", votes + 1)
-                    transaction.update(locationRef, "votedBy", votedBy + userEmail)
+                    transaction.update(collectionRef, "votes", votes + 1)
+                    transaction.update(collectionRef, "votedBy", votedBy + userEmail)
                 }
             }.addOnCompleteListener { result ->
                 onResult(result.exception)
@@ -313,7 +317,8 @@ class StoreUtil {
                             document.getLong("dislikes")?.toInt()?: 0,
                             document.getLong("grade")?.toDouble() ?: 0.0,
                             document.getString("createdBy") ?: "",
-                            document.getString("category") ?: ""
+                            document.getString("category") ?: "",
+                            document.get("votedBy") as? List<String> ?: emptyList()
                         )
                         response.add(poi)
                     }
