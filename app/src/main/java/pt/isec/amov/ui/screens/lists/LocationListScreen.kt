@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -37,7 +38,6 @@ import androidx.lifecycle.LiveData
 import androidx.navigation.NavHostController
 import pt.isec.amov.R
 import pt.isec.amov.models.Location
-import pt.isec.amov.ui.composables.CustomRatingBar
 import pt.isec.amov.ui.composables.NormalBtn
 import pt.isec.amov.ui.composables.SearchBar
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
@@ -136,17 +136,39 @@ fun LocationListScreen(NavHostController: NavHostController,
                                     )
                                 }
                             }
+                            Divider(
+                                color = Color.Black,
+                                thickness = 1.dp,
+                                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
+                            )
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(start = 26.dp, end = 20.dp, bottom = 20.dp),
+                                    .padding(start = 40.dp, end = 40.dp, bottom = 20.dp, top = 20.dp),
                                 horizontalArrangement = Arrangement.Center
                             ) {
+                                Text(
+                                    text = it.likes.toString(),
+                                    modifier = Modifier.padding(end = 8.dp)
+                                )
+                                Icon(
+                                    painter = painterResource(id = R.drawable.like),
+                                    contentDescription = null,
+                                    tint = Color(0xFF008100),
+                                    modifier = Modifier.size(24.dp)
+                                )
+                                    Spacer(modifier = Modifier.weight(1f,true))
+                                Text(
+                                    text = it.dislikes.toString(),
+                                    modifier = Modifier.padding(end = 8.dp)
+                                )
 
-                                CustomRatingBar(
-                                    rating = it.grade
-                                ) {}
-
+                                Icon(
+                                    painter = painterResource(id = R.drawable.dislike),
+                                    contentDescription = null,
+                                    tint = Color.Red,
+                                    modifier = Modifier.size(24.dp)
+                                )
 
                             }
                         }

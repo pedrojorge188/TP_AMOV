@@ -9,6 +9,8 @@ data class PointOfInterest(
     val latitude: Double,
     val longitude: Double,
     val votes: Int = 0,
+    val likes: Int = 0,
+    val dislikes: Int = 0,
     val grade: Double = 0.0,
     val createdBy: String,
     val category: String?

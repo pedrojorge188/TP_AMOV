@@ -45,6 +45,8 @@ class StoreUtil {
                 "photoUrl" to location.photoUrl,
                 "createdBy" to location.createdBy,
                 "votes" to location.votes,
+                "likes" to location.likes,
+                "dislikes" to location.dislikes,
                 "grade" to location.grade,
                 "category" to location.category
             )
@@ -87,6 +89,8 @@ class StoreUtil {
                 "description" to poi.description,
                 "photoUrl" to poi.photoUrl,
                 "grade" to poi.grade,
+                "likes" to poi.likes,
+                "dislikes" to poi.dislikes,
                 "latitude" to poi.latitude,
                 "longitude" to poi.longitude,
                 "createdBy" to poi.createdBy,
@@ -254,6 +258,8 @@ class StoreUtil {
                             document.getString("photoUrl") ?: "",
                             document.getString("createdBy") ?: "",
                             document.getLong("votes")?.toInt() ?: 0,
+                           document.getLong("likes")?.toInt()?: 0,
+                            document.getLong("dislikes")?.toInt()?: 0,
                             document.getLong("grade")?.toDouble() ?: 0.0,
                             document.getString("category") ?: "",
                         )
@@ -282,6 +288,8 @@ class StoreUtil {
                             document.getDouble("latitude") ?: 0.0,
                             document.getDouble("longitude") ?: 0.0,
                             document.getLong("votes")?.toInt() ?: 0,
+                            document.getLong("likes")?.toInt()?: 0,
+                            document.getLong("dislikes")?.toInt()?: 0,
                             document.getLong("grade")?.toDouble() ?: 0.0,
                             document.getString("createdBy") ?: "",
                             document.getString("category") ?: ""
