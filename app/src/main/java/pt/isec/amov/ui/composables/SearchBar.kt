@@ -42,7 +42,7 @@ import pt.isec.amov.ui.viewmodels.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBar(Screen: Screens, vm: ActionsViewModel,onOrderChanged: (String) -> Unit) {
+fun SearchBar(Screen: Screens, vm: ActionsViewModel,onOrderChanged: (String,String,String) -> Unit) {
 
     var expandedOrderBy by remember { mutableStateOf(false) }
     var expandedCategory by remember { mutableStateOf(false) }
@@ -128,7 +128,12 @@ fun SearchBar(Screen: Screens, vm: ActionsViewModel,onOrderChanged: (String) -> 
                         shape = MaterialTheme.shapes.extraSmall
                     ) {
 
-                        Text(text = stringResource(R.string.category))
+                        if(selectedCategory == null){
+                            Text(text = stringResource(R.string.category))
+
+                        }else{
+                            Text(text = selectedCategory!!.name)
+                        }
                         Icon(
                             imageVector = Icons.Default.ArrowDropDown,
                             contentDescription = "more category"
@@ -163,9 +168,10 @@ fun SearchBar(Screen: Screens, vm: ActionsViewModel,onOrderChanged: (String) -> 
                 Button(
                     onClick = {
                         Log.d("ORDERBY_I", "Value: $orderBy")
-                        onOrderChanged(orderBy)
-                              search  = "";
-                              selectedCategory = null;
+                        onOrderChanged(orderBy,search, selectedCategory?.name ?: "")
+                        search  = "";
+                        orderBy = "";
+                        selectedCategory = null;
 
                     },
 

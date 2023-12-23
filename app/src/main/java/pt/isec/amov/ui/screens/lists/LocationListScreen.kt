@@ -58,11 +58,19 @@ fun LocationListScreen(NavHostController: NavHostController,
                        onSelected : (NavigationData) -> Unit )
 {
     var orderBy by remember { mutableStateOf("") } // Adicione um estado para armazenar a ordenação
+    var searchBy by remember { mutableStateOf("") }
+    var categoryBy by remember { mutableStateOf("") }
 
     Column {
         Spacer(modifier = Modifier.height(16.dp))
-        SearchBar(Screens.LOCATION, vm){
-            orderBy = it
+        SearchBar(Screens.LOCATION, vm){ s: String, s1: String, s2: String ->
+            Log.d("ORDERBY", "Value: $s")
+            Log.d("SEARCHBY", "Value: $s1")
+            Log.d("CATEGORYBY", "Value: $s2")
+            orderBy = s
+            searchBy = s1
+            categoryBy = s2
+
 
         }
 
@@ -94,8 +102,19 @@ fun LocationListScreen(NavHostController: NavHostController,
                 modifier = Modifier
                     .padding(horizontal = 20.dp, vertical = 20.dp)
             ) {
-                items(location.value!!.sortedWith(compareBy { it.whatOrder(orderBy, vm) }), key = { it.id } ) {
-                    Card(
+                val filteredLocations = location.value!!.let {
+                    if (searchBy.isNotEmpty()) {
+                        Log.d("SEARCHBY", "Value: $searchBy")
+                        it.filter { location ->
+                            location.name.contains(searchBy, ignoreCase = true)/*&&location.category==*/ }
+                    } else {
+                        Log.d("SEARCHBY", "Val: $searchBy")
+
+                        it
+                    }
+                }
+                items(filteredLocations.sortedWith(compareBy { it.whatOrder(orderBy, vm) }), key = { it.id } ) {
+                Card(
                         elevation = CardDefaults.cardElevation(6.dp),
                         modifier = Modifier
                             .fillMaxWidth()

@@ -2,6 +2,7 @@ package pt.isec.amov.ui.screens.lists
 
 import DeleteDialog
 import RedWarningIconButton
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,6 +44,7 @@ import pt.isec.amov.ui.composables.SearchBar
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
 import pt.isec.amov.ui.viewmodels.NavigationData
 import pt.isec.amov.ui.viewmodels.Screens
+import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,11 +56,18 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
 
     val locals: State<List<PointOfInterest>?> = localsLiveData.observeAsState()
     var orderBy by remember { mutableStateOf("") } // Adicione um estado para armazenar a ordenação
+    var searchBy by remember { mutableStateOf("") } // Adicione um estado para armazenar a pesquisa
+    var categoryBy by remember { mutableStateOf("") } // Adicione um estado para armazenar a categoria
     Column {
 
         Spacer(modifier = Modifier.height(16.dp))
-        SearchBar(Screens.POINT_OF_INTEREST, vm){
-            orderBy = it
+        SearchBar(Screens.POINT_OF_INTEREST, vm){ s: String, s1: String, s2: String ->
+            Log.d("ORDERBY", "Value: $s")
+            Log.d("SEARCHBY", "Value: $s1")
+            Log.d("CATEGORYBY", "Value: $s2")
+            orderBy = s
+            searchBy = s1
+            categoryBy = s2
         }
         if(vm.error.value != null) {
 
@@ -83,8 +92,27 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
                 .padding(horizontal = 20.dp, vertical = 20.dp)
         ) {
 
-            items(locals.value!!, key = { it.id }) {
-                Card(
+            val filteredLocations = locals.value!!.let {
+                if (searchBy.isNotEmpty()&&categoryBy.isNotEmpty()) {
+                    Log.d("SEARCHBY", "Value: $searchBy")
+                    it.filter { location ->
+                        location.name.contains(searchBy, ignoreCase = true)&&location.category==categoryBy }
+                } else if (searchBy.isNotEmpty()){
+                    Log.d("SEARCHBY", "Value: $searchBy")
+                    it.filter { location ->
+                        location.name.contains(searchBy, ignoreCase = true) }
+                }else if (categoryBy.isNotEmpty()){
+                    it.filter { location ->
+                        location.category==categoryBy }
+                }
+                else {
+                    Log.d("SEARCHBY", "Val: $searchBy")
+
+                    it
+                }
+            }
+            items(filteredLocations.sortedWith(compareBy { it.whatOrder(orderBy, vm) }), key = { it.id } ) {
+            Card(
                     elevation = CardDefaults.cardElevation(4.dp),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -170,4 +198,21 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
         }
     }
 }
+fun PointOfInterest.whatOrder(orderBy: String, vm: ActionsViewModel): Comparable<*> {
+    Log.d("ORDERBY", "Value: $orderBy")
 
+    if (orderBy=="") return this.name.lowercase().reversed()
+    else if (orderBy=="Ord.Alfabética") return this.name.lowercase()
+    else if (orderBy=="Distância"){
+        var currentlatitude=0.0
+        var currentlongitude=0.0
+        vm.currentLocation.value?.let { location ->
+            currentlatitude = location.latitude
+            currentlongitude = location.longitude
+        }
+        val latitudeDifference = (this.latitude - currentlatitude).absoluteValue
+        val longitudeDifference = (this.longitude - currentlongitude).absoluteValue
+        return Math.sqrt(latitudeDifference * latitudeDifference + longitudeDifference * longitudeDifference)
+    }
+    else    return this.name.lowercase().reversed()
+}
