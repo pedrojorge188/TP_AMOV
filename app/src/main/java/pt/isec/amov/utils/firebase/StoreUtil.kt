@@ -48,7 +48,8 @@ class StoreUtil {
                 "likes" to location.likes,
                 "dislikes" to location.dislikes,
                 "grade" to location.grade,
-                "category" to location.category
+                "category" to location.category,
+                "votedBy" to location.votedBy
             )
 
             db.collection("locations").document(location.id)
@@ -76,6 +77,25 @@ class StoreUtil {
                     onResult(result.exception)
                 }
         }
+
+        fun addVote(locationId: String, userEmail: String, onResult: (Throwable?) -> Unit) {
+            val db = FirebaseFirestore.getInstance()
+            val locationRef = db.collection("locations").document(locationId)
+
+            db.runTransaction { transaction ->
+                val snapshot = transaction.get(locationRef)
+                val votes = snapshot.getLong("votes")?.toInt() ?: 0
+                val votedBy = snapshot.get("votedBy") as? List<String> ?: emptyList()
+
+                if (!votedBy.contains(userEmail)) {
+                    transaction.update(locationRef, "votes", votes + 1)
+                    transaction.update(locationRef, "votedBy", votedBy + userEmail)
+                }
+            }.addOnCompleteListener { result ->
+                onResult(result.exception)
+            }
+        }
+
         fun addPointOfInterestToLocation(
             locationName: String?,
             poi: PointOfInterest,
@@ -262,6 +282,7 @@ class StoreUtil {
                             document.getLong("dislikes")?.toInt()?: 0,
                             document.getLong("grade")?.toDouble() ?: 0.0,
                             document.getString("category") ?: "",
+                            document.get("votedBy") as? List<String> ?: emptyList()
                         )
                         response.add(location)
                     }

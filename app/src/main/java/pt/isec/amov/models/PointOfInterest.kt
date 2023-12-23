@@ -13,5 +13,6 @@ data class PointOfInterest(
     val dislikes: Int = 0,
     val grade: Double = 0.0,
     val createdBy: String,
-    val category: String?
+    val category: String?,
+    val votedBy: List<String> = emptyList()
 )

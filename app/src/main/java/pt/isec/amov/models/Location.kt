@@ -12,5 +12,6 @@ data class Location(
     val likes: Int = 0,
     val dislikes: Int = 0,
     val grade: Double = 0.0,
-    val category: String?
+    val category: String?,
+    val votedBy: List<String> = emptyList()
 )

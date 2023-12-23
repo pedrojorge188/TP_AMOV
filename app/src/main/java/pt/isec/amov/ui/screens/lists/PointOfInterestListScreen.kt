@@ -114,8 +114,12 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
                                         onClick = {
                                             //ação para colocar mais uma nota
                                         },
-                                        itemInfo = it.name,
-                                        it.votes.toFloat()
+                                        itemName = it.name,
+                                        itemId = it.id,
+                                        itemVotedBy = it.votedBy,
+                                        userEmail = vm.user.value!!.email,
+                                        it.votes.toFloat(),
+                                        vm = vm
                                     )
                                 }
                                 if(vm.user.value != null)

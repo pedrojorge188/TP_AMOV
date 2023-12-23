@@ -107,6 +107,18 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
             imagePath.value = null
         }
     }
+
+    fun addVote(locationId: String, userEmail: String) {
+        viewModelScope.launch {
+            appData.addVote(locationId, userEmail) {
+                    expt ->
+                if(expt != null) {
+                    _error.value = expt.message
+                }
+            }
+        }
+    }
+
     fun addCategory(categoryName: String, categoryDescription: String,type: String) {
         viewModelScope.launch {
             appData.addCategory(categoryName,type,_user.value!!.email, categoryDescription){

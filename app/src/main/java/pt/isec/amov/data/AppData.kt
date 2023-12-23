@@ -88,6 +88,12 @@ class AppData {
             })
         }
 
+        fun addVote(locationId: String, userEmail: String, onResult: (Throwable?) -> Unit) {
+            StoreUtil.addVote(locationId, userEmail, onResult = { result ->
+                onResult(result)
+            })
+        }
+
         fun addCategory(name: String, iconUrl: String?,createdBy: String, description: String, onResult: (Throwable?) -> Unit) {
             val newCategory = Category(
                 id = UUID.randomUUID().toString(),

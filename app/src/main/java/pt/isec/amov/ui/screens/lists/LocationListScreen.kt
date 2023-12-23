@@ -141,8 +141,12 @@ fun LocationListScreen(NavHostController: NavHostController,
                                         onClick = {
 
                                         },
-                                        itemInfo = it.name,
-                                        it.votes.toFloat()
+                                        itemName = it.name,
+                                        itemId = it.id,
+                                        itemVotedBy = it.votedBy,
+                                        userEmail = vm.user.value!!.email,
+                                        it.votes.toFloat(),
+                                        vm = vm
                                     )
                                 }
                             }
