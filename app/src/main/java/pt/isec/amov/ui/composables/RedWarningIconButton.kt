@@ -1,20 +1,17 @@
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
-import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -22,11 +19,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import pt.isec.amov.R
-import pt.isec.amov.models.Location
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
 
 @Composable
@@ -111,19 +106,33 @@ fun RedWarningIconButton(
 
 
 @Composable
-fun DeleteDialog(
-    onClick: () -> Unit
+fun EditAndDeleteDialog(
+    onClickDelete: () -> Unit,
+    onClickEdit: () -> Unit
 ) {
     val openDialog = remember { mutableStateOf(false) }
 
-    IconButton(
-        onClick = { openDialog.value = true },
-    ) {
-        Icon(
-            Icons.Filled.Delete,
-            contentDescription = "danger",
-            tint = Color.Black
-        )
+    Column {
+
+        IconButton(
+            onClick = { onClickEdit() },
+        ) {
+            Icon(
+                Icons.Filled.Edit,
+                contentDescription = "danger",
+                tint = Color.Black
+            )
+        }
+
+        IconButton(
+            onClick = { openDialog.value = true },
+        ) {
+            Icon(
+                Icons.Filled.Delete,
+                contentDescription = "danger",
+                tint = Color.Black
+            )
+        }
     }
 
     if (openDialog.value) {
@@ -140,7 +149,7 @@ fun DeleteDialog(
                 Button(
                     onClick = {
                         openDialog.value = false
-                        onClick()
+                        onClickDelete()
                     }
                 ) {
                     Text(text = stringResource(R.string.yes))

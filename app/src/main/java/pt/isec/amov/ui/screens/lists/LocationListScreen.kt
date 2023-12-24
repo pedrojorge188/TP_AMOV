@@ -1,6 +1,6 @@
 package pt.isec.amov.ui.screens.lists
 
-import DeleteDialog
+import EditAndDeleteDialog
 import RedWarningIconButton
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -60,6 +61,7 @@ fun LocationListScreen(NavHostController: NavHostController,
     var orderBy by remember { mutableStateOf("") } // Adicione um estado para armazenar a ordenação
     var searchBy by remember { mutableStateOf("") }
     var categoryBy by remember { mutableStateOf("") }
+    val isDropdownOpen = remember { mutableStateOf(false) }
 
     Column {
         Spacer(modifier = Modifier.height(16.dp))
@@ -148,13 +150,6 @@ fun LocationListScreen(NavHostController: NavHostController,
                                     )
                                 }
 
-                                if(vm.user.value != null)
-                                    if(it.createdBy.equals( vm.user.value!!.email )){
-                                        DeleteDialog(onClick = {
-                                            vm.deleteLocation(it.id);
-                                        })
-                                    }
-
                                 if(it.votes < 2){
                                     RedWarningIconButton(
                                         onClick = {
@@ -169,16 +164,55 @@ fun LocationListScreen(NavHostController: NavHostController,
                                         vm = vm
                                     )
                                 }
+
+                                if(vm.user.value != null){
+                                    if(it.createdBy.equals( vm.user.value!!.email )){
+                                        Column {
+                                            IconButton(
+                                                onClick = {
+                                                    isDropdownOpen.value = !isDropdownOpen.value
+                                                },
+                                            ) {
+                                                Icon(
+                                                    Icons.Filled.Settings,
+                                                    contentDescription = "Info"
+                                                )
+                                            }
+
+                                            Spacer(modifier = Modifier.height(8.dp))
+
+                                            if (isDropdownOpen.value) {
+                                                EditAndDeleteDialog(
+                                                    onClickDelete = {
+                                                        vm.deleteLocation(it.id);
+                                                    },
+                                                    onClickEdit = {
+
+                                                    }
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+
+
                             }
                             Divider(
                                 color = Color.Black,
                                 thickness = 1.dp,
-                                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 8.dp)
                             )
                             Row(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(start = 40.dp, end = 40.dp, bottom = 20.dp, top = 20.dp),
+                                    .padding(
+                                        start = 40.dp,
+                                        end = 40.dp,
+                                        bottom = 20.dp,
+                                        top = 20.dp
+                                    ),
                                 horizontalArrangement = Arrangement.Center
                             ) {
                                 Text(

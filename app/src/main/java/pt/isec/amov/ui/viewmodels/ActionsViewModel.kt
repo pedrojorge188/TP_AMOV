@@ -96,6 +96,17 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
         return response
     }
 
+    fun getPointOfInterestList(id : String): LiveData<List<PointOfInterest>> {
+        val response = MutableLiveData<List<PointOfInterest>>()
+
+        appData.allPointsOfInterest.observeForever { allPOIs ->
+            val filteredPOIs = allPOIs.filter { it.locationId == id.toString() }
+            response.value = filteredPOIs
+        }
+
+        return response
+    }
+
     fun addLocation(locationName: String, locationDescription: String, selectedCategory: Category, latitude: Double, longitude: Double) {
         viewModelScope.launch {
             appData.addLocation(locationName, latitude, longitude, locationDescription, "/images"+imagePath.value, _user.value!!.email, selectedCategory){
@@ -178,7 +189,16 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
     }
 
     fun deleteLocation(id: String) {
+        locationId.value = id
+
         viewModelScope.launch {
+            val pointOfInterestList = getPointOfInterestList().value
+
+            if (pointOfInterestList != null && pointOfInterestList.isNotEmpty()) {
+                _error.value = "Location can´t be deleted [Delete Points of interest first]"
+                return@launch
+            }
+
             appData.deleteLocation(id){
                     expt ->
                 if(expt != null) {
@@ -189,10 +209,26 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
     }
     fun deleteCategory(id: String) {
         viewModelScope.launch {
-            appData.deleteCategory(id){
-                    expt ->
-                if(expt != null) {
+            val locations = appData.allLocations.value ?: emptyList()
+
+            locations.forEach { location ->
+                val pointOfInterestList = getPointOfInterestList(location.id).value
+
+                val hasCategoryInPointOfInterest = pointOfInterestList!!.any { poi ->
+                    poi.category == id
+                }
+
+                if (hasCategoryInPointOfInterest) {
+                    _error.value = "Category can´t be deleted [Points of interest associated]"
+                    return@launch
+                }
+            }
+
+            appData.deleteCategory(id) { expt ->
+                if (expt != null) {
                     _error.value = expt.message
+                }else{
+                    _error.value = null
                 }
             }
         }

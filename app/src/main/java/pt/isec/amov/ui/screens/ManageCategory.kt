@@ -1,6 +1,6 @@
 package pt.isec.amov.ui.screens
 
-import DeleteDialog
+import EditAndDeleteDialog
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -57,6 +58,7 @@ import pt.isec.amov.ui.viewmodels.Screens
 fun ManageCategoryScreen(navController: NavHostController, vm: ActionsViewModel,categoryLiveData : LiveData<List<Category>>,onSelected : (NavigationData) -> Unit ) {
     var addCategory by remember { mutableStateOf("") }
     var addCategoryDescription by remember { mutableStateOf("") }
+    val isDropdownOpen = remember { mutableStateOf(false) }
     val iconList = listOf("cidade", "desporto", "ginasio", "montanhas", "restaurante", "museu","natureza","praia")
     var expanded by remember  { mutableStateOf(false) }
     var type by remember { mutableStateOf("") }
@@ -215,14 +217,33 @@ fun ManageCategoryScreen(navController: NavHostController, vm: ActionsViewModel,
                                 )
                             }
 
-                            if (vm.user.value?.email == it.createdBy){
-                                DeleteDialog(onClick = {
-                                    vm.deleteCategory(it.name);
-                                })
-                            }
 
+                            if(vm.user.value != null)
+                                if(it.createdBy.equals( vm.user.value!!.email )) {
+                                    IconButton(
+                                        onClick = {
+                                            isDropdownOpen.value = !isDropdownOpen.value
+                                        },
+                                    ) {
+                                        Icon(
+                                            Icons.Filled.Settings,
+                                            contentDescription = "Info"
+                                        )
+                                    }
 
+                                    Spacer(modifier = Modifier.height(8.dp))
 
+                                    if (isDropdownOpen.value) {
+                                        EditAndDeleteDialog(
+                                            onClickDelete = {
+                                                vm.deleteCategory(it.name);
+                                            },
+                                            onClickEdit = {
+
+                                            }
+                                        )
+                                    }
+                                }
 
                         }
                     }

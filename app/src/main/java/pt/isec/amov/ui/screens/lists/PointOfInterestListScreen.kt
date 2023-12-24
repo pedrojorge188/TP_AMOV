@@ -1,6 +1,6 @@
 package pt.isec.amov.ui.screens.lists
 
-import DeleteDialog
+import EditAndDeleteDialog
 import RedWarningIconButton
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
@@ -15,12 +15,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -58,6 +60,7 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
     var orderBy by remember { mutableStateOf("") } // Adicione um estado para armazenar a ordenação
     var searchBy by remember { mutableStateOf("") } // Adicione um estado para armazenar a pesquisa
     var categoryBy by remember { mutableStateOf("") } // Adicione um estado para armazenar a categoria
+    val isDropdownOpen = remember { mutableStateOf(false) }
     Column {
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -153,9 +156,29 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
                                 }
                                 if(vm.user.value != null)
                                     if(it.createdBy.equals( vm.user.value!!.email )) {
-                                        DeleteDialog(onClick = {
-                                            vm.deletePOI(it.name);
-                                        })
+                                        IconButton(
+                                            onClick = {
+                                                isDropdownOpen.value = !isDropdownOpen.value
+                                            },
+                                        ) {
+                                            Icon(
+                                                Icons.Filled.Settings,
+                                                contentDescription = "Info"
+                                            )
+                                        }
+
+                                        Spacer(modifier = Modifier.height(8.dp))
+
+                                        if (isDropdownOpen.value) {
+                                            EditAndDeleteDialog(
+                                                onClickDelete = {
+                                                    vm.deletePOI(it.name);
+                                                },
+                                                onClickEdit = {
+
+                                                }
+                                            )
+                                        }
                                     }
                             }
                         Divider(
