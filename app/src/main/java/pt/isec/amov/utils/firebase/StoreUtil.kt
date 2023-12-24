@@ -156,6 +156,40 @@ class StoreUtil {
                 }
         }
 
+        fun updateCategory(value: Category, onResult: (Throwable?) -> Unit) {
+            val db = FirebaseFirestore.getInstance()
+
+            db.collection("category")
+                .whereEqualTo("id", value.id)
+                .get()
+                .addOnSuccessListener { documents ->
+                    if (!documents.isEmpty) {
+                        val document = documents.documents[0]
+                        val catDocument = document.reference
+
+                        val updates = mapOf(
+                            "id" to value.id,
+                            "name" to value.name,
+                            "description" to value.description,
+                            "iconUrl" to value.iconUrl,
+                            "createdBy" to value.createdBy
+                        )
+
+                        catDocument.update(updates)
+                            .addOnCompleteListener { result ->
+                                onResult(result.exception)
+                            }
+                    } else {
+                        onResult(UnsupportedOperationException("Document not found in Firebase!"))
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.wtf("ERROR", exception.message)
+                    onResult(exception)
+                }
+        }
+
+
         fun updatePOI(value: PointOfInterest, onResult: (Throwable?) -> Unit) {
             val db = FirebaseFirestore.getInstance()
 
@@ -437,7 +471,6 @@ class StoreUtil {
                 }
             }
         }
-
 
     }
 

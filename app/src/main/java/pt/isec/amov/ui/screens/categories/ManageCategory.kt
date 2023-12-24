@@ -239,7 +239,8 @@ fun ManageCategoryScreen(navController: NavHostController, vm: ActionsViewModel,
                                                 vm.deleteCategory(it.name);
                                             },
                                             onClickEdit = {
-
+                                                vm.categoryId.value = it.id
+                                                navController.navigate(Screens.EDIT_CATEGORY.route)
                                             }
                                         )
                                     }
@@ -254,7 +255,7 @@ fun ManageCategoryScreen(navController: NavHostController, vm: ActionsViewModel,
     }
 }
 @Composable
-private fun getTranslation(txt: String): String {
+fun getTranslation(txt: String): String {
     // Mapeia o nome da imagem para o ID do recurso
     return when (txt) {
         "cidade" -> stringResource(R.string.cidade)

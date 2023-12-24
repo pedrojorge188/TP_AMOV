@@ -2,8 +2,8 @@ package pt.isec.amov.models
 
 data class Category(
     val id: String,
-    val name: String,
-    val iconUrl: String?,
+    var name: String,
+    var iconUrl: String?,
     val createdBy: String,
-    val description: String
+    var description: String
 )

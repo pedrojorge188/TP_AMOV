@@ -167,4 +167,11 @@ class AppData {
         }
     }
 
+    fun updateCategory(value: Category, onResult: (Throwable?) -> Unit) {
+        StoreUtil.updateCategory(value){
+                result ->
+            onResult(result)
+        }
+    }
+
 }

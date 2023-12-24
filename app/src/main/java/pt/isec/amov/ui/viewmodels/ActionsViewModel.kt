@@ -233,6 +233,18 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
     }
 
 
+    fun updateCategory(value: Category) {
+        viewModelScope.launch {
+            appData.updateCategory(value){
+                    expt ->
+                if(expt != null) {
+                    _error.value = expt.message
+                }
+            }
+            imagePath.value = null
+        }
+    }
+
     fun deleteCategory(id: String) {
         viewModelScope.launch {
             val locations = appData.allLocations.value ?: emptyList()
@@ -274,6 +286,7 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
     fun getCategoryIcon(name: String) : String {
         return appData.allCategory.value?.find { it.name == name }?.iconUrl ?: ""
     }
+
 
 
 }
