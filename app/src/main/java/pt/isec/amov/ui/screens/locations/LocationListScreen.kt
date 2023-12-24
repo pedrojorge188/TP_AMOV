@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Card
@@ -122,7 +121,7 @@ fun LocationListScreen(NavHostController: NavHostController,
                             .fillMaxWidth()
                             .padding(8.dp),
                         onClick = {
-                            onSelected(NavigationData(it.id, Screens.POINT_OF_INTEREST))
+                            onSelected(NavigationData(it.id, Screens.LOCATION_DETAILS))
                         }
                     ) {
                         Column {
@@ -155,17 +154,6 @@ fun LocationListScreen(NavHostController: NavHostController,
                                         vm = vm
                                     )
                                 }
-                                IconButton(
-                                    onClick = {
-                                        onSelected(NavigationData(it.id, Screens.LOCATION_DETAILS))
-                                    },
-                                ) {
-                                    Icon(
-                                        Icons.Filled.MoreVert,
-                                        contentDescription = "Info"
-                                    )
-                                }
-
 
                                     if(it.createdBy.equals( vm.user.value!!.email )){
                                         Column {
