@@ -75,4 +75,8 @@
     <string name="current_photo">Current Photo!</string>
     <string name="edit_point_of_interest">Edit Point Of Interest</string>
     <string name="edit_category">Edit Category</string>
+    <string name="report">Report</string>
+    <string name="you_already_vote_on_this_item">You already vote on this item</string>
+    <string name="do_you_want_to_submit_your_report">Do you want to submit your report!</string>
+    <string name="report_point_of_interest">Report point of interest</string>
 </resources>

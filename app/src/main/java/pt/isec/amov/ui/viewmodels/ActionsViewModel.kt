@@ -130,6 +130,15 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
         }
     }
 
+    fun addReport(locationId: String, userEmail: String, poiName: String) {
+        appData.addReport(locationId, userEmail, poiName) {
+                expt ->
+            if(expt != null) {
+                _error.value = expt.message
+            }
+        }
+    }
+
     fun addCategory(categoryName: String, categoryDescription: String,type: String) {
         viewModelScope.launch {
             appData.addCategory(categoryName,type,_user.value!!.email, categoryDescription){

@@ -1,5 +1,6 @@
 package pt.isec.amov.ui.screens.poi
 
+import ReportWarning
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
@@ -130,7 +130,9 @@ fun PointOfInteresetDetailsScreen(
         Divider(
             color = Color.Black,
             thickness = 1.dp,
-            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
         )
         Row(
             modifier = Modifier
@@ -138,24 +140,7 @@ fun PointOfInteresetDetailsScreen(
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
-            Button(
-                onClick = { navHostController.navigate(Screens.POINT_OF_INTEREST.route) },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF02458A),
-                    contentColor = Color.White
-                ),
-                shape = MaterialTheme.shapes.medium,
-                modifier = Modifier
-                    .padding(10.dp)
-                    .height(52.dp)
-                    .weight(1f)
-            ) {
-                Icon(
-                    Icons.Filled.Info,
-                    contentDescription = "LocationOn",
-                    tint = Color.White
-                )
-            }
+
             Button(
                 onClick = { navHostController.navigate(Screens.LOCATION_MAP.route) },
                 colors = ButtonDefaults.buttonColors(
@@ -236,6 +221,16 @@ fun PointOfInteresetDetailsScreen(
                     rating = pointOfInterest?.grade ?: 0.0
                 ) {}
 
+                ReportWarning(
+                    onClick = { /*TODO*/ },
+                    itemName = pointOfInterest.name,
+                    locationId = pointOfInterest.locationId,
+                    poiName = pointOfInterest.name,
+                    userEmail = viewModel.user.value!!.email,
+                    progressValue = 0f,
+                    itemReportedBy = pointOfInterest.reportedBy,
+                    vm = viewModel
+                )
             }
         }
     }

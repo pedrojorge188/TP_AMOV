@@ -84,7 +84,7 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
                     tint = Color.Red
                 )
                 Spacer(modifier = Modifier.width(16.dp))
-                Text(text = "Error: ${vm.error.value}", color = Color.Red)
+                Text(text = "${vm.error.value}", color = Color.Red)
             }
         }
         if(locals.value!!.isEmpty())
@@ -140,47 +140,52 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
 
                                 Spacer(modifier = Modifier.weight(1f,true))
 
-                                if(it.votes < 2){
-                                    RedWarningIconButton(
-                                        onClick = {
-                                            //ação para colocar mais uma nota
-                                        },
-                                        itemName = it.name,
-                                        locationId = it.locationId,
-                                        poiName = it.name,
-                                        itemVotedBy = it.votedBy,
-                                        userEmail = vm.user.value!!.email,
-                                        it.votes.toFloat(),
-                                        vm = vm
-                                    )
-                                }
                                 if(vm.user.value != null)
-                                    if(it.createdBy.equals( vm.user.value!!.email )) {
-                                        IconButton(
+
+                                    if(it.votes < 2){
+                                        RedWarningIconButton(
                                             onClick = {
-                                                isDropdownOpen.value = !isDropdownOpen.value
+                                                //ação para colocar mais uma nota
                                             },
-                                        ) {
-                                            Icon(
-                                                Icons.Filled.Settings,
-                                                contentDescription = "Info"
-                                            )
-                                        }
-
-                                        Spacer(modifier = Modifier.height(8.dp))
-
-                                        if (isDropdownOpen.value) {
-                                            EditAndDeleteDialog(
-                                                onClickDelete = {
-                                                    vm.deletePOI(it.name);
-                                                },
-                                                onClickEdit = {
-                                                    vm.pointOfInterestId.value = it.id
-                                                    NavHostController.navigate(Screens.EDIT_POI.route)
-                                                }
-                                            )
-                                        }
+                                            itemName = it.name,
+                                            locationId = it.locationId,
+                                            poiName = it.name,
+                                            itemVotedBy = it.votedBy,
+                                            userEmail = vm.user.value!!.email,
+                                            it.votes.toFloat(),
+                                            vm = vm
+                                        )
                                     }
+                                        if(it.createdBy.equals( vm.user.value!!.email )) {
+                                            IconButton(
+                                                onClick = {
+                                                    isDropdownOpen.value = !isDropdownOpen.value
+                                                },
+                                            ) {
+                                                Icon(
+                                                    Icons.Filled.Settings,
+                                                    contentDescription = "Info"
+                                                )
+                                            }
+
+                                            Spacer(modifier = Modifier.height(8.dp))
+
+                                            if (isDropdownOpen.value) {
+                                                EditAndDeleteDialog(
+                                                    onClickDelete = {
+                                                        if(it.report >= 3)
+                                                            vm.deletePOI(it.name);
+                                                        else
+                                                            vm.error.value =
+                                                                "Não é possivel remover pois ainda não foi reportado pelo numero mínimo de pessoas (${it.report} / 3)"
+                                                    },
+                                                    onClickEdit = {
+                                                        vm.pointOfInterestId.value = it.id
+                                                        NavHostController.navigate(Screens.EDIT_POI.route)
+                                                    }
+                                                )
+                                            }
+                                        }
                             }
                         Divider(
                             color = Color.Black,

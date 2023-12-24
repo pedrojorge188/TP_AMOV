@@ -100,6 +100,27 @@ class StoreUtil {
             }
         }
 
+        fun addReport(locationId: String, userEmail: String, poiName: String, onResult: (Throwable?) -> Unit) {
+            val db = FirebaseFirestore.getInstance()
+            val collectionRef = if (poiName.isNullOrBlank()) {
+                db.collection("locations").document(locationId)
+            } else {
+                db.collection("locations").document(locationId).collection("pointsOfInterest").document(poiName)
+            }
+
+            db.runTransaction { transaction ->
+                val snapshot = transaction.get(collectionRef)
+                val votes = snapshot.getLong("report")?.toInt() ?: 0
+                val votedBy = snapshot.get("reportedBy") as? List<String> ?: emptyList()
+
+                if (!votedBy.contains(userEmail)) {
+                    transaction.update(collectionRef, "report", votes + 1)
+                    transaction.update(collectionRef, "reportedBy", votedBy + userEmail)
+                }
+            }.addOnCompleteListener { result ->
+                onResult(result.exception)
+            }
+        }
         fun addPointOfInterestToLocation(
             locationName: String?,
             poi: PointOfInterest,
@@ -118,7 +139,7 @@ class StoreUtil {
                 "latitude" to poi.latitude,
                 "longitude" to poi.longitude,
                 "createdBy" to poi.createdBy,
-                "category" to poi.category
+                "category" to poi.category,
             )
 
             db.collection("locations").document(locationName!!)
@@ -426,6 +447,8 @@ class StoreUtil {
                             document.getLong("grade")?.toDouble() ?: 0.0,
                             document.getString("createdBy") ?: "",
                             document.getString("category") ?: "",
+                            document.getLong("report")?.toInt()?: 0,
+                            document.get("reportedBy") as? List<String> ?: emptyList(),
                             document.get("votedBy") as? List<String> ?: emptyList()
                         )
                         response.add(poi)
@@ -471,6 +494,7 @@ class StoreUtil {
                 }
             }
         }
+
 
     }
 

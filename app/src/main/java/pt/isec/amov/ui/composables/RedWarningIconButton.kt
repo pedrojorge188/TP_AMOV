@@ -107,6 +107,7 @@ fun RedWarningIconButton(
 
 @Composable
 fun EditAndDeleteDialog(
+
     onClickDelete: () -> Unit,
     onClickEdit: () -> Unit
 ) {

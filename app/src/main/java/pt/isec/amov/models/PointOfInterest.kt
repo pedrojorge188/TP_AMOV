@@ -14,5 +14,7 @@ data class PointOfInterest(
     val grade: Double = 0.0,
     val createdBy: String,
     var category: String?,
+    var report: Int = 0,
+    var reportedBy: List<String> = emptyList(),
     var votedBy: List<String> = emptyList()
 )

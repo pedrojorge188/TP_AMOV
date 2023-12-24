@@ -93,7 +93,11 @@ class AppData {
                 onResult(result)
             })
         }
-
+        fun addReport(locationId: String, userEmail: String, poiName: String, onResult: (Throwable?) -> Unit) {
+            StoreUtil.addReport(locationId, userEmail, poiName, onResult = { result ->
+                onResult(result)
+            })
+        }
         fun addCategory(name: String, iconUrl: String?,createdBy: String, description: String, onResult: (Throwable?) -> Unit) {
             val newCategory = Category(
                 id = UUID.randomUUID().toString(),

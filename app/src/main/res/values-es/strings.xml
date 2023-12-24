@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">praticalWork</string>
+    <string name="app_name">practicalWork</string>
     <string name="SubjectName">AMOV</string>
     <string name="Back">Volver</string>
     <string name="add">Agregar</string>
     <string name="AppName">TRABAJO PRÁCTICO</string>
-    <string name="Register">Registrar</string>
+    <string name="Register">Registro</string>
     <string name="login">Iniciar sesión</string>
     <string name="order">Ordenar por:</string>
     <string name="order_name">Orden alfabético</string>
@@ -18,7 +18,7 @@
     <string name="add_interest_location">Agregar punto de interés</string>
     <string name="interests_locations">Puntos de interés (</string>
     <string name="locations_details">Detalles de la ubicación</string>
-    <string name="info_modal_text">Esta información para el elemento \'%1$s\' no es confiable ya que aún no ha sido votada por el número mínimo de usuarios. ¿Deseas calificar la información como confiable?</string>
+    <string name="info_modal_text">Esta información para el ítem \'%1$s\' no es confiable ya que aún no ha sido votada por el número mínimo de usuarios. ¿Deseas calificar la información como confiable?</string>
     <string name="warning_info_title">Información no confiable</string>
     <string name="Cancel_text">Cancelar</string>
     <string name="vote">Aprobar información</string>
@@ -44,7 +44,7 @@
     <string name="category_name">Nombre de la categoría</string>
     <string name="foto_da_localiza_o">Foto de la ubicación</string>
     <string name="choose_from_gallery">Elegir de la galería</string>
-    <string name="location_photo">Foto de la ubicación</string>
+    <string name="location_photo">Foto de la ubicación</string>0
     <string name="choose_category">Elegir una categoría</string>
     <string name="latitude">Latitud</string>
     <string name="longitude">Longitud</string>
@@ -62,17 +62,21 @@
     <string name="my_location_market">Ubicación de tu dispositivo</string>
     <string name="Tipo">Tipo</string>
     <string name="name_POI">Nombre del punto de interés</string>
-    <string name="imagem_n_o_dispon_vel">Imagen no disponible</string>
+    <string name="imagem_n_o_dispon_vel">Cargando imagen</string>
     <string name="verifique_a_sua_liga_o">Verifica tu conexión</string>
     <string name="yes">Sí</string>
-    <string name="certain">¿Estás seguro de que quieres eliminar este elemento!</string>
+    <string name="certain">¿Estás seguro de que quieres eliminar este ítem?</string>
     <string name="delete">Eliminar</string>
     <string name="all_locations">Todas las ubicaciones</string>
-    <string name="error_adding_point_of_interest_to_location">Error al agregar punto de interés a la ubicación</string>
+    <string name="error_adding_point_of_interest_to_location">Error al agregar el punto de interés a la ubicación</string>
     <string name="created_by">Creado por: %1$s</string>
     <string name="edit_location">Editar ubicación</string>
     <string name="save">Guardar</string>
     <string name="current_photo">¡Foto actual!</string>
     <string name="edit_point_of_interest">Editar punto de interés</string>
     <string name="edit_category">Editar categoría</string>
+    <string name="report">Reportar</string>
+    <string name="you_already_vote_on_this_item">Ya has votado por este ítem</string>
+    <string name="do_you_want_to_submit_your_report">¿Quieres enviar tu informe?</string>
+    <string name="report_point_of_interest">Reportar punto de interés</string>
 </resources>
