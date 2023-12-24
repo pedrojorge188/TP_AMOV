@@ -22,7 +22,7 @@ fun CustomRatingBar(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.fillMaxWidth()
     ) {
-        (1..5).forEach { index ->
+        (1..3).forEach { index ->
             Icon(
                 imageVector = Icons.Default.Star,
                 contentDescription = null,

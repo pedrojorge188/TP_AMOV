@@ -1,4 +1,4 @@
-package pt.isec.amov.ui.screens
+package pt.isec.amov.ui.screens.categories
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image

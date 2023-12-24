@@ -14,6 +14,8 @@ enum class Screens(display: String, val showAppBar: Boolean){
     ADD_LOCATION("addLocation", true),
     MANAGE_CATEGORY("ManageCategory", true),
     ADD_POI("addPOI", true),
+    EDIT_LOCATION("editLocation", true),
+    EDIT_POI("editPOI", true),
     ACCOUNT_CHANGE_DATA("Contribution", true),
     CREDITS("Credits", true),
     MAP_OVERVIEW("allListedMap", true);

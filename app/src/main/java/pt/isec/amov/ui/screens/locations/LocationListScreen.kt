@@ -1,4 +1,4 @@
-package pt.isec.amov.ui.screens.lists
+package pt.isec.amov.ui.screens.locations
 
 import EditAndDeleteDialog
 import RedWarningIconButton
@@ -58,7 +58,7 @@ fun LocationListScreen(NavHostController: NavHostController,
                        locationLiveData : LiveData<List<Location>>,
                        onSelected : (NavigationData) -> Unit )
 {
-    var orderBy by remember { mutableStateOf("") } // Adicione um estado para armazenar a ordenação
+    var orderBy by remember { mutableStateOf("") }
     var searchBy by remember { mutableStateOf("") }
     var categoryBy by remember { mutableStateOf("") }
     val isDropdownOpen = remember { mutableStateOf(false) }
@@ -138,18 +138,8 @@ fun LocationListScreen(NavHostController: NavHostController,
                                         .padding(horizontal = 20.dp, vertical = 20.dp) ,
                                     fontSize = 16.sp
                                 )
-                                Spacer(modifier = Modifier.weight(1f,true))
-                                IconButton(
-                                    onClick = {
-                                        onSelected(NavigationData(it.id, Screens.LOCATION_DETAILS))
-                                    },
-                                ) {
-                                    Icon(
-                                        Icons.Filled.MoreVert,
-                                        contentDescription = "Info"
-                                    )
-                                }
 
+                                Spacer(modifier = Modifier.weight(1f,true))
                                 if(it.votes < 2){
                                     RedWarningIconButton(
                                         onClick = {
@@ -164,6 +154,17 @@ fun LocationListScreen(NavHostController: NavHostController,
                                         vm = vm
                                     )
                                 }
+                                IconButton(
+                                    onClick = {
+                                        onSelected(NavigationData(it.id, Screens.LOCATION_DETAILS))
+                                    },
+                                ) {
+                                    Icon(
+                                        Icons.Filled.MoreVert,
+                                        contentDescription = "Info"
+                                    )
+                                }
+
 
                                 if(vm.user.value != null){
                                     if(it.createdBy.equals( vm.user.value!!.email )){
@@ -187,7 +188,8 @@ fun LocationListScreen(NavHostController: NavHostController,
                                                         vm.deleteLocation(it.id);
                                                     },
                                                     onClickEdit = {
-
+                                                        vm.locationId.value = it.id
+                                                        NavHostController.navigate(Screens.EDIT_LOCATION.route)
                                                     }
                                                 )
                                             }

@@ -130,6 +130,40 @@ class StoreUtil {
                 }
         }
 
+        fun updateLocation(location: Location, onResult: (Throwable?) -> Unit) {
+            val db = FirebaseFirestore.getInstance()
+
+            val updates = mapOf(
+                "id" to location.id,
+                "name" to location.name,
+                "latitude" to location.latitude,
+                "longitude" to location.longitude,
+                "description" to location.description,
+                "photoUrl" to location.photoUrl,
+                "createdBy" to location.createdBy,
+                "votes" to 0,
+                "likes" to location.likes,
+                "dislikes" to location.dislikes,
+                "grade" to location.grade,
+                "category" to location.category,
+                "votedBy" to location.votedBy
+            )
+
+            db.collection("locations").document(location.id)
+                .update(updates)
+                .addOnCompleteListener { result ->
+                    onResult(result.exception)
+                }
+        }
+
+        fun deleteImagesFromStorage(photoUrl : String){
+            val storage = Firebase.storage
+            if (photoUrl.isNotBlank()) {
+                val storageRef = storage.reference.child(photoUrl)
+                storageRef.delete()
+            }
+        }
+
         fun deletePointOfInterest(poiName: String, onResult: (Throwable?) -> Unit) {
             val db = FirebaseFirestore.getInstance()
             val normalizedPoiName = poiName.trim().lowercase(Locale.getDefault()).replace("\\s+".toRegex(), "")

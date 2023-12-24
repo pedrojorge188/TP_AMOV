@@ -39,11 +39,17 @@ import pt.isec.amov.R
 import pt.isec.amov.ui.screens.auth.AccountPage
 import pt.isec.amov.ui.screens.auth.LoginScreen
 import pt.isec.amov.ui.screens.auth.RegisterScreen
-import pt.isec.amov.ui.screens.lists.LocationListScreen
-import pt.isec.amov.ui.screens.lists.PointOfInterestListScreen
-import pt.isec.amov.ui.screens.maps.AllMapOverview
-import pt.isec.amov.ui.screens.maps.LocationMapScreen
-import pt.isec.amov.ui.screens.maps.PointOfInterestMapScreen
+import pt.isec.amov.ui.screens.locations.LocationListScreen
+import pt.isec.amov.ui.screens.poi.PointOfInterestListScreen
+import pt.isec.amov.ui.screens.categories.CategoryDetailsScreen
+import pt.isec.amov.ui.screens.categories.ManageCategoryScreen
+import pt.isec.amov.ui.screens.locations.AddLocationScreen
+import pt.isec.amov.ui.screens.locations.EditLocationScreen
+import pt.isec.amov.ui.screens.locations.LocationDetailsScreen
+import pt.isec.amov.ui.screens.locations.LocationMapScreen
+import pt.isec.amov.ui.screens.poi.AddPointOfInterestScreen
+import pt.isec.amov.ui.screens.poi.PointOfInteresetDetailsScreen
+import pt.isec.amov.ui.screens.poi.PointOfInterestMapScreen
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
 import pt.isec.amov.ui.viewmodels.Screens
 
@@ -72,14 +78,15 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
         )
         showAddBtn = destination.route in arrayOf(
              Screens.LOCATION.route,  Screens.POINT_OF_INTEREST.route, Screens.ADD_LOCATION.route,
-            Screens.ADD_POI.route,Screens.MANAGE_CATEGORY.route,Screens.CATEGORY_DETAILS.route
+            Screens.ADD_POI.route,Screens.MANAGE_CATEGORY.route,Screens.CATEGORY_DETAILS.route,
         )
         showBackArrow = destination.route in arrayOf(
             Screens.ACCOUNT_CHANGE_DATA.route, Screens.LOGIN.route, Screens.ADD_POI.route,
             Screens.REGISTER.route, Screens.CREDITS.route, Screens.POINT_OF_INTEREST_DETAILS.route,
             Screens.LOCATION_DETAILS.route, Screens.POINT_OF_INTEREST.route, Screens.LOCATION_MAP.route,
             Screens.ADD_LOCATION.route , Screens.POINT_OF_INTEREST_MAP.route , Screens.MAP_OVERVIEW.route,
-            Screens.MANAGE_CATEGORY.route,Screens.CATEGORY_DETAILS.route
+            Screens.MANAGE_CATEGORY.route,Screens.CATEGORY_DETAILS.route,
+            Screens.EDIT_POI.route, Screens.EDIT_LOCATION.route
         )
     }
 
@@ -236,6 +243,7 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
                 }
             }
 
+
             composable(Screens.POINT_OF_INTEREST.route) {
                 title.value = stringResource(id = R.string.interests_locations) + viewModel.getLocation().name + ")"
                 viewModel.error.value = null
@@ -278,6 +286,17 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
                 viewModel.error.value = null
                 AddLocationScreen(navController, viewModel);
             }
+
+            composable(Screens.EDIT_LOCATION.route) {
+                title.value = stringResource(R.string.edit_location)
+                viewModel.error.value = null
+                EditLocationScreen(navController, viewModel, viewModel.getLocation());
+            }
+
+            composable(Screens.EDIT_POI.route) {
+
+            }
+
             composable(Screens.MANAGE_CATEGORY.route) {
                 title.value = stringResource(R.string.add_category)
                 viewModel.error.value = null

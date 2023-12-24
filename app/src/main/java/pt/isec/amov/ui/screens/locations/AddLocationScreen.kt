@@ -1,4 +1,5 @@
-package pt.isec.amov.ui.screens
+
+package pt.isec.amov.ui.screens.locations
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,19 +45,17 @@ import pt.isec.amov.ui.composables.SelectGalleryImg
 import pt.isec.amov.ui.composables.TakePhoto
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
 
-
 @Composable
-fun AddPointOfInterestScreen(navController: NavHostController, vm: ActionsViewModel) {
+fun AddLocationScreen(navController: NavHostController, vm: ActionsViewModel) {
 
-    var POIName by remember { mutableStateOf("") }
-    var POIDescription by remember { mutableStateOf("") }
+    var locationName by remember { mutableStateOf("") }
+    var locationDescription by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
     var selectedCategory by remember { mutableStateOf<Category?>(null) }
     var showLatLonDialog by remember { mutableStateOf(false) }
     var latitude by remember { mutableStateOf("") }
     var longitude by remember { mutableStateOf("") }
-    var locationOrigin by remember { mutableStateOf("") }
-
+    var locationOrigin by remember { mutableStateOf("")}
     val categories: State<List<Category>?> = vm.getCategorys().observeAsState()
 
     Column(
@@ -82,19 +81,20 @@ fun AddPointOfInterestScreen(navController: NavHostController, vm: ActionsViewMo
                 Text(text = "Error: ${vm.error.value}", color = Color.Red)
             }
         }
+
         OutlinedTextField(
-            value = POIName,
+            value = locationName,
             onValueChange = {
-                POIName = it
+                locationName = it
             },
-            label = { Text(stringResource(R.string.name_POI)) },
+            label = { Text(stringResource(R.string.location_name)) },
             singleLine = true
         )
 
         OutlinedTextField(
-            value = POIDescription,
+            value = locationDescription,
             onValueChange = {
-                POIDescription = it
+                locationDescription = it
             },
             label = { Text(stringResource(R.string.insert_description)) },
             singleLine = false
@@ -204,9 +204,8 @@ fun AddPointOfInterestScreen(navController: NavHostController, vm: ActionsViewMo
                     .fillMaxWidth(50F)
                     .fillMaxHeight(50F)
             ) {
-                if (vm.imagePath.value != null) {
-                    AsyncImage(model = vm.imagePath.value, contentDescription = "")
-                }
+                if(vm.imagePath.value != null)
+                    AsyncImage(vm.imagePath.value , contentDescription = "")
             }
         }
 
@@ -214,12 +213,13 @@ fun AddPointOfInterestScreen(navController: NavHostController, vm: ActionsViewMo
         NormalBtn(
             onClick =
             {
-                if (POIName.isNotBlank() && POIDescription.isNotBlank()
+                if (locationName.isNotBlank() && locationDescription.isNotBlank()
+                     && selectedCategory != null
                     && latitude.isNotBlank() && longitude.isNotBlank()
                 ) {
 
-                    vm.addPOI(
-                        POIName, POIDescription,
+                    vm.addLocation(
+                        locationName, locationDescription,
                         selectedCategory!!, latitude.toDouble(), longitude.toDouble()
                     )
 
@@ -229,8 +229,7 @@ fun AddPointOfInterestScreen(navController: NavHostController, vm: ActionsViewMo
                     vm.error.value = "You must enter all requirements!"
                 }
             },
-            text = stringResource(id = R.string.add_interest_location)
+            text = stringResource(id = R.string.add_location)
         )
     }
-
 }

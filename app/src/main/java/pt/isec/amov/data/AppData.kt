@@ -153,4 +153,11 @@ class AppData {
         }
     }
 
+    fun updateLocation(updatedLocation: Location, onResult: (Throwable?) -> Unit) {
+        StoreUtil.updateLocation(updatedLocation){
+                result ->
+            onResult(result)
+        }
+    }
+
 }

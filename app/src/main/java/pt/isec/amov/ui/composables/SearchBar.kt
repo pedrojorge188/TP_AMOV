@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
@@ -66,7 +66,10 @@ fun SearchBar(Screen: Screens, vm: ActionsViewModel,onOrderChanged: (String,Stri
             Row {
                 TextField(
                     value = search,
-                    onValueChange = { search = it },
+                    onValueChange = {
+                        search = it
+                        onOrderChanged(orderBy,search, selectedCategory?.name ?: "")
+                    },
                     label = { Text(stringResource(R.string.search)) },
                     singleLine = true,
                     modifier = Modifier
@@ -105,6 +108,7 @@ fun SearchBar(Screen: Screens, vm: ActionsViewModel,onOrderChanged: (String,Stri
                         onClick = {
                             orderBy = "Ord.Alfabética"
                             expandedOrderBy = false
+                            onOrderChanged(orderBy,search, selectedCategory?.name ?: "")
                         }
                     )
                     DropdownMenuItem(
@@ -112,6 +116,7 @@ fun SearchBar(Screen: Screens, vm: ActionsViewModel,onOrderChanged: (String,Stri
                         onClick = {
                             orderBy = "Distância"
                             expandedOrderBy = false
+                            onOrderChanged(orderBy,search, selectedCategory?.name ?: "")
                         }
                     )
                 }
@@ -150,6 +155,7 @@ fun SearchBar(Screen: Screens, vm: ActionsViewModel,onOrderChanged: (String,Stri
                                 onClick = {
                                     selectedCategory = category
                                     expandedCategory = false
+                                    onOrderChanged(orderBy,search, selectedCategory?.name ?: "")
                                 },
                                 text = {
                                     Text(
@@ -163,15 +169,14 @@ fun SearchBar(Screen: Screens, vm: ActionsViewModel,onOrderChanged: (String,Stri
                 }
             }
 
-            //mais tarde adicionar categoria
             if(orderBy != "" || search != "" || selectedCategory != null){
                 Button(
                     onClick = {
                         Log.d("ORDERBY_I", "Value: $orderBy")
-                        onOrderChanged(orderBy,search, selectedCategory?.name ?: "")
                         search  = "";
                         orderBy = "";
                         selectedCategory = null;
+                        onOrderChanged(orderBy,search, selectedCategory?.name ?: "")
 
                     },
 
@@ -182,7 +187,7 @@ fun SearchBar(Screen: Screens, vm: ActionsViewModel,onOrderChanged: (String,Stri
                 ) {
 
                     Icon(
-                        imageVector = Icons.Default.Search,
+                        imageVector = Icons.Default.Close,
                         contentDescription = stringResource(R.string.search)
                     )
                 }

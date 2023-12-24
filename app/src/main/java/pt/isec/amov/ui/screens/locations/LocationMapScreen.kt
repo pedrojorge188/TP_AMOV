@@ -1,56 +1,56 @@
-package pt.isec.amov.ui.screens.maps
+package pt.isec.amov.ui.screens.locations
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import org.osmdroid.util.GeoPoint
-import pt.isec.amov.models.PointOfInterest
+import pt.isec.amov.models.Location
 import pt.isec.amov.ui.composables.MapScene
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
-
 @Composable
-fun PointOfInterestMapScreen(
+fun LocationMapScreen(
     navHostController: NavHostController,
     viewModel: ActionsViewModel,
-    item: PointOfInterest
+    location: Location
 ) {
-
-    val geoPoint by remember{ mutableStateOf(
+    val geoPoint by remember { mutableStateOf(
         GeoPoint(
-            item.latitude, item.longitude
+            location.latitude, location.longitude
         )
     ) }
-
-    val lPOI = mutableListOf<PointOfInterest>()
-    lPOI.add(item)
 
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Top
     ) {
         Text(
-            text = item.name,
+            text = location.name,
             modifier = Modifier
                 .padding(16.dp)
-                .fillMaxWidth()
-                .wrapContentSize(Alignment.Center),
-            style = MaterialTheme.typography.titleLarge
+                .fillMaxWidth(),
+            style = MaterialTheme.typography.titleLarge,
+            textAlign = TextAlign.Center
         )
-
-        MapScene(POI = lPOI, geoPoint = geoPoint, location = false, viewModel)
-
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+        ) {
+            MapScene(POI = viewModel.getPointOfInterestList().value , geoPoint = geoPoint, true, viewModel)
+        }
     }
 }
+

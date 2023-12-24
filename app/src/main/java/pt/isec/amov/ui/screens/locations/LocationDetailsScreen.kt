@@ -1,4 +1,4 @@
-package pt.isec.amov.ui.screens
+package pt.isec.amov.ui.screens.locations
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -43,95 +44,97 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.storage
 import kotlinx.coroutines.tasks.await
 import pt.isec.amov.R
-import pt.isec.amov.models.PointOfInterest
-import pt.isec.amov.ui.composables.CustomRatingBar
+import pt.isec.amov.models.Location
 import pt.isec.amov.ui.composables.getResourceIdForImage
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
 import pt.isec.amov.ui.viewmodels.Screens
 
 @Composable
-fun PointOfInteresetDetailsScreen(
+fun LocationDetailsScreen(
     navHostController: NavHostController,
     viewModel: ActionsViewModel,
-    pointOfInterest: PointOfInterest?
-)  {
-
+    location : Location?
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 20.dp, vertical = 20.dp)
     ) {
 
-        if(pointOfInterest!!.votes < 2){
-            Row (modifier = Modifier
-                .padding(horizontal = 20.dp, vertical = 20.dp)){
-                Icon(
-                    Icons.Filled.Warning,
-                    contentDescription = "danger",
-                    tint = Color.Red
-                )
-                Spacer(modifier = Modifier.width(16.dp))
-                Text(text = stringResource(id = R.string.warning_info_title), color = Color.Red)
-            }
+          if(location!!.votes < 2){
+              Row (modifier = Modifier
+                  .padding(horizontal = 20.dp, vertical = 20.dp)){
+                  Icon(
+                      Icons.Filled.Warning,
+                      contentDescription = "danger",
+                      tint = Color.Red
+                  )
+                  Spacer(modifier = Modifier.width(16.dp))
+                  Text(text = stringResource(id = R.string.warning_info_title), color = Color.Red)
+              }
 
-        }
+          }
 
-        if (pointOfInterest.photoUrl != "") {
-            val storage = Firebase.storage
-            val storageRef: StorageReference? = if (pointOfInterest.photoUrl!!.isNotBlank()) {
-                storage.reference.child(pointOfInterest.photoUrl)
-            } else {
-                null
-            }
-            val imageUrl = remember { mutableStateOf<String?>(null) }
+            if (location.photoUrl != "") {
+                val storage = Firebase.storage
+                val storageRef: StorageReference? = if (location.photoUrl!!.isNotBlank()) {
+                    storage.reference.child(location.photoUrl!!)
+                } else {
+                    null
+                }
+                val imageUrl = remember { mutableStateOf<String?>(null) }
 
-            LaunchedEffect(key1 = storageRef) {
-                if (storageRef != null) {
-                    try {
-                        val downloadUrl = storageRef.downloadUrl.await().toString()
-                        imageUrl.value = downloadUrl
-                    } catch (e: Exception) {
-                        imageUrl.value = null
+                LaunchedEffect(key1 = storageRef) {
+                    if (storageRef != null) {
+                        try {
+                            val downloadUrl = storageRef.downloadUrl.await().toString()
+                            imageUrl.value = downloadUrl
+                        } catch (e: Exception) {
+                            imageUrl.value = null
+                        }
                     }
                 }
-            }
 
-            if (imageUrl.value != null) {
-                AsyncImage(
-                    model = imageUrl.value!!,
+                if (imageUrl.value != null) {
+                    AsyncImage(
+                        model = imageUrl.value!!,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                    )
+                } else {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = stringResource(R.string.imagem_n_o_dispon_vel),
+                            textAlign = TextAlign.Center)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        CircularProgressIndicator()
+                    }
+                }
+
+            }else{
+                Image(
+                    painter = painterResource(id = R.drawable.logo),
                     contentDescription = "",
+                    contentScale = ContentScale.Fit,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(200.dp)
+                        .height(150.dp)
                 )
-            } else {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = stringResource(R.string.imagem_n_o_dispon_vel),
-                        textAlign = TextAlign.Center)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    CircularProgressIndicator()
-                }
             }
-        }else{
-            Image(
-                painter = painterResource(id = R.drawable.logo),
-                contentDescription = "",
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(150.dp)
-            )
-        }
+
         Divider(
             color = Color.Black,
             thickness = 1.dp,
-            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
+            modifier = Modifier.fillMaxWidth().padding(vertical = 20.dp)
         )
+
+
         Row(
             modifier = Modifier
                 .padding(horizontal = 20.dp)
@@ -175,14 +178,42 @@ fun PointOfInteresetDetailsScreen(
                 )
             }
         }
-
         LazyColumn( modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 20.dp, vertical = 20.dp))
+            .padding(horizontal = 15.dp, vertical = 15.dp))
         {
 
             item {
-                val int= getResourceIdForImage(viewModel.getCategoryIcon(pointOfInterest.category ?: ""))
+                val int= getResourceIdForImage(viewModel.getCategoryIcon(location.category ?: ""))
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 40.dp, end = 40.dp, bottom = 20.dp ),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Text(
+                        text = location.likes.toString(),
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
+                    Icon(
+                        painter = painterResource(id = R.drawable.like),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                    Spacer(modifier = Modifier.weight(1f,true))
+                    Text(
+                        text = location.dislikes.toString(),
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
+
+                    Icon(
+                        painter = painterResource(id = R.drawable.dislike),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+
+                }
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -199,6 +230,12 @@ fun PointOfInteresetDetailsScreen(
                         )
                         Spacer(modifier = Modifier.width(15.dp))
                     }
+                    Text(
+                        text = "",
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 25.sp
+                    )
                     Column {
                         Text(
                             text = stringResource(R.string.category_txt),
@@ -207,7 +244,7 @@ fun PointOfInteresetDetailsScreen(
                             fontSize = 25.sp
                         )
                         Text(
-                            text = "   "+pointOfInterest.category,
+                            text = "   "+location.category,
                             color = Color.Black,
                             fontSize = 20.sp
                         )
@@ -222,9 +259,8 @@ fun PointOfInteresetDetailsScreen(
                     fontWeight = FontWeight.Bold,
                     fontSize = 25.sp
                 )
-
                 Text(
-                    text = pointOfInterest!!.description,
+                    text = location.description,
                     color = Color.Black,
                     fontSize = 18.sp,
                     modifier = Modifier.padding(start = 20.dp)
@@ -232,12 +268,15 @@ fun PointOfInteresetDetailsScreen(
 
                 Spacer(modifier = Modifier.height(20.dp))
 
-                CustomRatingBar(
-                    rating = pointOfInterest?.grade ?: 0.0
-                ) {}
+                Text(
+                    text = stringResource(R.string.created_by, location.createdBy),
+                    color = Color.Gray,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
 
             }
         }
     }
-
 }
+

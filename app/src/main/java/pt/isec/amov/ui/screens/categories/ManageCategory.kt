@@ -1,4 +1,4 @@
-package pt.isec.amov.ui.screens
+package pt.isec.amov.ui.screens.categories
 
 import EditAndDeleteDialog
 import androidx.compose.foundation.Image

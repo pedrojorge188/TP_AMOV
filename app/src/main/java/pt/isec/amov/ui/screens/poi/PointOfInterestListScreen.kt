@@ -1,4 +1,4 @@
-package pt.isec.amov.ui.screens.lists
+package pt.isec.amov.ui.screens.poi
 
 import EditAndDeleteDialog
 import RedWarningIconButton
