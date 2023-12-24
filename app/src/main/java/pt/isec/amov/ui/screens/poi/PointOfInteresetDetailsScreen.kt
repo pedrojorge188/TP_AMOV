@@ -79,7 +79,7 @@ fun PointOfInteresetDetailsScreen(
         if (pointOfInterest.photoUrl != "") {
             val storage = Firebase.storage
             val storageRef: StorageReference? = if (pointOfInterest.photoUrl!!.isNotBlank()) {
-                storage.reference.child(pointOfInterest.photoUrl)
+                storage.reference.child(pointOfInterest.photoUrl!!)
             } else {
                 null
             }

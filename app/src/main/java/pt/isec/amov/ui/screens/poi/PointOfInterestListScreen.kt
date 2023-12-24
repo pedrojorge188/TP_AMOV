@@ -175,7 +175,8 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
                                                     vm.deletePOI(it.name);
                                                 },
                                                 onClickEdit = {
-
+                                                    vm.pointOfInterestId.value = it.id
+                                                    NavHostController.navigate(Screens.EDIT_POI.route)
                                                 }
                                             )
                                         }

@@ -140,6 +140,7 @@ fun LocationListScreen(NavHostController: NavHostController,
                                 )
 
                                 Spacer(modifier = Modifier.weight(1f,true))
+                                if(vm.user.value != null){
                                 if(it.votes < 2){
                                     RedWarningIconButton(
                                         onClick = {
@@ -166,7 +167,6 @@ fun LocationListScreen(NavHostController: NavHostController,
                                 }
 
 
-                                if(vm.user.value != null){
                                     if(it.createdBy.equals( vm.user.value!!.email )){
                                         Column {
                                             IconButton(

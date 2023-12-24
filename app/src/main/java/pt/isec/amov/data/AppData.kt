@@ -160,4 +160,11 @@ class AppData {
         }
     }
 
+    fun updatePOI(value: PointOfInterest, onResult: (Throwable?) -> Unit) {
+        StoreUtil.updatePOI(value){
+                result ->
+            onResult(result)
+        }
+    }
+
 }

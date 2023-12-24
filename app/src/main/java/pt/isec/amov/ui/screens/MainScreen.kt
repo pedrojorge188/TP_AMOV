@@ -39,16 +39,17 @@ import pt.isec.amov.R
 import pt.isec.amov.ui.screens.auth.AccountPage
 import pt.isec.amov.ui.screens.auth.LoginScreen
 import pt.isec.amov.ui.screens.auth.RegisterScreen
-import pt.isec.amov.ui.screens.locations.LocationListScreen
-import pt.isec.amov.ui.screens.poi.PointOfInterestListScreen
 import pt.isec.amov.ui.screens.categories.CategoryDetailsScreen
 import pt.isec.amov.ui.screens.categories.ManageCategoryScreen
 import pt.isec.amov.ui.screens.locations.AddLocationScreen
 import pt.isec.amov.ui.screens.locations.EditLocationScreen
 import pt.isec.amov.ui.screens.locations.LocationDetailsScreen
+import pt.isec.amov.ui.screens.locations.LocationListScreen
 import pt.isec.amov.ui.screens.locations.LocationMapScreen
 import pt.isec.amov.ui.screens.poi.AddPointOfInterestScreen
+import pt.isec.amov.ui.screens.poi.EditPOIScreen
 import pt.isec.amov.ui.screens.poi.PointOfInteresetDetailsScreen
+import pt.isec.amov.ui.screens.poi.PointOfInterestListScreen
 import pt.isec.amov.ui.screens.poi.PointOfInterestMapScreen
 import pt.isec.amov.ui.viewmodels.ActionsViewModel
 import pt.isec.amov.ui.viewmodels.Screens
@@ -294,7 +295,9 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
             }
 
             composable(Screens.EDIT_POI.route) {
-
+                title.value = stringResource(R.string.edit_point_of_interest)
+                viewModel.error.value = null
+                EditPOIScreen(navController, viewModel, viewModel.getPointOfInterest()!!);
             }
 
             composable(Screens.MANAGE_CATEGORY.route) {

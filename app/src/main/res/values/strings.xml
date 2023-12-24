@@ -73,4 +73,5 @@
     <string name="edit_location">Edit Location</string>
     <string name="save">Save</string>
     <string name="current_photo">Current Photo!</string>
+    <string name="edit_point_of_interest">Edit Point Of Interest</string>
 </resources>

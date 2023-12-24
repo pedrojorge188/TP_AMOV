@@ -220,6 +220,19 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
         }
     }
 
+    fun updatePOI(value: PointOfInterest) {
+        viewModelScope.launch {
+            appData.updatePOI(value){
+                    expt ->
+                if(expt != null) {
+                    _error.value = expt.message
+                }
+            }
+            imagePath.value = null
+        }
+    }
+
+
     fun deleteCategory(id: String) {
         viewModelScope.launch {
             val locations = appData.allLocations.value ?: emptyList()

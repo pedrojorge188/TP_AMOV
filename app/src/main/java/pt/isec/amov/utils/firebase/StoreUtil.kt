@@ -156,6 +156,46 @@ class StoreUtil {
                 }
         }
 
+        fun updatePOI(value: PointOfInterest, onResult: (Throwable?) -> Unit) {
+            val db = FirebaseFirestore.getInstance()
+
+            val updates = mapOf(
+                "id" to value.id,
+                "name" to value.name,
+                "latitude" to value.latitude,
+                "longitude" to value.longitude,
+                "description" to value.description,
+                "photoUrl" to value.photoUrl,
+                "createdBy" to value.createdBy,
+                "votes" to 0,
+                "likes" to value.likes,
+                "dislikes" to value.dislikes,
+                "grade" to value.grade,
+                "category" to value.category,
+                "votedBy" to value.votedBy
+            )
+
+            db.collectionGroup("pointsOfInterest")
+                .get()
+                .addOnSuccessListener { documents ->
+                    for (document in documents) {
+                        if(document.getString("id").equals(value.id)) {
+                            val poiDocument = document.reference
+                            poiDocument.update(updates)
+                                .addOnCompleteListener { result ->
+                                    onResult(result.exception)
+                                }
+                        }else{
+                            onResult(throw UnsupportedOperationException("Any document found in firebase!"))
+                        }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.wtf("ERROR", exception.message)
+                    onResult(exception)
+                }
+        }
+
         fun deleteImagesFromStorage(photoUrl : String){
             val storage = Firebase.storage
             if (photoUrl.isNotBlank()) {
@@ -397,6 +437,7 @@ class StoreUtil {
                 }
             }
         }
+
 
     }
 
