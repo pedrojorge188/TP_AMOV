@@ -79,4 +79,7 @@
     <string name="you_already_vote_on_this_item">You already vote on this item</string>
     <string name="do_you_want_to_submit_your_report">Do you want to submit your report!</string>
     <string name="report_point_of_interest">Report point of interest</string>
+    <string name="rate">Rate</string>
+    <string name="comments">Comments</string>
+    <string name="map_overview">Map Overview</string>
 </resources>

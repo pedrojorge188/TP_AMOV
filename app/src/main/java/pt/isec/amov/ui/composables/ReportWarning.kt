@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Build
 import androidx.compose.material3.AlertDialog
@@ -58,12 +59,13 @@ fun ReportWarning(
             Icon(
                 Icons.Filled.Build,
                 contentDescription = "LocationOn",
-                tint = Color.White
+                tint = Color.White,
+                modifier = Modifier.size(18.dp)
             )
             Text(
                 text = stringResource(R.string.report),
                 color = Color.White,
-                fontSize = 18.sp,
+                fontSize = 14.sp,
                 modifier = Modifier.padding(start = 20.dp)
             )
         }
