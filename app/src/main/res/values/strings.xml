@@ -82,4 +82,7 @@
     <string name="rate">Rate</string>
     <string name="comments">Comments</string>
     <string name="map_overview">Map Overview</string>
+    <string name="remaining_characters">Remaining Characters: %1$s</string>
+    <string name="any_comment_yet">Any Comment yet!</string>
+    <string name="you_already_wrote_once">You already wrote once!</string>
 </resources>

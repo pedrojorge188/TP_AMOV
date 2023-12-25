@@ -48,6 +48,7 @@ import pt.isec.amov.ui.screens.locations.LocationDetailsScreen
 import pt.isec.amov.ui.screens.locations.LocationListScreen
 import pt.isec.amov.ui.screens.locations.LocationMapScreen
 import pt.isec.amov.ui.screens.poi.AddPointOfInterestScreen
+import pt.isec.amov.ui.screens.poi.CommentPoiScreen
 import pt.isec.amov.ui.screens.poi.EditPOIScreen
 import pt.isec.amov.ui.screens.poi.PointOfInteresetDetailsScreen
 import pt.isec.amov.ui.screens.poi.PointOfInterestListScreen
@@ -88,7 +89,7 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
             Screens.LOCATION_DETAILS.route, Screens.POINT_OF_INTEREST.route, Screens.LOCATION_MAP.route,
             Screens.ADD_LOCATION.route , Screens.POINT_OF_INTEREST_MAP.route , Screens.MAP_OVERVIEW.route,
             Screens.MANAGE_CATEGORY.route,Screens.CATEGORY_DETAILS.route,
-            Screens.EDIT_POI.route, Screens.EDIT_LOCATION.route, Screens.EDIT_CATEGORY.route
+            Screens.EDIT_POI.route, Screens.EDIT_LOCATION.route, Screens.EDIT_CATEGORY.route, Screens.COMMENT_SCREEN.route
         )
     }
 
@@ -271,6 +272,7 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
                     }
                 )
             }
+
             composable(Screens.LOCATION_MAP.route) {
                 title.value = viewModel.getLocation().name
                 viewModel.error.value = null
@@ -301,6 +303,11 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
                 EditPOIScreen(navController, viewModel, viewModel.getPointOfInterest()!!);
             }
 
+            composable(Screens.COMMENT_SCREEN.route) {
+                viewModel.error.value = null
+                CommentPoiScreen(navController, viewModel, app.appData.pointsOfInterest, viewModel.getPointOfInterest()!!);
+            }
+
             composable(Screens.EDIT_CATEGORY.route) {
                 title.value = stringResource(R.string.edit_category)
                 viewModel.error.value = null
@@ -320,6 +327,7 @@ fun MainScreen(navController: NavHostController = rememberNavController(), viewM
                 viewModel.error.value = null
                 AddPointOfInterestScreen(navController, viewModel);
             }
+
             composable(Screens.MAP_OVERVIEW.route) {
                 title.value = stringResource(R.string.location_name)
                 viewModel.error.value = null

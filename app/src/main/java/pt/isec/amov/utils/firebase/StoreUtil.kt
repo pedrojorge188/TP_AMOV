@@ -215,39 +215,28 @@ class StoreUtil {
             val db = FirebaseFirestore.getInstance()
 
             val updates = mapOf(
-                "id" to value.id,
                 "name" to value.name,
-                "latitude" to value.latitude,
-                "longitude" to value.longitude,
                 "description" to value.description,
                 "photoUrl" to value.photoUrl,
-                "createdBy" to value.createdBy,
-                "votes" to 0,
+                "latitude" to value.latitude,
+                "longitude" to value.longitude,
                 "likes" to value.likes,
                 "dislikes" to value.dislikes,
                 "grade" to value.grade,
+                "comment" to value.comment,
                 "category" to value.category,
+                "reportedBy" to value.reportedBy,
                 "votedBy" to value.votedBy
             )
+            
 
-            db.collectionGroup("pointsOfInterest")
-                .get()
-                .addOnSuccessListener { documents ->
-                    for (document in documents) {
-                        if(document.getString("id").equals(value.id)) {
-                            val poiDocument = document.reference
-                            poiDocument.update(updates)
-                                .addOnCompleteListener { result ->
-                                    onResult(result.exception)
-                                }
-                        }else{
-                            onResult(throw UnsupportedOperationException("Any document found in firebase!"))
-                        }
-                    }
+            db.collection("locations").document(value.locationId).collection("pointsOfInterest").document(value.name)
+                .update(updates)
+                .addOnSuccessListener {
+                    onResult(null) // Sucesso, sem erros
                 }
-                .addOnFailureListener { exception ->
-                    Log.wtf("ERROR", exception.message)
-                    onResult(exception)
+                .addOnFailureListener { e ->
+                    onResult(e) // Passando o erro caso ocorra
                 }
         }
 
@@ -424,6 +413,42 @@ class StoreUtil {
                 }
         }
 
+
+        fun addComment(
+            id: String,
+            locationId: String,
+            comment: String,
+            userEmail: String,
+            onResult: (Throwable?) -> Unit
+        ) {
+            val commentMap = mapOf(
+                userEmail to comment
+            )
+
+            val db = FirebaseFirestore.getInstance()
+            val poiDocument = db.collection("locations").document(locationId).collection("pointsOfInterest").document(id)
+            poiDocument.get().addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    val existingComments = documentSnapshot.get("comment") as? Map<String, String> ?: emptyMap()
+
+                    val updatedComments = existingComments.toMutableMap()
+                    updatedComments[comment] = userEmail
+
+                    poiDocument.update("comment", updatedComments)
+                        .addOnSuccessListener {
+                            onResult(null)
+                        }
+                        .addOnFailureListener { e ->
+                            onResult(e)
+                        }
+                } else {
+
+                    onResult(throw UnsupportedOperationException("Document not found"))
+                }
+            }
+
+        }
+
         fun readPOIFromFirebase(onPOILoaded: (MutableList<PointOfInterest>) -> Unit) {
             val db = FirebaseFirestore.getInstance()
 
@@ -442,12 +467,13 @@ class StoreUtil {
                             document.getDouble("latitude") ?: 0.0,
                             document.getDouble("longitude") ?: 0.0,
                             document.getLong("votes")?.toInt() ?: 0,
-                            document.getLong("likes")?.toInt()?: 0,
-                            document.getLong("dislikes")?.toInt()?: 0,
+                            document.getLong("likes")?.toInt() ?: 0,
+                            document.getLong("dislikes")?.toInt() ?: 0,
                             document.getLong("grade")?.toDouble() ?: 0.0,
                             document.getString("createdBy") ?: "",
                             document.getString("category") ?: "",
-                            document.getLong("report")?.toInt()?: 0,
+                            document.getLong("report")?.toInt() ?: 0,
+                            document.get("comment") as? Map<String, String> ?: emptyMap(),
                             document.get("reportedBy") as? List<String> ?: emptyList(),
                             document.get("votedBy") as? List<String> ?: emptyList()
                         )
@@ -456,8 +482,10 @@ class StoreUtil {
                     onPOILoaded(response)
                 }
                 .addOnFailureListener { exception ->
+                    // Tratar falha
                 }
         }
+
 
 
         fun getFileFromAsset(assetManager: AssetManager, strName: String): InputStream? {

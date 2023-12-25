@@ -314,7 +314,7 @@ fun PointOfInteresetDetailsScreen(
                 }
                 Button(
                     onClick = {
-
+                        navHostController.navigate(Screens.COMMENT_SCREEN.route)
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color(0xFF02458A),

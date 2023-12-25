@@ -82,4 +82,7 @@
     <string name="rate">Avaliação</string>
     <string name="comments">Comentários</string>
     <string name="map_overview">Mapa Global</string>
+    <string name="remaining_characters">Caracteres Restantes: %1$s</string>
+    <string name="any_comment_yet">Ainda sem comentários!</string>
+    <string name="you_already_wrote_once">Você já realizou um comentário</string>
 </resources>

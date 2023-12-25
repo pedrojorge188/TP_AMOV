@@ -178,4 +178,17 @@ class AppData {
         }
     }
 
+    fun addComment(
+        id: String,
+        locationId: String,
+        comment: String,
+        userEmail: String,
+        onResult: (Throwable?) -> Unit
+    ) {
+        StoreUtil.addComment(id,locationId,userEmail,comment){
+                result ->
+            onResult(result)
+        }
+    }
+
 }

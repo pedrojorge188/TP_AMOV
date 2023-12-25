@@ -254,6 +254,18 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
         }
     }
 
+    fun addComment(id: String, locationId: String, comment: String) {
+        viewModelScope.launch {
+            appData.addComment(id,locationId,comment,user.value!!.email){
+                    expt ->
+                if(expt != null) {
+                    _error.value = expt.message
+                }
+            }
+            imagePath.value = null
+        }
+    }
+
     fun deleteCategory(id: String) {
         viewModelScope.launch {
             val locations = appData.allLocations.value ?: emptyList()
