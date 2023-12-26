@@ -64,10 +64,11 @@ import pt.isec.amov.ui.viewmodels.Screens
 fun PointOfInteresetDetailsScreen(
     navHostController: NavHostController,
     viewModel: ActionsViewModel,
-    pointOfInterest: PointOfInterest?
+    poi: PointOfInterest?
 ) {
     var rating2 by remember { mutableStateOf(0) }
 
+    var pointOfInterest by remember { mutableStateOf(poi) }
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -98,11 +99,11 @@ fun PointOfInteresetDetailsScreen(
 
                 }
 
-                if (pointOfInterest.photoUrl != "") {
+                if (pointOfInterest!!.photoUrl != "") {
                     val storage = Firebase.storage
                     val storageRef: StorageReference? =
-                        if (pointOfInterest.photoUrl!!.isNotBlank()) {
-                            storage.reference.child(pointOfInterest.photoUrl!!)
+                        if (pointOfInterest!!.photoUrl!!.isNotBlank()) {
+                            storage.reference.child(pointOfInterest!!.photoUrl!!)
                         } else {
                             null
                         }
@@ -197,7 +198,7 @@ fun PointOfInteresetDetailsScreen(
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = pointOfInterest.likes.toString(),
+                        text = pointOfInterest!!.likes.toString(),
                         modifier = Modifier.padding(end = 8.dp)
                     )
                     Icon(
@@ -207,7 +208,7 @@ fun PointOfInteresetDetailsScreen(
                     )
                     Spacer(modifier = Modifier.weight(1f, true))
                     Text(
-                        text = pointOfInterest.dislikes.toString(),
+                        text = pointOfInterest!!.dislikes.toString(),
                         modifier = Modifier.padding(end = 8.dp)
                     )
 
@@ -219,7 +220,7 @@ fun PointOfInteresetDetailsScreen(
 
                 }
                 val int =
-                    getResourceIdForImage(viewModel.getCategoryIcon(pointOfInterest.category ?: ""))
+                    getResourceIdForImage(viewModel.getCategoryIcon(pointOfInterest!!.category ?: ""))
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -247,7 +248,7 @@ fun PointOfInteresetDetailsScreen(
                             fontSize = 25.sp
                         )
                         Text(
-                            text = "   " + pointOfInterest.category,
+                            text = "   " + pointOfInterest!!.category,
                             color = Color.Black,
                             fontSize = 20.sp
                         )
@@ -278,7 +279,7 @@ fun PointOfInteresetDetailsScreen(
                     modifier = Modifier.padding(start = 10.dp)
                 )
                 Row(modifier = Modifier.padding(start = 20.dp)) {
-                    val averageRating = pointOfInterest.calculateAverageRating()
+                    val averageRating = pointOfInterest!!.calculateAverageRating()
                     Text(
                         text = (averageRating).toString(),
                         fontSize = 18.sp,
@@ -306,9 +307,9 @@ fun PointOfInteresetDetailsScreen(
                 Row(modifier = Modifier
                     .padding(start = 20.dp)
                 ) {
-                    if (viewModel.user.value!!.email in pointOfInterest.avaliations.keys) {
+                    if (viewModel.user.value!!.email in pointOfInterest!!.avaliations.keys) {
                         Text(
-                            text = "A sua avaliação foi de " + pointOfInterest.avaliations[viewModel.user.value!!.email] + " estrelas",
+                            text = "A sua avaliação foi de " + pointOfInterest!!.avaliations[viewModel.user.value!!.email] + " estrelas",
                             color = Color.LightGray,
                             fontSize = 13.sp
                         )
@@ -320,10 +321,11 @@ fun PointOfInteresetDetailsScreen(
                     Button(
                         onClick = {
                             viewModel.addAvaliation(
-                                pointOfInterest.name,
-                                pointOfInterest.locationId,
+                                pointOfInterest!!.name,
+                                pointOfInterest!!.locationId,
                                 rating2,
                             )
+                            pointOfInterest = viewModel.getPointOfInterest()
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xFF02458A),
@@ -336,7 +338,7 @@ fun PointOfInteresetDetailsScreen(
                             .height(52.dp)
                     ) {
                         Text(
-                            text = if(viewModel.user.value!!.email !in pointOfInterest.avaliations.keys) "Enviar Avaliação" else "Atualizar Avaliação",
+                            text = if(viewModel.user.value!!.email !in pointOfInterest!!.avaliations.keys) "Enviar Avaliação" else "Atualizar Avaliação",
                             color = Color.White,
                             fontSize = 16.sp
                         )
@@ -370,11 +372,11 @@ fun PointOfInteresetDetailsScreen(
                     ReportWarning(
                         onClick = { /*TODO*/ },
                         itemName = pointOfInterest!!.name,
-                        locationId = pointOfInterest.locationId,
-                        poiName = pointOfInterest.name,
+                        locationId = pointOfInterest!!.locationId,
+                        poiName = pointOfInterest!!.name,
                         userEmail = viewModel.user.value!!.email,
                         progressValue = 0f,
-                        itemReportedBy = pointOfInterest.reportedBy,
+                        itemReportedBy = pointOfInterest!!.reportedBy,
                         vm = viewModel
                     )
 

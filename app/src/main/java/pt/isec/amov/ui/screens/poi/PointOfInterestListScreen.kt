@@ -90,141 +90,141 @@ fun PointOfInterestListScreen(NavHostController: NavHostController,
         if(locals.value!!.isEmpty())
             NormalBtn(onClick = { NavHostController.navigate(Screens.ADD_POI.route) }, text = stringResource(id = R.string.add_interest_location))
 
-        LazyColumn (
-            modifier = Modifier
-                .padding(horizontal = 20.dp, vertical = 20.dp)
-        ) {
+        if (vm.user.value != null)
 
-            val filteredLocations = locals.value!!.let {
-                if (searchBy.isNotEmpty()&&categoryBy.isNotEmpty()) {
-                    Log.d("SEARCHBY", "Value: $searchBy")
-                    it.filter { location ->
-                        location.name.contains(searchBy, ignoreCase = true)&&location.category==categoryBy }
-                } else if (searchBy.isNotEmpty()){
-                    Log.d("SEARCHBY", "Value: $searchBy")
-                    it.filter { location ->
-                        location.name.contains(searchBy, ignoreCase = true) }
-                }else if (categoryBy.isNotEmpty()){
-                    it.filter { location ->
-                        location.category==categoryBy }
-                }
-                else {
-                    Log.d("SEARCHBY", "Val: $searchBy")
+            LazyColumn (
+                modifier = Modifier
+                    .padding(horizontal = 20.dp, vertical = 20.dp)
+            ) {
 
-                    it
-                }
-            }
-            items(filteredLocations.sortedWith(compareBy { it.whatOrder(orderBy, vm) }), key = { it.id } ) {
-            Card(
-                    elevation = CardDefaults.cardElevation(4.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                    onClick = {
-                        onSelected(NavigationData(it.id, Screens.POINT_OF_INTEREST_DETAILS))
+                val filteredLocations = locals.value!!.let {
+                    if (searchBy.isNotEmpty()&&categoryBy.isNotEmpty()) {
+                        Log.d("SEARCHBY", "Value: $searchBy")
+                        it.filter { location ->
+                            location.name.contains(searchBy, ignoreCase = true)&&location.category==categoryBy }
+                    } else if (searchBy.isNotEmpty()){
+                        Log.d("SEARCHBY", "Value: $searchBy")
+                        it.filter { location ->
+                            location.name.contains(searchBy, ignoreCase = true) }
+                    }else if (categoryBy.isNotEmpty()){
+                        it.filter { location ->
+                            location.category==categoryBy }
                     }
-                ) {
-                    Column {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 8.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = it.name,
+                    else {
+                        Log.d("SEARCHBY", "Val: $searchBy")
+
+                        it
+                    }
+                }
+                items(filteredLocations.sortedWith(compareBy { it.whatOrder(orderBy, vm) }), key = { it.id } ) {
+                Card(
+                        elevation = CardDefaults.cardElevation(4.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        onClick = {
+                            onSelected(NavigationData(it.id, Screens.POINT_OF_INTEREST_DETAILS))
+                        }
+                    ) {
+                        Column {
+                            Row(
                                 modifier = Modifier
-                                    .padding(horizontal = 20.dp, vertical = 20.dp),
-                                fontSize = 16.sp
-                            )
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = it.name,
+                                    modifier = Modifier
+                                        .padding(horizontal = 20.dp, vertical = 20.dp),
+                                    fontSize = 16.sp
+                                )
 
-                            Spacer(modifier = Modifier.weight(1f, true))
+                                Spacer(modifier = Modifier.weight(1f, true))
 
-                            if (vm.user.value != null)
-
-                                if (it.votes < 2) {
-                                    RedWarningIconButton(
+                                    if (it.votes < 2) {
+                                        RedWarningIconButton(
+                                            onClick = {
+                                                //ação para colocar mais uma nota
+                                            },
+                                            itemName = it.name,
+                                            locationId = it.locationId,
+                                            poiName = it.name,
+                                            itemVotedBy = it.votedBy,
+                                            userEmail = vm.user.value!!.email,
+                                            it.votes.toFloat(),
+                                            vm = vm
+                                        )
+                                    }
+                                if (it.createdBy.equals(vm.user.value!!.email)) {
+                                    IconButton(
                                         onClick = {
-                                            //ação para colocar mais uma nota
+                                            isDropdownOpen.value = !isDropdownOpen.value
                                         },
-                                        itemName = it.name,
-                                        locationId = it.locationId,
-                                        poiName = it.name,
-                                        itemVotedBy = it.votedBy,
-                                        userEmail = vm.user.value!!.email,
-                                        it.votes.toFloat(),
-                                        vm = vm
-                                    )
-                                }
-                            if (it.createdBy.equals(vm.user.value!!.email)) {
-                                IconButton(
-                                    onClick = {
-                                        isDropdownOpen.value = !isDropdownOpen.value
-                                    },
-                                ) {
-                                    Icon(
-                                        Icons.Filled.Settings,
-                                        contentDescription = "Info"
-                                    )
-                                }
+                                    ) {
+                                        Icon(
+                                            Icons.Filled.Settings,
+                                            contentDescription = "Info"
+                                        )
+                                    }
 
-                                Spacer(modifier = Modifier.height(8.dp))
+                                    Spacer(modifier = Modifier.height(8.dp))
 
-                                if (isDropdownOpen.value) {
-                                    EditAndDeleteDialog(
-                                        onClickDelete = {
-                                            if (it.report >= 3)
-                                                vm.deletePOI(it.name);
-                                            else
-                                                vm.error.value =
-                                                    "Não é possivel remover pois ainda não foi reportado pelo numero mínimo de pessoas (${it.report} / 3)"
-                                        },
-                                        onClickEdit = {
-                                            vm.pointOfInterestId.value = it.id
-                                            NavHostController.navigate(Screens.EDIT_POI.route)
-                                        }
-                                    )
+                                    if (isDropdownOpen.value) {
+                                        EditAndDeleteDialog(
+                                            onClickDelete = {
+                                                if (it.report >= 3)
+                                                    vm.deletePOI(it.name);
+                                                else
+                                                    vm.error.value =
+                                                        "Não é possivel remover pois ainda não foi reportado pelo numero mínimo de pessoas (${it.report} / 3)"
+                                            },
+                                            onClickEdit = {
+                                                vm.pointOfInterestId.value = it.id
+                                                NavHostController.navigate(Screens.EDIT_POI.route)
+                                            }
+                                        )
+                                    }
                                 }
                             }
-                        }
-                        Divider(
-                            color = Color.Black,
-                            thickness = 1.dp,
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)
-                        )
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 40.dp, end = 40.dp, bottom = 20.dp, top = 20.dp),
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Text(
-                                text = it.likes.toString(),
-                                modifier = Modifier.padding(end = 8.dp)
+                            Divider(
+                                color = Color.Black,
+                                thickness = 1.dp,
+                                modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)
                             )
-                            Icon(
-                                painter = painterResource(id = R.drawable.like),
-                                contentDescription = null,
-                                modifier = Modifier.size(24.dp)
-                            )
-                            Spacer(modifier = Modifier.weight(1f, true))
-                            Text(
-                                text = it.dislikes.toString(),
-                                modifier = Modifier.padding(end = 8.dp)
-                            )
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 40.dp, end = 40.dp, bottom = 20.dp, top = 20.dp),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Text(
+                                    text = it.likes.toString(),
+                                    modifier = Modifier.padding(end = 8.dp)
+                                )
+                                Icon(
+                                    painter = painterResource(id = R.drawable.like),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(24.dp)
+                                )
+                                Spacer(modifier = Modifier.weight(1f, true))
+                                Text(
+                                    text = it.dislikes.toString(),
+                                    modifier = Modifier.padding(end = 8.dp)
+                                )
 
-                            Icon(
-                                painter = painterResource(id = R.drawable.dislike),
-                                contentDescription = null,
-                                modifier = Modifier.size(24.dp)
-                            )
+                                Icon(
+                                    painter = painterResource(id = R.drawable.dislike),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(24.dp)
+                                )
 
+                            }
                         }
-                    }
-                    }
+                        }
+                }
             }
         }
-    }
 }
 fun PointOfInterest.whatOrder(orderBy: String, vm: ActionsViewModel): Comparable<*> {
     Log.d("ORDERBY", "Value: $orderBy")

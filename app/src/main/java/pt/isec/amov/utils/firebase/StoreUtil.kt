@@ -226,6 +226,7 @@ class StoreUtil {
                 "comment" to value.comment,
                 "category" to value.category,
                 "reportedBy" to value.reportedBy,
+                "votes" to value.votes,
                 "votedBy" to value.votedBy
             )
 

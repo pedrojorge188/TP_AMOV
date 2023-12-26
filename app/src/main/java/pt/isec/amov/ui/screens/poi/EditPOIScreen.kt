@@ -289,6 +289,7 @@ fun EditPOIScreen(navController: NavHostController, vm: ActionsViewModel, poi: P
                     updatedPOI.value.latitude = latitude
                     updatedPOI.value.longitude = longitude
                     updatedPOI.value.votedBy = emptyList()
+                    updatedPOI.value.votes = 0
                     vm.updatePOI(updatedPOI.value)
                     navController.popBackStack()
 

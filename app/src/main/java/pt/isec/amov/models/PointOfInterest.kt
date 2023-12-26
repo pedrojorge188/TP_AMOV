@@ -8,7 +8,7 @@ data class PointOfInterest(
     var photoUrl: String?,
     var latitude: Double,
     var longitude: Double,
-    val votes: Int = 0,
+    var votes: Int = 0,
     val likes: Int = 0,
     val dislikes: Int = 0,
     val grade: Double = 0.0,
