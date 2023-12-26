@@ -191,4 +191,17 @@ class AppData {
         }
     }
 
+    fun addAvaliation(
+        id: String,
+        locationId: String,
+        avaliation: Int,
+        email: String,
+        function: (Throwable?) -> Unit
+    ) {
+        StoreUtil.addAvaliation(id,locationId,avaliation,email){
+                result ->
+            function(result)
+        }
+    }
+
 }

@@ -449,6 +449,41 @@ class StoreUtil {
 
         }
 
+
+        fun addAvaliation(
+            id: String,
+            locationId: String,
+            avaliation: Int,
+            email: String,
+            onResult: (Throwable?) -> Unit
+        ) {
+            val AvaliationMap = mapOf(
+                email to avaliation
+            )
+
+            val db = FirebaseFirestore.getInstance()
+            val poiDocument = db.collection("locations").document(locationId).collection("pointsOfInterest").document(id)
+            poiDocument.get().addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    val existingAvaliations = documentSnapshot.get("avaliations") as? Map<String, Int> ?: emptyMap()
+
+                    val updatedAvaliations = existingAvaliations.toMutableMap()
+                    updatedAvaliations[email] = avaliation
+
+                    poiDocument.update("avaliations", updatedAvaliations)
+                        .addOnSuccessListener {
+                            onResult(null)
+                        }
+                        .addOnFailureListener { e ->
+                            onResult(e)
+                        }
+                } else {
+
+                    onResult(throw UnsupportedOperationException("Document not found"))
+                }
+            }
+        }
+
         fun readPOIFromFirebase(onPOILoaded: (MutableList<PointOfInterest>) -> Unit) {
             val db = FirebaseFirestore.getInstance()
 
@@ -474,6 +509,7 @@ class StoreUtil {
                             document.getString("category") ?: "",
                             document.getLong("report")?.toInt() ?: 0,
                             document.get("comment") as? Map<String, String> ?: emptyMap(),
+                            document.get("avaliations") as? Map<String, Int> ?: emptyMap(),
                             document.get("reportedBy") as? List<String> ?: emptyList(),
                             document.get("votedBy") as? List<String> ?: emptyList()
                         )
@@ -522,6 +558,7 @@ class StoreUtil {
                 }
             }
         }
+
 
 
     }

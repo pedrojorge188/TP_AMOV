@@ -266,6 +266,18 @@ class ActionsViewModel(private val appData: AppData,  private val locationHandle
         }
     }
 
+    fun addAvaliation(id: String, locationId: String, avaliation: Int) {
+        viewModelScope.launch {
+            appData.addAvaliation(id,locationId,avaliation,user.value!!.email){
+                    expt ->
+                if(expt != null) {
+                    _error.value = expt.message
+                }
+            }
+            imagePath.value = null
+        }
+    }
+
     fun deleteCategory(id: String) {
         viewModelScope.launch {
             val locations = appData.allLocations.value ?: emptyList()

@@ -6,6 +6,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.rounded.StarHalf
+import androidx.compose.material.icons.rounded.StarOutline
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -15,21 +18,24 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun CustomRatingBar(
-    rating: Double,
-    onRatingChanged: (Float) -> Unit
+    modifier: Modifier = Modifier,
+    rating: Int = 0,
+    stars: Int = 3,
+    starsColor: Color = Color(0xE0FFD700),
+    onRatingChange: (Double) -> Unit
 ) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        (1..3).forEach { index ->
+
+    Row {
+        for (index in 0 .. stars) {
             Icon(
-                imageVector = Icons.Default.Star,
+                modifier = modifier.clickable { onRatingChange(index.toDouble()) },
                 contentDescription = null,
-                tint = if (index <= rating) Color(201, 180, 0, 255) else Color.Gray,
-                modifier = Modifier
-                    .size(30.dp, 30.dp)
-                    .clickable { onRatingChanged(index.toFloat()) }
+                tint = starsColor,
+                imageVector = if(index <= rating) {
+                    Icons.Rounded.Star
+                } else {
+                    Icons.Rounded.StarOutline
+                }
             )
         }
     }

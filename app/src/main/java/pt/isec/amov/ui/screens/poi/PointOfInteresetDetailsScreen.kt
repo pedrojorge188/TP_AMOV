@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -31,8 +32,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -63,6 +66,7 @@ fun PointOfInteresetDetailsScreen(
     viewModel: ActionsViewModel,
     pointOfInterest: PointOfInterest?
 ) {
+    var rating2 by remember { mutableStateOf(0) }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -274,11 +278,74 @@ fun PointOfInteresetDetailsScreen(
                     modifier = Modifier.padding(start = 10.dp)
                 )
                 Row(modifier = Modifier.padding(start = 20.dp)) {
-                    CustomRatingBar(
-                        rating = pointOfInterest?.grade ?: 0.0
-                    ) {}
+                    val averageRating = pointOfInterest.calculateAverageRating()
+                    Text(
+                        text = (averageRating).toString(),
+                        fontSize = 18.sp,
+                        modifier = Modifier.padding(end = 4.dp)
+                    )
+                    Icon(
+                        imageVector = Icons.Default.Star,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp)
+                    )
                 }
-                Spacer(modifier = Modifier.height(150.dp).fillMaxWidth()
+
+                Row(modifier = Modifier
+                    .padding(start = 20.dp)
+                ) {
+                    CustomRatingBar(
+                        modifier = Modifier
+                            .size(40.dp),
+                        rating = rating2,
+                        starsColor = Color(0xE0FFD700)
+                    ) {
+                        rating2 = it.toInt()
+                    }
+                }
+                Row(modifier = Modifier
+                    .padding(start = 20.dp)
+                ) {
+                    if (viewModel.user.value!!.email in pointOfInterest.avaliations.keys) {
+                        Text(
+                            text = "A sua avaliação foi de " + pointOfInterest.avaliations[viewModel.user.value!!.email] + " estrelas",
+                            color = Color.LightGray,
+                            fontSize = 13.sp
+                        )
+                    }
+                }
+                Row (modifier = Modifier
+                    .padding(start = 20.dp)
+                ){
+                    Button(
+                        onClick = {
+                            viewModel.addAvaliation(
+                                pointOfInterest.name,
+                                pointOfInterest.locationId,
+                                rating2,
+                            )
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF02458A),
+                            contentColor = Color.White
+                        ),
+                        shape = MaterialTheme.shapes.medium,
+                        modifier = Modifier
+                            .padding(horizontal = 20.dp, vertical = 8.dp)
+                            .fillMaxWidth()
+                            .height(52.dp)
+                    ) {
+                        Text(
+                            text = if(viewModel.user.value!!.email !in pointOfInterest.avaliations.keys) "Enviar Avaliação" else "Atualizar Avaliação",
+                            color = Color.White,
+                            fontSize = 16.sp
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier
+                    .height(150.dp)
+                    .fillMaxWidth()
                     .background(Color.Transparent))
             }
         }

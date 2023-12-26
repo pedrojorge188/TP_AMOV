@@ -16,6 +16,17 @@ data class PointOfInterest(
     var category: String?,
     var report: Int = 0,
     var comment: Map<String,String> = emptyMap(),
+    var avaliations: Map<String,Int> = emptyMap(),
     var reportedBy: List<String> = emptyList(),
     var votedBy: List<String> = emptyList()
-)
+){
+    fun calculateAverageRating(): Double {
+        if (avaliations.isEmpty()) {
+            return 0.0
+        }
+
+        val totalRating = avaliations.values.sum()
+        val numberOfRatings = avaliations.size
+        return totalRating.toDouble() / numberOfRatings
+    }
+}
