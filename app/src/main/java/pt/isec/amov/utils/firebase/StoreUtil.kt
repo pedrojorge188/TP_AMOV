@@ -228,7 +228,7 @@ class StoreUtil {
                 "reportedBy" to value.reportedBy,
                 "votedBy" to value.votedBy
             )
-            
+
 
             db.collection("locations").document(value.locationId).collection("pointsOfInterest").document(value.name)
                 .update(updates)
